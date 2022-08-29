@@ -1,0 +1,5 @@
+
+trait Equalable {
+  ==(other)
+  !=(other) { !(this == other) }
+}

@@ -1,0 +1,17 @@
+
+import "veery/functional/place_holder" for PlaceHolder
+
+class Bind {
+  static call(arg0, fn)                                            { callAll([arg0], fn) }
+  static call(arg0, arg1, fn)                                      { callAll([arg0, arg1], fn) }
+  static call(arg0, arg1, arg2, fn)                                { callAll([arg0, arg1, arg2], fn) }
+  static call(arg0, arg1, arg2, arg3, fn)                          { callAll([arg0, arg1, arg2, arg3], fn) }
+  static call(arg0, arg1, arg2, arg3, arg4, fn)                    { callAll([arg0, arg1, arg2, arg3, arg4], fn) }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, fn)              { callAll([arg0, arg1, arg2, arg3, arg4, arg5], fn) }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, args6, fn)       { callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6], fn) }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, args6, arg7, fn) { callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7], fn) }
+
+  static callAll(args, fn) { 
+    implementation_detail
+  }
+}

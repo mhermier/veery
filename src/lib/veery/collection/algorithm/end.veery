@@ -1,0 +1,4 @@
+
+class End {
+  static call(sequenceable) { false }
+}

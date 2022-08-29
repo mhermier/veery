@@ -1,0 +1,183 @@
+
+import "veery/abort" for Abort
+import "veery/character" for Character
+import "veery/chars" for Chars
+import "veery/event/key" for Key
+import "veery/input_output/circular_buffer_reader" for Circular_buffer_reader
+import "veery/input_output/system_console" for System_console
+
+class Input {
+  static init_() {
+    // See https://en.wikipedia.org/wiki/ANSI_escape_code
+
+    __escape_O_code_points = {
+//      'A'.codePoint: Key.fromString("Up"      ),
+//      'B'.codePoint: Key.fromString("Down"    ),
+//      'C'.codePoint: Key.fromString("Right"   ),
+//      'D'.codePoint: Key.fromString("Left"    ),
+//      'E'.codePoint: Key.fromString(""        ),
+//      'F'.codePoint: Key.fromString("End"     ),
+//      'G'.codePoint: Key.fromString("Keypad 5"),
+//      'H'.codePoint: Key.fromString("Home"    ),
+//      'I'.codePoint: Key.fromString(""        ),
+//      'J'.codePoint: Key.fromString(""        ),
+//      'K'.codePoint: Key.fromString(""        ),
+//      'L'.codePoint: Key.fromString(""        ),
+//      'M'.codePoint: Key.fromString(""        ),
+//      'N'.codePoint: Key.fromString(""        ),
+//      'O'.codePoint: Key.fromString(""        ),
+      'P'.codePoint: Key.fromString("F1"      ),
+      'Q'.codePoint: Key.fromString("F2"      ),
+      'R'.codePoint: Key.fromString("F3"      ),
+      'S'.codePoint: Key.fromString("F4"      ),
+//      'T'.codePoint: Key.fromString(""        ),
+//      'U'.codePoint: Key.fromString(""        ),
+//      'V'.codePoint: Key.fromString(""        ),
+//      'W'.codePoint: Key.fromString(""        ),
+//      'X'.codePoint: Key.fromString(""        ),
+//      'Y'.codePoint: Key.fromString(""        ),
+//      'Z'.codePoint: Key.fromString(""        ),
+    }
+
+    __escape_left_braket_code_points = {
+      'A'.codePoint: Key.fromString("Up"   ),
+      'B'.codePoint: Key.fromString("Down" ),
+      'C'.codePoint: Key.fromString("Right"),
+      'D'.codePoint: Key.fromString("Left" ),
+//      'E'.codePoint: Key.fromString(""     ),
+      'F'.codePoint: Key.fromString("End"  ),
+//      'G'.codePoint: Key.fromString(""     ),
+      'H'.codePoint: Key.fromString("Home" ),
+//      'I'.codePoint: Key.fromString(""     ),
+//      'J'.codePoint: Key.fromString(""     ),
+//      'K'.codePoint: Key.fromString(""     ),
+//      'L'.codePoint: Key.fromString(""     ),
+//      'M'.codePoint: Key.fromString(""     ),
+//      'N'.codePoint: Key.fromString(""     ),
+//      'O'.codePoint: Key.fromString(""     ),
+//      'P'.codePoint: Key.fromString(""     ),
+//      'Q'.codePoint: Key.fromString(""     ),
+//      'R'.codePoint: Key.fromString(""     ),
+//      'S'.codePoint: Key.fromString(""     ),
+//      'T'.codePoint: Key.fromString(""     ),
+//      'U'.codePoint: Key.fromString(""     ),
+//      'V'.codePoint: Key.fromString(""     ),
+//      'W'.codePoint: Key.fromString(""     ),
+//      'X'.codePoint: Key.fromString(""     ),
+//      'Y'.codePoint: Key.fromString(""     ),
+//      'Z'.codePoint: Key.fromString(""     ),
+    }
+
+    __escape_left_braket_key_codes = {
+//       1: Key.fromString("Home"    ),
+//       2: Key.fromString("Insert"  ),
+//       1: Key.fromString("Home"    ),
+//       2: Key.fromString("Insert"  ),
+//       3: Key.fromString("Delete"  ),
+//       4: Key.fromString("End"     ),
+//       5: Key.fromString("PageUp"  ),
+//       6: Key.fromString("PageDown"),
+//       7: Key.fromString("Home"    ),
+//       8: Key.fromString("End"     ),
+//       9: Key.fromString(""        ),
+//      10: Key.fromString("F0"      ),
+//      11: Key.fromString("F1"      ),
+//      12: Key.fromString("F2"      ),
+//      13: Key.fromString("F3"      ),
+//      14: Key.fromString("F4"      ),
+//      15: Key.fromString("F5"      ),
+//      16: Key.fromString(""        ),
+//      17: Key.fromString("F6"      ),
+//      18: Key.fromString("F7"      ),
+//      19: Key.fromString("F8"      ),
+//      20: Key.fromString("F9"      ),
+//      21: Key.fromString("F10"     ),
+//      22: Key.fromString(""        ),
+//      23: Key.fromString("F11"     ),
+//      24: Key.fromString("F12"     ),
+//      25: Key.fromString("F13"     ),
+//      26: Key.fromString("F14"     ),
+//      27: Key.fromString(""        ),
+//      28: Key.fromString("F15"     ),
+//      29: Key.fromString("F16"     ),
+//      30: Key.fromString(""        ),
+//      31: Key.fromString("F17"     ),
+//      32: Key.fromString("F18"     ),
+//      33: Key.fromString("F19"     ),
+//      34: Key.fromString("F20"     ),
+//      35: Key.fromString(""        ),
+    }
+  }
+
+  static new() { new(System_console.input) }
+  construct new(reader) {
+    _reader = Circular_buffer_reader.new(reader)
+  }
+
+  read() {
+    var c = read_()
+
+    if (c.codePoint == Chars.escape) {
+      c = read_()
+
+      /*
+      <esc> <nochar>                                 -> esc
+      <esc> <esc>                                    -> esc
+      <esc> <char>                                   -> Alt-keypress or keycode sequence
+      <esc> '[' <nochar>                             -> Alt-[
+      <esc> '[' (<modifier>) <char>                  -> keycode sequence, <modifier> is a decimal number and defaults to 1 (xterm)
+      <esc> '[' (<keycode>) (';'<modifier>) '~'      -> keycode sequence, <keycode> and <modifier> are decimal numbers and default to 1 (vt)
+
+      Modifiers:
+      Key pressed   Number   Comment
+                    1        always added, the rest are optional
+      Shift         1
+      (Left) Alt    2
+      Control       4
+      Meta          8
+      */
+
+      if (c.codePoint == Chars.escape) {
+        return Key.fromString("Escape")
+      } else if (c == 'O') {
+        return handle_map_(__escape_O_code_points, read_().codePoint)
+      } else if (c == '[') {
+        if (peek_().isDigit) {
+          var key_code = null
+          var modifier = 1
+
+          var key_code_or_modifier = readNumber_()
+          if (peek_() == ';') {
+            Abort.todo("Handle keycode with modifier")
+          }
+          if (peek_() == '~') {
+          }
+          Abort.todo("Handle modifier or key code")
+        }
+
+        return handle_map_(__escape_left_braket_code_points, read_().codePoint)
+      } else {
+        Abort.todo("Handle ESC %(c) sequences")
+      }
+    } else {
+      return Key.fromCharacter(c)
+    }
+  }
+
+  handle_map_(map, code) {
+    var key = map[code]
+    if (key == null) {
+      Abort.todo("Handle code %(code)")
+    }
+    return key
+  }
+
+  read_() { _reader.read() }
+  peek_() { _reader.peek() }
+  peek_(n) { _reader.peek(n) }
+
+  readNumber_() {
+    Abort.todo("read number")
+  }
+}
+Input.init_()

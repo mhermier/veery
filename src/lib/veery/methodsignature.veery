@@ -1,0 +1,23 @@
+
+class Method {
+  static fromMangledName(mangledName) {
+  }
+
+  veery_init_() {
+    _isConstruct = false
+    _isStatic = false
+    _name = ""
+    _setter = false
+    _parentArity = false
+  }
+
+  mangled  { _mangled  }
+  toString { _toString }
+
+  isConstruct  { _isConstruct }
+  isStatic     { _isStatic }
+  name         { _name }
+  bracketArity { _bracketArity }
+  setter       { _setter }
+  parenArity   { _parenArity }
+}

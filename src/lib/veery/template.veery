@@ -1,0 +1,16 @@
+
+import "veery/memoize" for Memoize
+import "veery/pack" for Pack
+import "veery/template_class" for TemplateClass
+
+class Template is Pack {
+  construct new(generator) {
+    _generator = Memoize.new {|args|
+      return generator.call(args)
+    }
+  }
+
+  callAll(args) { _generator.call(args) }
+
+  static makeTemplateClass(name, args) { TemplateClass.veery_new_(name, args) }
+}

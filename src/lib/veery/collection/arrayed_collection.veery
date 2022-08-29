@@ -1,0 +1,20 @@
+
+import "veery/abort" for Abort
+
+class Arrayed_collection {
+
+  [index] {
+    if (index is Num) return at(index) // TODO: Smart index
+    if (index is Range) Abort.todo()
+
+    Abort.assertion_failed("Index must be a number or a range")
+  }
+
+  count { Abort.subclass_responsibility() }
+
+  at(index) { Abort.subclass_responsibility() }
+
+  middle(startIndex, size) { Abort.subclass_responsibility() }
+
+  // TODO: Add utility functions first, last, chop, chopped, truncate...
+}

@@ -1,0 +1,32 @@
+
+import "veery/math/middle_point" for MiddlePoint
+
+class BinarySearch {
+  static init_() {
+    __defaultIfNotFound = Fn.new { null }
+  }
+
+  static call(sortedSequence, value) { call(sortedSequence, value, __defaultIfNotFound) }
+  static call(sortedSequence, value, ifNotFound) {
+    var lowerIndex = 0
+    var upperIndex = sortedSequence.count - 1
+    var midIndex
+    var midValue
+
+    while (lowerIndex <= upperIndex) {
+        midIndex = MiddlePoint.call(lowerIndex, upperIndex).floor
+        //System.print("[%(lowerIndex) %(midIndex) %(upperIndex)]")
+        midValue = sortedSequence[midIndex]
+
+        if (value == midValue) return midIndex
+        if (value < midValue) {
+            upperIndex = midIndex - 1
+        } else {
+            lowerIndex = midIndex + 1
+        }
+    }
+    return ifNotFound.call()
+  }
+}
+
+BinarySearch.init_()

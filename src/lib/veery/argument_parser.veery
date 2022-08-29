@@ -1,0 +1,199 @@
+
+import "veery/character" for Character
+
+import "os" for Process
+
+class ArgumentParserResult {
+  construct new(argument_parser, arguments) {
+    _argument_parser = argument_parser
+    _arguments       = arguments
+  }
+
+  argument_parser { _argument_parser }
+
+  program_name { _program_name }
+  program_name=(program_name) { _program_name = program_name }
+
+  show_usage { _show_usage }
+  show_usage=(show_usage) { _show_usage = show_usage }
+
+  show_usage() {
+    Fiber.abort("Show usage")
+  }
+
+  arguments { _arguments }
+  arguments_shift() { _arguments.removeAt(0) }
+}
+
+class Option {
+  construct new() {
+    new {}
+  }
+
+  construct new(setupFn) {
+    _arity = 0
+
+    setupFn.call(this)
+  }
+
+  short_name { _short_name }
+  short_name = (short_name) { _short_name = short_name }
+
+  long_name { _long_name }
+  long_name = (long_name) { _long_name = long_name }
+
+  arity { _arity }
+  arity = (arity) { _arity = arity }
+
+  help { _help }
+  help = (help) { _help = help }
+
+  callback { _callback }
+  callback = (callback) { _callback = callback }
+}
+
+class ArgumentParser {
+  construct new() {
+    new {}
+  }
+
+  construct new(setupFn) {
+    _options = {}
+
+    add_option {|option|
+        option.short_name = 'h'
+        option.long_name = "help"
+        option.help = "show this help message and exit"
+        option.callback = Fn.new {
+          System.print("Implement")
+          Fiber.abort()
+        }
+      }
+
+/*
+    add_option {|option|
+        option.short_name = 'v'
+        option.long_name = "version"
+        option.help = "show version informations and exit"
+        option.callback = Fn.new {
+          System.print("Implement")
+          Fiber.abort()
+        }
+      }
+*/
+
+    setupFn.call(this)
+  }
+
+  program_name { _program_name }
+  program_name=(program_name) { _program_name = program_name }
+
+  add_option(setupFn) {
+    var option = Option.new(setupFn)
+
+    // TODO: support aliases (short and long names as lists basically)
+    register_option_short_name_(option, option.short_name)
+    register_option_long_name_(option, option.long_name)
+    return this
+  }
+
+  register_option_short_name_(option, short_name) {
+    if (short_name == null) return
+
+    // TODO sanitize short_name
+
+    _options["-%(short_name)"] = option
+  }
+
+  register_option_long_name_(option, long_name) {
+    if (long_name == null) return
+
+    // TODO sanitize long_name
+
+    _options["--%(long_name)"] = option
+  }
+
+  parse() {
+    return parse(Process.arguments)
+  }
+
+  parse(arguments) {
+    var result = ArgumentParserResult.new(this, arguments) 
+
+/*
+    var program_name = result.arguments_shift()
+
+    // Do not clobber possibly user provided program_name
+    if (!result.program_name) result.program_name = program_name
+*/
+
+    while (result.arguments.count > 0) {
+      var current = result.arguments[0]
+
+      if (current == "--") {
+        break // End of options
+      }
+
+      var option
+      if (option = _options[current]) {
+        // TODO handle errors
+        // TODO Check arity
+
+        result.arguments_shift()
+        option.callback.call(result)
+      } else if (current.startsWith("--")) {
+        var assign_index = current.indexOf("=")
+        if (assign_index < 0) {
+          Fiber.abort("Handle unknown long option")
+        }
+
+        var lhs = current[0...assign_index]
+        var rhs = current[assign_index + 1..-1]
+
+        option = _options[lhs]
+        if (!option) {
+          Fiber.abort("Handle unknown long option")
+        }
+
+        if (option.arity != 1) {
+          Fiber.abort("Handle assign long option must have an arity of 1 argument")
+        }
+
+        // Inject argument and value separately before trying to parse again
+        result.arguments[0] = lhs
+        result.arguments.insert(1, rhs)
+        continue
+      } else if (current.startsWith("-") &&
+                 current.count >= 2) {
+        var lhs = current[0..1]
+        var rhs = current[2..-1]
+
+        option = _options[lhs]
+        if (!option) {
+          Fiber.abort("Handle unknown short option")
+        }
+
+        if (option.arity == 0) {
+          // Inject combined arguments separately before trying to parse again
+          result.arguments[0] = lhs
+          result.arguments.insert(1, "-%(rhs)")
+        } else if (option.arity == 1) {
+          // Inject argument and value separately before trying to parse again
+          result.arguments[0] = lhs
+          result.arguments.insert(1, rhs)
+        } else {
+          Fiber.abort("Handle assign short option must have an arity of 2+ argument")
+        }
+        continue
+      } else {
+        break // Not an option
+      }
+    }
+
+    if (result.show_usage) {
+      result.show_usage()
+      return null
+    }
+    return result
+  }
+}

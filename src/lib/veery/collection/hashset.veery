@@ -1,0 +1,30 @@
+
+class HashSet {
+  static []  { this[Object] }
+  static [K] { __template.apply(K) }
+
+  static init_() {
+  if (__template != null) return
+
+    __template = Template.new("Tuple") {|name, args|
+        if (name.type != String || name == "") Fiber.abort("Name must be a non-empty string.")
+        if (fields.isEmpty) Fiber.abort("A tuple must have at least one field.")
+
+        var flds = fields.map { |f| "\"%(f)\"" }.join(", ")
+
+        var s = "class %(env.name) is %(env.base_class.name) {\n"
+        s = s + "    static fields { [%(flds)] }\n"
+        s = s + "    construct new(%(fields.join(", "))) {\n"
+        for (i in 0...fields.count) {
+            var f = fields[i]
+            s = s + "        _%(f) = %(f)\n"
+        }
+        s = s + "    }\n"
+        s = s + fields.map { |f| "    %(f) { _%(f) }" }.join("\n") + "\n"
+        s = s + "    toString { \"(" + fields.map { |f| "\%(_%(f))" }.join(", ") + ")\" }\n}\n"
+        s = s + "return %(name)"
+        return s
+    }
+}
+
+HashSet.init_()

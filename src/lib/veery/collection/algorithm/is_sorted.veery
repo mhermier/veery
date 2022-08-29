@@ -1,0 +1,19 @@
+
+import "veery/functional/less_than" for LessThan
+
+class IsSorted {
+  static call(sequenceable) { call(sequenceable, LessThan) }
+  static call(sequenceable, compare) {
+    var i = sequenceable.iterate(null)
+    if (i) {
+      var prev = sequenceable.iteratorValue(i)
+      var cur
+      while (i = sequenceable.iterate(i)) {
+        cur = sequenceable.iteratorValue(i)
+        if (!compare.call(prev, cur)) return false
+        prev = cur
+      }
+    }
+    return true
+  }
+}

@@ -1,0 +1,11 @@
+
+class Benchmark {
+  static call(benchmark) { call("", benchmark) }
+
+  static call(name, benchmark) {
+    var start = System.clock
+    benchmark.call()
+    var end = System.clock
+    System.print("[%(name)] elapsed: %(end - start)")
+  }
+}

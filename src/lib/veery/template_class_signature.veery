@@ -1,0 +1,15 @@
+
+// REMOVE
+import "random" for Random
+var FakeMangle = Random.new()
+
+class TemplateClassSignature {
+  static mangle(baseName, args) {
+    // FIXME Do the real thing
+    return "%(baseName)_%(FakeMangle.int())"
+  }
+
+  static demangle(name) {
+    implementMe
+  }
+}

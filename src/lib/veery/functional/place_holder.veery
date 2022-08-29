@@ -1,0 +1,9 @@
+
+class PlaceHolder {
+  static new(index) {
+    return new_(index)
+  }
+  construct new_(index) {
+    _index = index
+  }
+}

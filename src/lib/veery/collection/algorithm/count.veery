@@ -1,0 +1,12 @@
+
+import "veery/collections/algorithms/count" for Count
+
+class Count {
+  static call(sequenceable) {
+    var count = 0
+    for (element in sequenceable) {
+      count = count + 1
+    }
+    return count
+  }
+}

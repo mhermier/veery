@@ -1,0 +1,7 @@
+
+class NthPrime {
+  static call(n) {
+  }
+}
+
+// NthPrime.call(223) == 1409

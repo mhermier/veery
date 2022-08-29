@@ -1,0 +1,71 @@
+
+import "veery/assert" for Assert
+import "veery/character" for Character
+import "veery/character_string" for CharacterString
+
+// A single file of source code.
+//
+// Handles mapping token offsets to lines and columns.
+class SourceFile {
+  construct new(path, string) {
+    Assert.call(string is CharacterString, "Argument must be a character_string")
+
+    _path = path
+    _string = string
+  }
+
+  // Gets the byte at [index] in the source file.
+  [index] { _string[index] }
+
+  // The number of bytes in the source file.
+  count { _string.count }
+
+  // The file path of the source file.
+  path { _path }
+
+  // Gets the 1-based line that the byte at offset lies on.
+  columnAt(offset) {
+    var column = 1
+
+    // Walk backwards until we hit a newline.
+    for (i in (offset - 1)..0) {
+      if (_string[i] == '\n') break
+      column = column + 1
+    }
+    return column
+  }
+
+  // Gets the 1-based line that the byte at offset lies on.
+  lineAt(offset) {
+    // Count all of the newlines before the offset.
+    // TODO: Binary search to optimize.
+    var line = 0
+    findLines_()
+    for (i in 0..._lines.count) {
+      if (offset < _lines[i]) return i
+    }
+    return _lines.count
+  }
+
+  // Gets the source text of [line], where 1 is the first line.
+  getLine(line) {
+    var newlines = findLines_()
+    return _string[newlines[line - 1]...(newlines[line] - 1)]
+  }
+
+  // Gets a substring of the source string starting at [start] with [length]
+  // bytes.
+  substring(start, length) { _string[start...(start + length)] }
+
+  // Finds the byte offset of the beginning of every line in the source file.
+  // This lets us quickly map offsets to lines and vice versa.
+  findLines_() {
+    if (_lines != null) return _lines
+
+    _lines = [0]
+    for (i in 0..._string.count) {
+      if (_string[i] == '\n') _lines.add(i + 1)
+    }
+    return _lines
+  }
+}

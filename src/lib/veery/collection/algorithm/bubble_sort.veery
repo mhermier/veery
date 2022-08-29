@@ -1,0 +1,38 @@
+
+import "veery/functional/less_than" for LessThan
+
+/*
+var bubbleSort = Fn.new { |a|
+    var n = a.count
+    while (true) {
+        var n2 = 0
+        for (i in 1...n) {
+            if (a[i - 1] > a[i]) {
+                a.swap(i, i - 1)
+                n2 = i
+            }
+        }
+        n = n2
+        if (n == 0) break
+    }
+}
+*/
+
+class BubbleSort {
+  // OPTIMIZEME ?
+  static call(arrayable) { call(arrayable, LessThan) }
+  static call(arrayable, compare) {
+    var n = arrayable.count
+    while (n != 0) {
+        var n2 = 0
+        for (i in 1...n) {
+            if (compare.call(arrayable[i], arrayable[i - 1])) {
+                arrayable.swap(i, i - 1)
+                n2 = i
+            }
+        }
+        n = n2
+    }
+    return arrayable
+  }
+}

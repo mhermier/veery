@@ -1,0 +1,8 @@
+// DO NOT EDIT: This file is automagically generated
+
+import "os" for Process
+import "veery/veery" for Veery
+var ret = Veery.new().run(Process.arguments)
+if (ret != null && ret != 0) {
+  Fiber.abort("TODO: exit more properly")
+}

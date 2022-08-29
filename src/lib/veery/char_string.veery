@@ -1,0 +1,13 @@
+
+import "veery/abort" for Abort
+import "veery/collection/arrayed_collection" for Arrayed_collection
+
+class Char_string is Arrayed_collection {
+  construct fromString(string) {
+    _toString = string
+  }
+
+  at(index) { Abort.todo() }
+
+  toString { _toString }
+}

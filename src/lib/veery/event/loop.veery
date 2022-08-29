@@ -1,0 +1,23 @@
+
+class Loop {
+  construct new() {
+    _isRuning = false
+  }
+
+  isRuning { _isRuning }
+
+  run() {
+    _isRuning = true
+    // FIXME
+    /*
+    while (_isRuning) {
+      // Pull and handle events
+    }
+    */
+  }
+
+  stop() {
+    _isRuning = false
+  }
+
+}

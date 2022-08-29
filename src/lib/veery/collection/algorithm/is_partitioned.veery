@@ -1,0 +1,16 @@
+
+class IsPartitioned {
+  static call(sequenceable, unaryPredicate)
+  {
+    var it = sequenceable.iterate(null)
+    while (it) {
+      if (unaryPredicate.call(sequenceable.iteratorValue(it))) break
+      sequenceable.iterate(it)
+    }
+    while (it) {
+      if (!unaryPredicate.call(sequenceable.iteratorValue(it))) return false
+      sequenceable.iterate(it)
+    }
+    return true
+  }
+}

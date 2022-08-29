@@ -1,0 +1,40 @@
+
+import "meta" for Meta
+
+//import "veery/result" for Result
+
+class Type {
+
+  veery_Meta { Meta }
+
+  veery_type_=(type) {
+    _type = type
+
+    _interfaces = null
+  }
+
+  attributes { _type.attributes }
+
+  interfaces {
+    if (_interfaces != null) return _interfaces
+
+    _interfaces = []
+
+    // FIXME: API is not practical
+    if (attributes != null &&
+        attributes.self != null &&
+        attributes.self["implements"] != null) {
+      for(implementName in attributes.self["implements"].keys) {
+        _interfaces.add(_type.veery_lookup_(implementName))
+      }
+    }
+
+    return _interfaces
+  }
+
+  name { _type.name }
+
+  supertype { implementMe }
+
+  toString { name }
+}

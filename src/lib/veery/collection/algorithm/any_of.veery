@@ -1,0 +1,9 @@
+
+class AnyOf {
+  static call(sequenceable, unaryPredicate) {
+    for (element in sequenceable) {
+      if (unaryPredicate.call(element)) return true
+    }
+    return false
+  }
+}

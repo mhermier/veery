@@ -1,0 +1,16 @@
+
+import "veery/compiler/abstract_lang/ast" for Expr
+
+class ThisModuleExpr is Expr {
+  construct new(keyword) {
+    _keyword = keyword
+  }
+
+  keyword { _keyword }
+
+  accept(visitor) { visitor.visitThisModuleExpr(this) }
+
+  toString {
+    return "ThisModule(%(_keyword))"
+  }
+}

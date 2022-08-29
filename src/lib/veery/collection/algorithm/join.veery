@@ -1,0 +1,17 @@
+
+class Join {
+  static call(seq) { call(seq, "") }
+
+  static call(seq, sep) {
+    var first = true
+    var result = ""
+
+    for (element in seq) {
+      if (!first) result = result + sep
+      first = false
+      result = result + element.toString
+    }
+
+    return result
+  }
+}

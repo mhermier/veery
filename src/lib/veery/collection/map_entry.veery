@@ -1,0 +1,7 @@
+
+class Map_Entry {
+  construct new(key, value) {
+    _key = key
+    _value = value
+  }
+}

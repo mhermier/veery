@@ -1,0 +1,6 @@
+
+class Hash {
+  static call(value) {
+    return value.hash
+  }
+}

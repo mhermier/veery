@@ -1,0 +1,38 @@
+
+import "veery/compiler/abstract_lang/token_type" for TokenType
+
+class Token {
+  construct new(source, type, start, length) {
+    _source = source
+    _type = type
+    _start = start
+    _length = length
+  }
+
+  == (other) {
+    if (other is String) { // FIXME TokenType
+      return _type == other
+    }
+
+    return this === other
+  }
+  != (other) { return !(this == other) }
+
+  // The source file this token was parsed from.
+  source { _source }
+  type { _type }
+  text { _source.substring(_start, _length) }
+
+  start { _start }
+  length { _length }
+
+  // The 1-based line number that the token starts on.
+  lineStart { _source.lineAt(_start) }
+  lineEnd { _source.lineAt(_start + _length) }
+
+  // The 1-based column number that the token starts on.
+  columnStart { _source.columnAt(_start) }
+  columnEnd { _source.columnAt(_start + _length) }
+
+  toString { text.toString }
+}

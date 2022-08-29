@@ -1,0 +1,68 @@
+
+import "veery/collections/algorithms/join" for Join
+import "veery/template_class_signature" for TemplateClassSignature
+import "veery/type" for Type
+
+class TemplateClass is Type {
+  static init_() {
+    __codeGenObjectOptionsDefault = {}
+  }
+
+  construct veery_new_(baseName, args) {
+    _baseName    = baseName
+    _args        = args
+    _mangledName = TemplateClassSignature.mangle(baseName, args)
+    _name        = "%(baseName)[%(Join.call(args, ", "))]"
+  }
+
+  baseName { _baseName }
+  args     { _args }
+
+  mangledName { _mangledName }
+  name { _name }
+
+  toString { _name }
+
+  supertype { implementMe }
+
+  veery_codeGenObject() { veery_codeGenObject(__codeGenObjectOptionsDefault) }
+  veery_codeGenObject(options) {
+    var code = """
+        static veery_lookup_(name) {
+          // FIXME: need to sanitize the name for injection attack
+          return __type.veery_Meta.compile("return %(name)").call()
+        }
+
+        static veery_type { __type }
+
+        static veery_type_=(type) {
+          __type = type
+          __type.veery_type_ = this
+        }
+
+        type { __type }
+
+        static name { __type.name }
+        static toString { name }
+
+        is(clazz) {
+          implementMe
+        }
+      """
+
+    if (options["enable_toString"] != false) {
+    code = code + """
+
+        toString { "instance of %(__type)" }
+      """
+    }
+    return code
+  }
+
+  veery_codeGenCallArgs(count) {
+    // FIXME: Do a more proper thing with signature to support bracket/parent and setter syntax?
+    return (0...count).map {|i| "arg%(i)" }.join(", ")
+  }
+}
+
+TemplateClass.init_()

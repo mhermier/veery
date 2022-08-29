@@ -1,0 +1,86 @@
+
+import "veery/template" for Template
+
+class Result {
+  static []         { __class }
+  static [T]        { this[T, Object] }
+  static [T, Error] { __template[T, Error] }
+
+  static try(fn) { __class.try(fn) }
+
+  static veery_init_() {
+    if (__template != null) return
+
+    __template = Template.new() {|args|
+      var type        = Template.makeTemplateClass("Result", args)
+      var mangledName = type.mangledName
+      var T           = args[0]
+      var Error       = args[1]
+
+      var template = "
+        class %(mangledName) is Result {
+          %(type.veery_codeGenObject())
+
+          static veery_init_() {
+            __T     = veery_type.args[0]
+            __Error = veery_type.args[1]
+          }
+
+          static errorType { __Error }
+          static valueType { __T }
+
+          // FIXME: Validate types
+          static new(value)   { veery_new_(value, true) }
+          static error(error) { veery_new_(error, false) }
+
+          static try(fn) {
+            var fiber = Fiber.new(fn)
+            var result = fiber.try()
+
+            if (!fiber.isDone)       return error(\"Not done\")
+            if (fiber.error != null) return error(fiber.error)
+
+            return new(result)
+          }
+
+          construct veery_new_(value, hasValue) {
+            _value = value
+            _hasValue = hasValue
+          }
+
+          hasValue { _hasValue }
+
+          error {
+            if (_hasValue) Fiber.throw(\"Trying to access value\")
+
+            return _value
+          }
+
+          value {
+            if (_hasValue) return _value
+
+            Fiber.throw(\"Trying to access error\")
+          }
+
+          value_or(default) {
+            if (_hasValue) return _value
+
+            // Validate default type
+            return default
+          }
+        }
+
+        return %(mangledName)
+      "
+
+      var clazz = type.veery_Meta.compile(template).call()
+      clazz.veery_type_ = type
+      clazz.veery_init_()
+      return clazz
+    }
+
+    __class = __template[Object, Object]
+  }
+}
+
+Result.veery_init_()

@@ -1,0 +1,9 @@
+
+import "veery/interface" for Interface
+
+class Iterable is Interface {
+
+  iterate(it) { subclassResponsibility }
+
+  iteratorValue(it) { subclassResponsibility }
+}

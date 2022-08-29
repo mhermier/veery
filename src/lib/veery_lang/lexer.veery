@@ -1,0 +1,351 @@
+
+import "veery/abort" for Abort
+import "veery/character" for Character
+import "veery/chars" for Chars
+import "veery/compiler/abstract_lang/token" for Token, TokenType
+
+var KEYWORDS = {
+  "and":       TokenType.reservedKeyword,
+  "break":     TokenType.breakKeyword,
+  "class":     TokenType.classKeyword,
+  "construct": TokenType.constructKeyword,
+  "continue":  TokenType.continueKeyword,
+  "do":        TokenType.reservedKeyword,
+  "else":      TokenType.elseKeyword,
+  "enum":      TokenType.enumKeyword,
+  "false":     TokenType.falseKeyword,
+  "for":       TokenType.forKeyword,
+  "foreign":   TokenType.foreignKeyword,
+  "if":        TokenType.ifKeyword,
+  "import":    TokenType.importKeyword,
+  "in":        TokenType.inKeyword,
+  "interface": TokenType.reservedKeyword,
+  "is":        TokenType.isKeyword,
+  "not":       TokenType.reservedKeyword,
+  "null":      TokenType.nullKeyword,
+  "or":        TokenType.reservedKeyword,
+  "return":    TokenType.returnKeyword,
+  "static":    TokenType.staticKeyword,
+  "super":     TokenType.superKeyword,
+  "this":      TokenType.thisKeyword,
+  "this_module": TokenType.thisModuleKeyword,
+  "trait":     TokenType.reservedKeyword,
+  "true":      TokenType.trueKeyword,
+  "type_of":   TokenType.reservedKeyword,
+  "var":       TokenType.varKeyword,
+  "while":     TokenType.whileKeyword,
+  "xor":       TokenType.reservedKeyword,
+}
+
+// Data table for tokens that are tokenized using maximal munch.
+//
+// The key is the character that starts the token or tokens. After that is a
+// list of token types and characters. As long as the next character is matched,
+// the type will update to the type after that character.
+var PUNCTUATORS = {
+  '\n'.codePoint: [TokenType.line],
+
+  '('.codePoint:  [TokenType.leftParen],
+  ')'.codePoint:  [TokenType.rightParen],
+  '['.codePoint:  [TokenType.leftBracket],
+  ']'.codePoint:  [TokenType.rightBracket],
+  '{'.codePoint:  [TokenType.leftBrace],
+  '}'.codePoint:  [TokenType.rightBrace],
+
+  ':'.codePoint:  [TokenType.colon],
+  ';'.codePoint:  [TokenType.semicolon],
+  ','.codePoint:  [TokenType.comma],
+  '*'.codePoint:  [TokenType.star],
+  '/'.codePoint:  [TokenType.slash],
+  '%'.codePoint:  [TokenType.percent],
+  '+'.codePoint:  [TokenType.plus],
+  '-'.codePoint:  [TokenType.minus],
+  '~'.codePoint:  [TokenType.tilde],
+  '^'.codePoint:  [TokenType.caret],
+  '?'.codePoint:  [TokenType.question],
+
+  '|'.codePoint:  [TokenType.pipe,  '|', TokenType.pipePipe],
+  '&'.codePoint:  [TokenType.amp,   '&', TokenType.ampAmp],
+  '!'.codePoint:  [TokenType.bang,  '=', TokenType.bangEqual,  '=', TokenType.strictEquality],
+  '='.codePoint:  [TokenType.equal, '=', TokenType.equalEqual, '=', TokenType.strictInequality],
+
+  '.'.codePoint:  [TokenType.dot,   '.', TokenType.dotDot,     '.', TokenType.dotDotDot],
+}
+
+// Tokenizes a string of input. This lexer differs from most in that it
+// silently ignores errors from incomplete input, like a string literal with
+// no closing quote. That's because this is intended to be run on a line of
+// input while the user is still typing it.
+class Lexer {
+  construct new(source) {
+    _source = source
+    _start = 0
+    _current = 0
+
+    // The stack of ongoing interpolated strings. Each element in the list is
+    // a single level of interpolation nesting. The value of the element is the
+    // number of unbalanced "(" still remaining to be closed.
+    _interpolations = []
+  }
+
+  readToken() {
+    _start = _current
+
+    var c = peek()
+    if (c == null) return makeToken(TokenType.eof)
+    advance()
+
+    var d = c.codePoint
+
+    if (!_interpolations.isEmpty) {
+      if (c == '(') {
+        _interpolations[-1] = _interpolations[-1] + 1
+      } else if (c == ')') {
+        _interpolations[-1] = _interpolations[-1] - 1
+
+        // The last ")" in an interpolated expression ends the expression and
+        // resumes the string.
+        if (_interpolations[-1] == 0) {
+          // This is the final ")", so the interpolation expression has ended.
+          // This ")" now begins the next section of the template string.
+          _interpolations.removeAt(-1)
+          return readString()
+        }
+      }
+    }
+
+    // Handle "//", and "/*".
+    if (c == '/') {
+      if (match('/')) return readLineComment()
+      if (match('*')) return readBlockComment()
+    }
+
+    if (PUNCTUATORS.containsKey(d)) {
+      var punctuator = PUNCTUATORS[d]
+      var type = punctuator[0]
+      var i = 1
+      while (i < punctuator.count) {
+        if (!match(punctuator[i])) break
+        type = punctuator[i + 1]
+        i = i + 2
+      }
+
+      return makeToken(type)
+    }
+
+    // Handle "<", "<<", and "<=".
+    if (c == '<') {
+      if (match('<')) return makeToken(TokenType.lessLess)
+      if (match('=')) return makeToken(TokenType.lessEqual)
+      return makeToken(TokenType.less)
+    }
+
+    // Handle ">", ">>", and ">=".
+    if (c == '>') {
+      if (match('>')) return makeToken(TokenType.greaterGreater)
+      if (match('=')) return makeToken(TokenType.greaterEqual)
+      return makeToken(TokenType.greater)
+    }
+
+    if (c == '_') return readField()
+
+    if (c == '\'') return readCharacter()
+    if (c == '"') return readString()
+
+    if (c == '0' && peek() == 'x') return readHexNumber()
+    if (Chars.isWhitespace(d)) return readWhitespace()
+    if (c.isDigit) return readNumber()
+    if (c.isAlpha) return readName()
+
+    return makeToken(TokenType.error)
+  }
+
+  // Reads a line comment until the end of the line is reached.
+  readLineComment() {
+    // A line comment stops at the newline since newlines are significant.
+    while (peek() != '\n' && !isAtEnd) {
+      advance()
+    }
+
+    return makeToken(TokenType.comment)
+  }
+
+  readBlockComment() {
+    // Block comments can nest.
+    var nesting = 1
+    while (nesting > 0) {
+      // TODO: Report error.
+      if (isAtEnd) break
+
+      if (peek() == '/' && peek(1) == '*') {
+        advance()
+        advance()
+        nesting = nesting + 1
+      } else if (peek() == '*' && peek(1) == '/') {
+        advance()
+        advance()
+        nesting = nesting - 1
+        if (nesting == 0) break
+      } else {
+        advance()
+      }
+    }
+
+    return makeToken(TokenType.comment)
+  }
+
+  // Reads a static or instance field.
+  readField() {
+    var type = TokenType.field
+    if (match('_')) type = TokenType.staticField
+
+    // Read the rest of the name.
+    while (match {|c| c.isAlphaNumeric }) {}
+
+    return makeToken(type)
+  }
+
+  readCharacter() {
+    while (!isAtEnd) {
+      var c = advance()
+
+      if (c == '\\') {
+        // TODO: Process specific escapes and validate them.
+        advance()
+      } else if (c == '\'') {
+        break
+      }
+    }
+
+    // TODO: Handle unterminated character.
+
+    return makeToken(TokenType.character)
+  }
+
+  // Reads a string literal.
+  readString() {
+    var type = TokenType.string
+
+    while (!isAtEnd) {
+      var c = advance()
+
+      if (c == '\\') {
+        // TODO: Process specific escapes and validate them.
+        advance()
+      } else if (c == '%') {
+        // Consume the '('.
+        advance()
+        // TODO: Handle missing '('.
+        _interpolations.add(1)
+        type = TokenType.interpolation
+        break
+      } else if (c == '"') {
+        break
+      }
+    }
+
+    // TODO: Handle unterminated string.
+
+    return makeToken(type)
+  }
+
+  // Reads a number literal.
+  readHexNumber() {
+    // Skip past the `x`.
+    advance()
+
+    // Read the rest of the number.
+    while (match {|c| c.isHexDigit }) {}
+    return makeToken(TokenType.number)
+  }
+
+  // Reads a series of whitespace characters.
+  readWhitespace() {
+    // Read the rest of the whitespace.
+    while (match {|c| Chars.isWhitespace(c.codePoint) }) {}
+
+    return makeToken(TokenType.whitespace)
+  }
+
+  // Reads a number literal.
+  readNumber() {
+    // Read the rest of the number.
+    while (match {|c| c.isDigit }) {}
+
+    // Read floating point.
+    if (peek() == '.' &&
+        peek(1) != null && peek(1).isDigit) { // operator ?.
+      match ('.')
+      while (match {|c| c.isDigit }) {}
+    }
+
+    // Handle scientific notation
+    if (match('e')) {
+      if (peek() == '+' || peek() == '-') {
+        advance()
+      }
+      while (match {|c| c.isDigit }) {}
+    }
+    return makeToken(TokenType.number)
+  }
+
+  // Reads an identifier or keyword token.
+  readName() {
+    // Read the rest of the name.
+    while (match {|c| c.isAlphaNumeric }) {}
+
+    var text = _source.substring(_start, _current - _start)
+    var type = TokenType.name
+    if (KEYWORDS.containsKey(text.toString)) {
+      type = KEYWORDS[text.toString]
+    }
+
+    return Token.new(_source, type, _start, _current - _start)
+  }
+
+  // Returns `true` if we have scanned all characters.
+  isAtEnd { _current >= _source.count }
+
+  // Advances past the current character.
+  advance() {
+    if (!isAtEnd) {
+      _current = _current + 1
+      return peek(-1)
+    }
+    return null
+  }
+
+  // Returns the byte value of the current character.
+  peek() { peek(0) }
+
+  // Returns the byte value of the character [n] bytes past the current
+  // character.
+  peek(n) {
+    if (_current + n >= _source.count) return null
+    return _source[_current + n]
+  }
+
+  // Consumes the current character if it matches [condition], which can be a
+  // numeric code point value or a function that takes a code point and returns
+  // `true` if the code point matches.
+  match(condition) {
+    var c = peek()
+    if (c == null) return false
+
+    if (condition is Character) {
+      if (condition != c) return false
+    } else if (condition is Fn) {
+      if (!condition.call(c)) return false
+    } else if (c is Num) {
+      if (condition != c.codePoint) return false
+    } else {
+      Abort.internal_error("Unsupported condition type")
+    }
+
+    advance()
+    return true
+  }
+
+  // Creates a token of [type] from the current character range.
+  makeToken(type) { Token.new(_source, type, _start, _current - _start) }
+}

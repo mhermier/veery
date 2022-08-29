@@ -1,0 +1,5 @@
+
+import "veery/type" for Type
+
+class Clazz {
+}

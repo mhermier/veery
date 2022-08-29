@@ -1,0 +1,131 @@
+
+import "veery/memoize" for Memoize
+import "veery/template" for Template
+
+class Array {
+  static [count] { this[count, Object] }
+
+  static [count, T] { __template[count, T] }
+
+  static new() {
+    return __classes[ 0].new()
+  }
+  static new(arg0) {
+    return __classes[ 1].new(arg0)
+  }
+  static new(arg0, arg1) {
+    return __classes[ 2].new(arg0, arg1)
+  }
+  static new(arg0, arg1, arg2) {
+    return __classes[ 3].new(arg0, arg1, arg2)
+  }
+  static new(arg0, arg1, arg2, arg3) {
+    return __classes[ 4].new(arg0, arg1, arg2, arg3)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4) {
+    return __classes[ 5].new(arg0, arg1, arg2, arg3, arg4)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5) {
+    return __classes[ 6].new(arg0, arg1, arg2, arg3, arg4, arg5)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
+    return __classes[ 7].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
+    return __classes[ 8].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) {
+    return __classes[ 9].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
+    return __classes[10].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    return __classes[11].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
+    return __classes[12].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) {
+    return __classes[13].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) {
+    return __classes[14].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) {
+    return __classes[15].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)
+  }
+  static new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) {
+    return __classes[16].new(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)
+  }
+
+  static fromAll(args) {
+    return Array[args.count].fromAll(args)
+  }
+
+  static init_() {
+    if (__template != null) return
+
+    __template = Template.new() {|args|
+      var type        = Template.makeTemplateClass("Tuple", args)
+      var mangledName = type.mangledName
+      var count       = args[0]
+      var T           = args[1]
+
+      var codeForArgs = ""
+      if (count <= 16) {
+        var funcArgs = type.veery_codeGenCallArgs(count)
+        codeForArgs = "
+          construct new(%(funcArgs)) {
+            _data = List.filled(%(count), null)
+
+            %((0...count).map {|i| "this[%(i)] = arg%(i)"}.join("\n            "))
+          }
+        "
+      }
+
+      var template = "
+        class %(mangledName) is Array {
+          %(type.veery_codeGenObject())
+
+          static veery_init_() {
+            __T = veery_type.args[1]
+          }
+
+          static count { %(count) }
+          static valueType { __T }
+
+          %(codeForArgs)
+
+          construct fromAll(seq) {
+            implementMe
+          }
+
+          [subscript] { _data[subscript] }
+
+          [subscript] = (value) {
+            // FIXME: Validate value type
+            return _data[subscript] = value
+          }
+
+          count { %(count) }
+
+          // Satisfiy 'Sequenceable'
+          iterate(it) { _data.iterate(it) }
+          iteratorValue(it) { _data.iteratorValue(it) }
+        }
+
+        return %(mangledName)
+      "
+
+      var clazz = type.veery_Meta.compile(template).call()
+      clazz.veery_type_ = type
+      clazz.veery_init_()
+      return clazz
+    }
+
+    __classes = Memoize.new {|count| __template.call(count, Object) }
+  }
+}
+
+Array.init_()

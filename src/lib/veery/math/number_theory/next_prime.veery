@@ -1,0 +1,13 @@
+
+import "veery/math/number_theory/isprime" for IsPrime
+
+class NextPrime {
+  // Returns the next prime number greater than 'n'.
+  static call(n) {
+      n = n + ((n%2 == 0) ? 1 : 2)
+      while (true) {
+          if (IsPrime.call(n)) return n
+          n = n + 2
+      }
+  }
+}

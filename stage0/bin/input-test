@@ -1,0 +1,20 @@
+// DO NOT EDIT: This file is automagically generated
+
+import "io" for Stdin
+import "veery/chars" for Chars
+import "veery/event/input" for Input
+import "veery/event/key" for Key
+import "veery/event/loop" for Loop
+Stdin.isRaw = true
+var event_loop = Loop.new()
+var input = Input.new()
+event_loop.run()
+while (true) {
+  var key = input.read()
+  System.print(key)
+  var byte = key.toKeyCode
+  if (byte == Chars.ctrlC) {
+    event_loop.stop()
+    break
+  }
+}

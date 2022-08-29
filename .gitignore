@@ -1,0 +1,20 @@
+
+# Default build dir
+/build
+
+# Cloned deps
+/deps/*.git
+
+# Compilation stages
+# stage0 must be preserved to provide a bootstrap compiler
+/stage1
+/stage2
+/stage3
+
+# I leave temporary Veery & Wren scripts at the top level
+# so that I can quickly test stuff.
+/scratch*.veery
+/scratch*.wren
+
+# Ignore IDE files
+.vscode

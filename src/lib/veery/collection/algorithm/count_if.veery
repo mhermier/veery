@@ -1,0 +1,14 @@
+
+import "veery/collections/algorithms/count" for Count
+
+class CountIf {
+  static call(sequenceable, unaryPredicate) {
+    var count = 0
+    for (element in sequenceable) {
+      if (unaryPredicate.call(element)) {
+        count = count + 1
+      }
+    }
+    return count
+  }
+}

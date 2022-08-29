@@ -1,0 +1,13 @@
+
+class UnitTests {
+  static init_() {
+  }
+
+  static benchmark(name, description, fn) {
+  }
+
+  static test(name, description, fn) {
+  }
+}
+
+UnitTests.init_()

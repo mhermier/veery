@@ -1,0 +1,221 @@
+
+import "veery/identity" for Identity
+
+class Pack {
+  static [] {
+    return callAll([])
+  }
+  static [arg0] {
+    return callAll([arg0])
+  }
+  static [arg0, arg1] {
+    return callAll([arg0, arg1])
+  }
+  static [arg0, arg1, arg2] {
+    return callAll([arg0, arg1, arg2])
+  }
+  static [arg0, arg1, arg2, arg3] {
+    return callAll([arg0, arg1, arg2, arg3])
+  }
+  static [arg0, arg1, arg2, arg3, arg4] {
+    return callAll([arg0, arg1, arg2, arg3, arg4])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14])
+  }
+  static [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15])
+  }
+
+  static call() {
+    return callAll([])
+  }
+  static call(arg0) {
+    return callAll([arg0])
+  }
+  static call(arg0, arg1) {
+    return callAll([arg0, arg1])
+  }
+  static call(arg0, arg1, arg2) {
+    return callAll([arg0, arg1, arg2])
+  }
+  static call(arg0, arg1, arg2, arg3) {
+    return callAll([arg0, arg1, arg2, arg3])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4) {
+    return callAll([arg0, arg1, arg2, arg3, arg4])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14])
+  }
+  static call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15])
+  }
+
+  static callAll(args) { args }
+
+  static    new()   { new(Identity) }
+  construct new(fn) {
+    _fn = fn
+  }
+
+  [] {
+    return callAll([])
+  }
+  [arg0] {
+    return callAll([arg0])
+  }
+  [arg0, arg1] {
+    return callAll([arg0, arg1])
+  }
+  [arg0, arg1, arg2] {
+    return callAll([arg0, arg1, arg2])
+  }
+  [arg0, arg1, arg2, arg3] {
+    return callAll([arg0, arg1, arg2, arg3])
+  }
+  [arg0, arg1, arg2, arg3, arg4] {
+    return callAll([arg0, arg1, arg2, arg3, arg4])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14])
+  }
+  [arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15] {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15])
+  }
+
+  call() {
+    return callAll([])
+  }
+  call(arg0) {
+    return callAll([arg0])
+  }
+  call(arg0, arg1) {
+    return callAll([arg0, arg1])
+  }
+  call(arg0, arg1, arg2) {
+    return callAll([arg0, arg1, arg2])
+  }
+  call(arg0, arg1, arg2, arg3) {
+    return callAll([arg0, arg1, arg2, arg3])
+  }
+  call(arg0, arg1, arg2, arg3, arg4) {
+    return callAll([arg0, arg1, arg2, arg3, arg4])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14])
+  }
+  call(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) {
+    return callAll([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15])
+  }
+
+  callAll(args) { _fn.call(args) }
+}

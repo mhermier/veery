@@ -1,0 +1,18 @@
+
+class IsEqual {
+  static call(sequenceableLeft, sequenceableRight) { call(sequenceableLeft, sequenceableRight, ... ) }
+  static call(sequenceableLeft, sequenceableRight, binaryPredicate) {
+    var iteratorLeft
+    var iteratorRight
+    var result
+
+    while (iteratorLeft = sequenceableLeft.iterate(iteratorLeft) &&
+           iteratorRight = sequenceableRight.iterate(iteratorRight)) {
+      if (result = binaryPredicate.call(sequenceableLeft.iteratorValue(iteratorLeft),
+                                        sequenceableRight.iteratorValue(iteratorRight))) {
+        return result
+      }
+    }
+    return iteratorLeft == iteratorRight
+  }
+}

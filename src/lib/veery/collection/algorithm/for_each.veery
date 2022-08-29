@@ -1,0 +1,6 @@
+
+class ForEach {
+  static call(sequenceable, unaryFn) {
+    for (i in sequenceable) unaryFn.call(i)
+  }
+}

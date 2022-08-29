@@ -1,0 +1,37 @@
+
+import "veery/functional/less_than" for LessThan
+
+class QuickSort {
+  static call(sequenceable) { call(sequenceable, LessThan) }
+  static call(arrayable, compare) {
+    call_(arrayable, 0, arrayable.count - 1, compare)
+    return arrayable
+  }
+
+  static call_(arrayable, low, high, compare) {
+    if (low >= 0 && high >= 0 && low < high) {
+      var p = partition_(arrayable, low, high, compare)
+      call_(arrayable, low, p, compare)
+      call_(arrayable, p+1, high, compare)
+    }
+  }
+
+  static partition_(arrayable, low, high, compare) {
+    var mid = ((low + high)/2).floor
+    var p = arrayable[mid]
+    var i = low - 1
+    var j = high + 1
+    while (true) {
+      while (true) {
+        i = i + 1
+        if (!compare.call(arrayable[i], p)) break
+      }
+      while (true) {
+        j = j - 1
+        if (!compare.call(p, arrayable[j])) break
+      }
+      if (i >= j) return j
+      arrayable.swap(i, j)
+    }
+  }
+}

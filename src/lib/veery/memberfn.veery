@@ -1,0 +1,79 @@
+
+import "meta" for Meta
+
+import "veery/template" for Template
+
+class MemberFn {
+  static call(member) { __template.call(member) }
+
+  static veery_init_() {
+    if (__template != null) return
+
+    __template = Template.new() {|args|
+      var name   = Template.mangle("MemberFn", args)
+      var member = args[0]
+
+      // FIXME: This is broken, instead the member name should be fully parsed
+      //        to deduce the arity and produce a single call function
+      //        and also accept subcripts/setter syntax combos
+      var template = "
+        class %(name) is MemberFn {
+          static call(obj) {
+            return obj.%(member)()
+          }
+          static call(obj, arg0) {
+            return obj.%(member)(arg0)
+          }
+          static call(obj, arg0, arg1) {
+            return obj.%(member)(arg0, arg1)
+          }
+          static call(obj, arg0, arg1, arg2) {
+            return obj.%(member)(arg0, arg1, arg2)
+          }
+          static call(obj, arg0, arg1, arg2, arg3) {
+            return obj.%(member)(arg0, arg1, arg2, arg3)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)
+          }
+          static call(obj, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) {
+            return obj.%(member)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)
+          }
+        }
+
+        return %(name)
+        "
+
+      return  Meta.compile(template).call()
+    }
+  }
+}
+
+MemberFn.veery_init_()

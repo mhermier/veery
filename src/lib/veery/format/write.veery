@@ -1,0 +1,13 @@
+
+import "veery/format/print_all" for WriteAll
+
+class Write {
+  static call(format, a0)                             { WriteAll.call(format, [a0]) }
+  static call(format, a0, a1)                         { WriteAll.call(format, [a0, a1]) }
+  static call(format, a0, a1, a2)                     { WriteAll.call(format, [a0, a1, a2]) }
+  static call(format, a0, a1, a2, a3)                 { WriteAll.call(format, [a0, a1, a2, a3]) }
+  static call(format, a0, a1, a2, a3, a4)             { WriteAll.call(format, [a0, a1, a2, a3, a4]) }
+  static call(format, a0, a1, a2, a3, a4, a5)         { WriteAll.call(format, [a0, a1, a2, a3, a4, a5]) }
+  static call(format, a0, a1, a2, a3, a4, a5, a6)     { WriteAll.call(format, [a0, a1, a2, a3, a4, a5, a6]) }
+  static call(format, a0, a1, a2, a3, a4, a5, a6, a7) { WriteAll.call(format, [a0, a1, a2, a3, a4, a5, a6, a7]) }
+}

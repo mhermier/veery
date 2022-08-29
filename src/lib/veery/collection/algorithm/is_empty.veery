@@ -1,0 +1,6 @@
+
+import "veery/collections/algorithms/count" for Count
+
+class IsEmpty {
+  static call(sequenceable) { Count(sequenceable) == 0 }
+}

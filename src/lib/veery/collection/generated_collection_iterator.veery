@@ -1,0 +1,67 @@
+
+import "veery/abort" for Abort
+import "veery/magnitude" for Magnitude
+
+class Generated_collection_iterator_ is Magnitude {
+  construct new(generator, index, previous) {
+    _generator = generator
+    _index = index
+
+    _previous = previous
+    _next = null
+  }
+
+  generator { _generator }
+
+  index { _index }
+
+  previous { _previous }
+
+  next {
+    if (_next != null) {
+      return _next
+    }
+    if (_generator.isDone) {
+      _next = null // Barrier
+      return _next
+    }
+
+    // Memoize value and create next value
+    _value = _generator.call()
+    return _next = new(_generator, _index + 1, this)
+  }
+
+  value { _value }
+}
+
+class Generated_collection_iterator is Magnitude {
+  construct begin(generator) {
+    _generator = generator
+  }
+
+  clone() { Abort.todo() }
+
+  ==(other) {
+    Abort.todo()
+  }
+  <(other) {
+    Abort.todo()
+  }
+
+  [n] { peek(n) }
+
+  decrement() { increment(1) }
+  decrement(n) {
+    Abort.todo()
+  }
+
+  increment() { increment(1) }
+  increment(n) {
+    Abort.todo()
+  }
+
+  peek { peek(0) }
+  peek(n) {
+    Abort.todo()
+  }
+}

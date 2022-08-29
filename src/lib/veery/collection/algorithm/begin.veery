@@ -1,0 +1,4 @@
+
+class Begin {
+  static call(sequenceable) { sequenceable.iterate(null) }
+}

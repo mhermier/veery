@@ -1,0 +1,11 @@
+
+import "os" for Process
+
+import "veery/veery" for Veery
+
+// TODO: expect exit codes
+var ret = Veery.new().run(Process.arguments)
+if (ret != null &&
+    ret != 0) {
+  Fiber.abort("TODO: exit more properly")
+}

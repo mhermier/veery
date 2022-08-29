@@ -1,0 +1,12 @@
+
+import "collection/generated_collection_iterator" for Generated_collection_iterator
+
+class Generated_collection {
+  construct new(generator) {
+    _begin = Generated_collection_iterator.new(generator)
+    _end = null // FIXME
+  }
+
+  begin() { _begin.clone() }
+  end() { _end.clone() }
+}

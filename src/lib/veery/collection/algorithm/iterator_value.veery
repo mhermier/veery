@@ -1,0 +1,4 @@
+
+class IteratorValue {
+  static call(sequenceable, iterator) { sequenceable.iteratorValue(iterator) }
+}

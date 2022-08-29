@@ -1,0 +1,86 @@
+
+// Utilities for working with characters.
+class Chars {
+  static ctrlA { 0x01 }
+  static ctrlB { 0x02 }
+  static ctrlC { 0x03 }
+  static ctrlD { 0x04 }
+  static ctrlE { 0x05 }
+  static ctrlF { 0x06 }
+  static tab { 0x09 }
+  static lineFeed { 0x0a }
+  static ctrlK { 0x0b }
+  static ctrlL { 0x0c }
+  static carriageReturn { 0x0d }
+  static ctrlN { 0x0e }
+  static ctrlP { 0x10 }
+  static ctrlU { 0x15 }
+  static ctrlW { 0x17 }
+  static escape { 0x1b }
+  static space { 0x20 }
+  static bang { 0x21 }
+  static quote { 0x22 }
+  static percent { 0x25 }
+  static amp { 0x26 }
+  static singleQuote { 0x27 }
+  static leftParen { 0x28 }
+  static rightParen { 0x29 }
+  static star { 0x2a }
+  static plus { 0x2b }
+  static comma { 0x2c }
+  static minus { 0x2d }
+  static dot { 0x2e }
+  static slash { 0x2f }
+
+  static zero { 0x30 }
+  static one { 0x31 }
+  static nine { 0x39 }
+
+  static less { 0x3c }
+  static equal { 0x3d }
+  static greater { 0x3e }
+  static question { 0x3f }
+
+  static upperA { 0x41 }
+  static upperF { 0x46 }
+  static upperO { 0x4f }
+  static upperZ { 0x5a }
+
+  static leftBracket { 0x5b }
+  static backslash { 0x5c }
+  static rightBracket { 0x5d }
+  static caret { 0x5e }
+  static underscore { 0x5f }
+
+  static lowerA { 0x61 }
+  static lowerE { 0x65 }
+  static lowerF { 0x66 }
+  static lowerX { 0x78 }
+  static lowerZ { 0x7a }
+
+  static leftBrace { 0x7b }
+  static pipe { 0x7c }
+  static rightBrace { 0x7d }
+  static tilde { 0x7e }
+  static delete { 0x7f }
+
+  static isAlpha(c) {
+    return c >= lowerA && c <= lowerZ ||
+           c >= upperA && c <= upperZ ||
+           c == underscore
+  }
+
+  static isDigit(c) { c >= zero && c <= nine }
+
+  static isAlphaNumeric(c) { isAlpha(c) || isDigit(c) }
+
+  static isHexDigit(c) {
+    return c >= zero && c <= nine ||
+           c >= lowerA && c <= lowerF ||
+           c >= upperA && c <= upperF
+  }
+
+  static isLowerAlpha(c) { c >= lowerA && c <= lowerZ }
+
+  static isWhitespace(c) { c == space || c == tab || c == carriageReturn }
+}

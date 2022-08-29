@@ -1,0 +1,13 @@
+// DO NOT EDIT: This file is automagically generated
+
+import "veery/input_output/byte_to_utf8_reader" for Byte_to_UTF8_reader
+import "veery/input_output/wren_stdin_reader_adapter" for Wren_Stdin_reader_adapter
+class System_console {
+  static init_() {
+    __input = Byte_to_UTF8_reader.new(Wren_Stdin_reader_adapter.instance)
+  }
+  static input{
+    return __input
+  }
+}
+System_console.init_()

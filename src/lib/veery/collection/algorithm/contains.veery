@@ -1,0 +1,7 @@
+
+contains(collection: Collection const, element) {
+  for (item in collection) {
+    if (element == item) return true
+  }
+  return false
+}

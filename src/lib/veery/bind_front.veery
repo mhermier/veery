@@ -1,0 +1,5 @@
+
+class BindFront {
+  static call(obj, args0) {
+  }
+}

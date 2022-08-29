@@ -1,0 +1,19 @@
+
+import "veery/apply" for Apply
+import "veery/pack" for Pack
+
+class Memoize is Pack {
+  construct new(fn) {
+    _fn = fn
+    _memoized = {}
+  }
+
+  callAll(args) {
+    var key = args.toString
+    var memoized = _memoized[key]
+
+    if (memoized != null) return memoized
+
+    return _memoized[key] = Apply.call(_fn, args)
+  }
+}

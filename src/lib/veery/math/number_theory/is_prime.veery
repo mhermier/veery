@@ -1,0 +1,89 @@
+
+import "veery/collection/algorithm/binary_search" for BinarySearch
+import "veery/collection/algorithm/none_of" for NoneOf
+import "veery/math/maximum" for Maximum
+import "veery/math/minimum" for Minimum
+
+class IsPrime {
+  // Use a HashSet instead ?
+
+  static init_() {
+    __primes = [2, 3, 5, 7]
+    __tested = 8
+  }
+
+  // Sieves for primes up to and including 'n'.
+  static sieve(n) {
+    if (!n.isInteger || n < __tested) return
+
+    __primes = [2]
+
+    // Use a cheap estimation of the number of prime to perfor a reserve and
+    // avoid extra reallocations
+    __primes.reserve((n / (n.log - 1)).floor)
+
+    var k = ((n-3)/2).floor + 1
+    var marked = List.filled(k, true)
+    var limit = ((n.sqrt.floor - 3)/2).floor + 1
+    limit = limit.max(0)
+    for (i in 0...limit) {
+      if (marked[i]) {
+        var p = 2*i + 3
+        var s = ((p*p - 3)/2).floor
+        var j = s
+        while (j < k) {
+          marked[j] = false
+          j = j + p
+        }
+      }
+    }
+    for (i in 0...k) {
+      if (marked[i]) __primes.add(2*i + 3)
+    }
+  }
+
+  static grow(n) {
+    if (!n.isInteger || n < __tested) return
+
+    // Use a cheap estimation of the number of prime to perfor a reserve and
+    // avoid extra reallocations
+    __primes.reserve((n / (n.log - 1)).floor)
+
+    while (n > __tested) {
+      var low = __tested + 1
+      var high = Minimum.call(__primes[-1] * __primes[-1], n)
+
+      // Perform a segmented sieve
+      var isPrime = List.filled(high - low + 1, true)
+      for (prime in __primes) { // FIXME: only need to test primes up to sqrt of high
+        var composite = Maximum.call(prime * prime, ((low + prime - 1) / prime).floor * prime)
+        while (composite <= high) {
+          //System.print("composite %(composite - low)")
+          isPrime[composite - low] = false
+          composite = composite + prime
+        }
+      }
+
+      for (candidate in low..high) {
+        //System.print("candidate %(candidate) %(isPrime[candidate - low])")
+        if (isPrime[candidate - low]) {
+          __primes.add(candidate)
+        }
+      }
+
+      __tested = high
+    }
+  }
+
+  static call(n) {
+    if (!n.isInteger || n < 2) return false
+
+    grow(n)
+
+    return BinarySearch.call(__primes, n) != null
+  }
+
+  static primes_ { __primes }
+}
+
+IsPrime.init_()

@@ -1,0 +1,79 @@
+
+import "veery/abort" for Abort
+import "veery/character" for Character
+
+// Be aware:
+// Prefer key names for serialisation.
+//
+// While keyCodes are stable for char mapping, they are not
+// for named action keys.
+
+class Key {
+  static init_() {
+    __enum = {}
+    __automatic_key_code = 0
+
+    // FIXME: Make list more exhaustive
+
+    // Ctrl+A to Ctrl+Z
+    for (i in 1..26) Key.new_("Ctrl+%(Character.fromCodePoint('@'.codePoint + i))", i)
+
+    // Function keys: F1, F2, ...
+    for (i in 0..20) Key.new_("F%(i)")
+
+    __delete = Key.new_("Delete"  )
+    __down   = Key.new_("Down"    )
+    __end    = Key.new_("End"     )
+               Key.new_("Escape"  )
+    __home   = Key.new_("Home"    )
+               Key.new_("Insert"  )
+    __left   = Key.new_("Left"    )
+               Key.new_("PageDown")
+               Key.new_("PageUp"  )
+    __right  = Key.new_("Right"   )
+    __up     = Key.new_("Up"      )
+  }
+
+  static new_(toString) {
+    __automatic_key_code = __automatic_key_code - 1
+    return new_(toString, __automatic_key_code)
+  }
+
+  construct new_(toString, toKeyCode) {
+    _toKeyCode = toKeyCode
+    _toString  = toString
+
+    __enum[_toKeyCode] = this
+    __enum[_toString]  = this
+  }
+
+  static fromCharacter(c) {
+    var codePoint = c.codePoint
+    var k = __enum[codePoint]
+    if (k != null) return k
+
+    return new_(c.toString, codePoint)
+  }
+
+  static fromString(s) {
+    var k = __enum[s]
+    if (k != null) return k
+
+    Abort.todo("Unknown \"%(s)\" key")
+  }
+
+  static delete { __delete }
+  static down   { __down   }
+  static end    { __end    }
+  static home   { __home   }
+  static left   { __left   }
+  static right  { __right  }
+  static up     { __up     }
+
+  hash { Abort.todo() }
+
+  toKeyCode { _toKeyCode }
+  toString  { _toString }
+}
+
+Key.init_()

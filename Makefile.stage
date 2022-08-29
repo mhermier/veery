@@ -1,0 +1,70 @@
+
+ALL_OBJECTS+=$(BUILDDIR)/bin/input-test
+ALL_OBJECTS+=$(BUILDDIR)/bin/veery
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/ansi/color.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/abort.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/argument_parser.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/assert.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/character.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/character_string.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/chars.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast/enum_definition.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast/this_module_expression.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast_generator.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/composed_visitor.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/recursive_visitor.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/source_file.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/token_type.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/token.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/transform/character_transform.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/transform/constant_folding_transform/constant_folding_transform.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/transform_visitor.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/validator/call_receiver_validator.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/visitor.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/analyzer.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/compiler.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/reporter.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/shell.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/event/input.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/event/key.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/event/loop.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/byte_to_utf8_reader.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/circular_buffer_reader.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/system_console.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/wren_stdin_reader_adapter.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/magnitude.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/repl/action.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/repl/actions.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/repl/repl.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/veery.wren
+
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery_lang/lexer.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery_lang/parser.wren
+
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/lexer.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/parser.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/resolver.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/scope.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/source_printer.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/transform/enum_transform.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/transform/strict_equality_transform.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/transform/this_module_transform.wren
+
+.PHONY: all
+all: $(ALL_OBJECTS)
+
+.PHONY: bootstrap
+bootstrap: $(ALL_OBJECTS)
+
+$(BUILDDIR)/bin/%: src/bin/%.veery
+	mkdir -p $(dir $@)
+	$(VEERY) compile $< $@
+
+$(BUILDDIR)/wren_modules/%.wren: src/lib/%.veery
+	mkdir -p $(dir $@)
+	$(VEERY) compile $< $@
+
+.PHONY: clean
+clean:
+	rm -rf $(ALL_OBJECTS)

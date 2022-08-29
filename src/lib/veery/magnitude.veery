@@ -1,0 +1,12 @@
+
+import "veery/abort" for Abort
+
+class Magnitude {
+  ==(other) { Abort.subclass_responsibility() }
+  !=(other) { !(this == other) }
+
+  < (other) { Abort.subclass_responsibility() }
+  <=(other) { this < other || this == other }
+  > (other) { !(this <= other) }
+  >=(other) { !(this < other) }
+}

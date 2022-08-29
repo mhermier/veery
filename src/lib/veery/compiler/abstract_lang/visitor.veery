@@ -1,0 +1,47 @@
+
+import "veery/abort" for Abort
+
+// TODO: Make it an interface
+
+class AbstractVisitor {
+  visitBody(node) { Abort.subclass_responsibility() }
+  visitMapEntry(node) { Abort.subclass_responsibility() }
+  visitMethod(node) { Abort.subclass_responsibility() }
+  visitModule(node) { Abort.subclass_responsibility() }
+
+  // Expressions.
+
+  visitAssignmentExpr(node) { Abort.subclass_responsibility() }
+  visitBoolExpr(node) { Abort.subclass_responsibility() }
+  visitCallExpr(node) { Abort.subclass_responsibility() }
+  visitCharacterExpr(node) { Abort.subclass_responsibility() }
+  visitConditionalExpr(node) { Abort.subclass_responsibility() }
+  visitFieldExpr(node) { Abort.subclass_responsibility() }
+  visitGroupingExpr(node) { Abort.subclass_responsibility() }
+  visitInfixExpr(node) { Abort.subclass_responsibility() }
+  visitInterpolationExpr(node) { Abort.subclass_responsibility() }
+  visitListExpr(node) { Abort.subclass_responsibility() }
+  visitMapExpr(node) { Abort.subclass_responsibility() }
+  visitNullExpr(node) { Abort.subclass_responsibility() }
+  visitNumExpr(node) { Abort.subclass_responsibility() }
+  visitPrefixExpr(node) { Abort.subclass_responsibility() }
+  visitStaticFieldExpr(node) { Abort.subclass_responsibility() }
+  visitStringExpr(node) { Abort.subclass_responsibility() }
+  visitSubscriptExpr(node) { Abort.subclass_responsibility() }
+  visitSuperExpr(node) { Abort.subclass_responsibility() }
+  visitThisExpr(node) { Abort.subclass_responsibility() }
+  visitThisModuleExpr(node) { Abort.subclass_responsibility() }
+
+  // Statements.
+
+  visitBlockStmt(node) { Abort.subclass_responsibility() }
+  visitBreakStmt(node) { Abort.subclass_responsibility() }
+  visitClassStmt(node) { Abort.subclass_responsibility() }
+  visitContinueStmt(node) { Abort.subclass_responsibility() }
+  visitForStmt(node) { Abort.subclass_responsibility() }
+  visitIfStmt(node) { Abort.subclass_responsibility() }
+  visitImportStmt(node) { Abort.subclass_responsibility() }
+  visitReturnStmt(node) { Abort.subclass_responsibility() }
+  visitVarStmt(node) { Abort.subclass_responsibility() }
+  visitWhileStmt(node) { Abort.subclass_responsibility() }
+}
