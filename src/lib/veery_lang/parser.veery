@@ -295,14 +295,21 @@ class Parser {
     return grammar_rule
   }
 
-  static from_source(source, reporter) { new(Lexer.new(source), reporter) }
+  construct new(compiler) {
+    _compiler = compiler;
+  }
 
-  construct new(lexer, reporter) {
-    _lexer = lexer
-    _reporter = reporter
-    _current = null
+  // TODO: Remove, added to simulate local variable access
+  compilation_context { _compilation_context_ }
 
-    peek()
+  parse(compilation_context, source) {
+    _compilation_context_ = compilation_context;
+
+    _lexer    = Lexer.new(source);
+    _current  = null;
+
+    peek();
+    return parseModule();
   }
 
   parseModule() {
@@ -790,7 +797,7 @@ class Parser {
     }
 
     if (peek() != TokenType.semicolon) {
-      _reporter.call(Severity.Warning, error, [next_token])
+      .report(compilation_context, Severity.Warning, error, [next_token]);
       return
     }
 
@@ -829,15 +836,18 @@ class Parser {
     return _current
   }
 
-  // Reports an error on the most recent token.
-  error(message) {
-    _reporter.call(Severity.Error, message, [_current != null ? _current : _previous])
+  // Reports a warning on the most recent token.
+  report(compilation_context, warning, message) {
+    .report(compilation_context, warning, message, [_current != null ? _current : _previous]);
   }
 
-  // Reports an error on the most recent token.
-  warn(message) {
-    _reporter.call(Severity.Warning, message, [_current != null ? _current : _previous])
+  report(compilation_context, warning, message, tokens) {
+    compilation_context.report(warning, message, tokens);
   }
+
+  // TODO: Remove
+  error(message) { .report(compilation_context, Severity.Error,   message) }
+  warn(message)  { .report(compilation_context, Severity.Warning, message) }
 
   // The main entrypoint for the top-down operator precedence parser.
   parsePrecedence(precedence) {

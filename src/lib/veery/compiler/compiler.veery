@@ -53,12 +53,12 @@ class Compiler {
     return _warnings[name] = Warning.new_(this, name, desc, severity);
   }
 
-  parseFile(path) {
+  parseFile(compilation_context, path) {
 //    System.print("Parsing %(path)")
     var code = CharacterString.fromString(File.read(path))
     var source = SourceFile.new(path, code)
-    var parser = Parser.from_source(source, _reporter)
-    var ast = parser.parseModule()
+
+    var ast = _parser.parse(compilation_context, source);
 
 //    var resolver = Resolver.new(_reporter)
 //    resolver.resolve(ast)
@@ -111,6 +111,7 @@ class Compiler {
     var pipeline = IdentityVisitor.new();
 
     // veery
+    _parser = Parser.new(this);
 
     // wren
     if (true)  pipeline = pipeline | CharacterTransform.new();
@@ -125,10 +126,9 @@ class Compiler {
     if (false) pipeline = pipeline | CallReceiverValidator.new();
 
     var compilation_context = CompilationContext.new(this, reporter_class.new());
-    _reporter = compilation_context;
 
     var path = arguments[0];
-    var ast = parseFile(path);
+    var ast = parseFile(compilation_context, path);
     //System.print(ast);
 
     var file = File.create(arguments[1]);

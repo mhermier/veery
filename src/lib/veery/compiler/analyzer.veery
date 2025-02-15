@@ -5,6 +5,7 @@ import "veery/character_string" for CharacterString
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/token" for Token, TokenType
 import "veery/compiler/compilation_context" for CompilationContext;
+import "veery/compiler/compiler" for Compiler;
 import "veery/compiler/reporter" for JsonReporter, PrettyReporter;
 
 import "wren_lang/lexer" for Lexer
@@ -14,31 +15,31 @@ import "wren_lang/resolver" for Resolver
 class Analyzer {
   construct new () {}
 
-  parseFile(path) {
+  parseFile(compilation_context, path) {
 //    System.print("Parsing %(path)")
     var code = CharacterString.fromString(File.read(path))
     var source = SourceFile.new(path, code)
 
-    var parser = Parser.from_source(source, _reporter);
-    var ast = parser.parseModule()
+    var ast = _parser.parse(compilation_context, source);
 
-    var resolver = Resolver.new(_reporter)
-    var compilation_context;
+    var resolver = Resolver.new(compilation_context);
     resolver.resolve(ast, compilation_context);
 
     //System.print(ast)
   }
 
-  processDirectory(path) {
+  processDirectory(compilation_context, path) {
     for (entry in Directory.list(path)) {
       entry="%(path)/%(entry)"
       if (entry.endsWith(".wren") && File.exists(entry)) {
-        parseFile(entry)
+        .parseFile(compilation_context, entry);
       }
     }
   }
 
   run(arguments) {
+    var compiler = Compiler.new();
+
     var language;
     var reporter_class = PrettyReporter
 
@@ -69,22 +70,24 @@ class Analyzer {
       Fiber.abort("Properly implement arguments and language support");
     }
 
-    var compilation_context = CompilationContext.new(this, reporter_class.new());
-    _reporter = compilation_context;
-
     if (arguments.count != 1) {
       System.print("Usage: wrenalyzer [--json] <source file>")
       return 1
     }
 
+    _parser = Parser.new(compiler);
+
+    var compilation_context = CompilationContext.new(compiler, reporter_class.new());
+
     var path = arguments[0]
+    // FIXME: Do not abuse the compilation context for multiple files
     if (Directory.exists(path)) {
-      processDirectory(path)
+      .processDirectory(compilation_context, path);
     } else {
-      parseFile(path)
+      .parseFile(compilation_context, path);
     }
 
-    if (_reporter.has_errors) {
+    if (compilation_context.has_errors) {
       System.print("Build has errors")
       return 1
     }
