@@ -3,6 +3,8 @@ enum TokenType {
   interpreter_arguments,
 
   // Punctuators.
+  numberSign,
+
   leftParen,
   rightParen,
   leftBracket,

@@ -211,6 +211,8 @@ class Parser {
     var this_               = Fn.new {|token, parser, canAssign| ThisExpr.new(token) }
 
     __grammar_rules = {
+      TokenType.numberSign       : UNUSED,
+
       TokenType.leftParen        : PREFIX.call(grouping),
       TokenType.rightParen       : UNUSED,
       TokenType.leftBracket      : GrammarRule.new(list, subscript, subscriptSignature, Precedence.CALL, null),

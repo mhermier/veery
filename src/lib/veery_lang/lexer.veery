@@ -45,6 +45,8 @@ var KEYWORDS = {
 var PUNCTUATORS = {
   '\n'.codePoint: [TokenType.line],
 
+  '#'.codePoint:  [TokenType.numberSign],
+
   '('.codePoint:  [TokenType.leftParen],
   ')'.codePoint:  [TokenType.rightParen],
   '['.codePoint:  [TokenType.leftBracket],
