@@ -276,8 +276,9 @@ class Parser {
   }
 
   parseModule() {
-    var statements = definitions(TokenType.eof, "Expect end of input.")
-    return Module.new(statements)
+    var interpreter_arguments = match(TokenType.interpreter_arguments);
+    var statements = definitions(TokenType.eof, "Expect end of input.");
+    return Module.new(interpreter_arguments, statements);
   }
 
   definitions(right, message) {

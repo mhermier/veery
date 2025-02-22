@@ -59,6 +59,9 @@ class SourcePrinter is AbstractVisitor {
   }
 
   visitModule(node, visitor_data) {
+    if (node.interpreter_arguments) {
+      .print_(node.interpreter_arguments);
+    }
     print_("// DO NOT EDIT: This file is automagically generated")
     print_()
     for (statement in node.statements) {

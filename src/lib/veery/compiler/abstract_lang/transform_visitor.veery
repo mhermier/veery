@@ -86,6 +86,7 @@ class TransformVisitor is AbstractVisitor {
 
   visitModule(node, visitor_data) {
     var newNode = Module.new(
+        node.interpreter_arguments,
         acceptAll_(node.statements, visitor_data));
     return newNode
   }

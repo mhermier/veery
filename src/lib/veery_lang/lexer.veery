@@ -120,6 +120,10 @@ class Lexer {
       if (match('*')) return readBlockComment()
     }
 
+    if (c == '#') {
+      if (match('!')) return .readLine(TokenType.interpreter_arguments);
+    }
+
     if (PUNCTUATORS.containsKey(d)) {
       var punctuator = PUNCTUATORS[d]
       var type = punctuator[0]

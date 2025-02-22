@@ -1,5 +1,7 @@
 
 enum TokenType {
+  interpreter_arguments,
+
   // Punctuators.
   leftParen,
   rightParen,

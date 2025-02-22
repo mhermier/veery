@@ -5,15 +5,17 @@ class Expr is Node {}
 class Stmt is Node {}
 
 class Module is Node {
-  construct new(statements) {
-    _statements = statements
+  construct new(interpreter_arguments, statements) {
+    _interpreter_arguments = interpreter_arguments;
+    _statements = statements;
   }
 
+  interpreter_arguments { _interpreter_arguments }
   statements { _statements }
 
   accept(visitor, visitor_data) { visitor.visitModule(this, visitor_data) }
 
-  toString { "Module(%(_statements))" }
+  toString { "Module(%(_interpreter_arguments), %(_statements))" }
 }
 
 class MapEntryNode {
