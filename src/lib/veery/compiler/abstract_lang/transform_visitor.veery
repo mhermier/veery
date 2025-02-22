@@ -198,6 +198,8 @@ class TransformVisitor is AbstractVisitor {
   visitThisExpr(node, visitor_data) { node }
   visitThisModuleExpr(node, visitor_data) { node }
 
+  visitAttributeSpecifier(node, visitor_data) { node }
+
   // Statements.
 
   visitBlockStmt(node, visitor_data) {

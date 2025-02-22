@@ -33,6 +33,7 @@ import "veery/compiler/abstract_lang/ast" for
     ThisExpr,
     VarStmt,
     WhileStmt
+import "veery/compiler/abstract_lang/ast/attribute_specifier" for AttributeSpecifier;
 import "veery/compiler/abstract_lang/token" for Token, TokenType
 import "veery/compiler/reporter" for Severity
 import "wren_lang/lexer" for Lexer
@@ -343,6 +344,19 @@ class Parser {
     }
 
     return statement()
+  }
+
+  attribute_specifiers() {
+    var attribute_specifiers = [];
+    var numberSign;
+    while (numberSign = .match(TokenType.numberSign)) {
+      var name = .consume(TokenType.name, "Expect method name after '#'.");
+      var expression = .methodCall(null, name);
+      .consumeLine("Expect newline after attribute specifier.");
+      var attribute_specifier = AttributeSpecifier.new(numberSign, expression);
+      attribute_specifiers.add(attribute_specifier);
+    }
+    return attribute_specifiers;
   }
 
   // Parses the rest of a class definition after the "class" token.

@@ -1,0 +1,18 @@
+
+import "veery/compiler/abstract_lang/ast" for Node;
+
+class AttributeSpecifier is Node {
+  construct new(tag, expression) {
+    _tag        = tag;
+    _expression = expression;
+  }
+
+  tag        { _tag }
+  expression { _expression }
+
+  accept(visitor, visitor_data) { visitor.visitAttributeSpecifier(this, visitor_data) }
+
+  toString {
+    return "AttributeSpecifier(%(_expression))";
+  }
+}

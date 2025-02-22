@@ -36,6 +36,8 @@ class AbstractVisitor {
   visitThisExpr                (node, visitor_data) { .visit(node, visitor_data) }
   visitThisModuleExpr          (node, visitor_data) { .visit(node, visitor_data) }
 
+  visitAttributeSpecifier      (node, visitor_data) { .visit(node, visitor_data) }
+
   // Statements.
 
   visitBlockStmt               (node, visitor_data) { .visit(node, visitor_data) }

@@ -206,6 +206,11 @@ class SourcePrinter is AbstractVisitor {
     Fiber.abort("this_module's are not supported")
   }
 
+  visitAttributeSpecifier(node, visitor_data) {
+    write_('#');
+    node.expression.accept(this, visitor_data);
+  }
+
   // Statements.
 
   visitBlockStmt(node, visitor_data) {
@@ -336,6 +341,16 @@ class SourcePrinter is AbstractVisitor {
     print_("{")
     printAllNodeIndent_(nodes, visitor_data);
     write_("}")
+  }
+
+  printAllAttributeSpecifiers_(attribute_specifiers, visitor_data) {
+    if (attribute_specifiers != null) {
+      for (attribute_specifier in attribute_specifiers) {
+        attribute_specifier.accept(this, visitor_data);
+        print_();
+        indent_();
+      }
+    }
   }
 
   write_(obj) { _file.writeBytes(obj.toString) }
