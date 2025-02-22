@@ -21,6 +21,6 @@ class EnumTransform is TransformVisitor {
         ])));
     }
 
-    return ClassStmt.new(null, node.name, null, methods);
+    return ClassStmt.new(null, null, node.name, null, methods);
   }
 }

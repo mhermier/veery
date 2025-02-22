@@ -222,6 +222,8 @@ class SourcePrinter is AbstractVisitor {
   }
 
   visitClassStmt(node, visitor_data) {
+    .printAllAttributeSpecifiers_(node.attribute_specifiers, visitor_data);
+
     if (node.foreignKeyword != null) {
       write_("foreign ")
     }

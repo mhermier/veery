@@ -301,14 +301,16 @@ class Parser {
   }
 
   definition() {
+    var attribute_specifiers = this.attribute_specifiers();
+
     if (match(TokenType.classKeyword)) {
-      return finishClass(null)
+      return finishClass(attribute_specifiers, null);
     }
 
     if (match(TokenType.foreignKeyword)) {
       var foreignKeyword = _previous
       consume(TokenType.classKeyword, "Expect 'class' after 'foreign'.")
-      return finishClass(foreignKeyword)
+      return finishClass(attribute_specifiers, foreignKeyword);
     }
 
     if (match(TokenType.importKeyword)) {
@@ -360,7 +362,7 @@ class Parser {
   }
 
   // Parses the rest of a class definition after the "class" token.
-  finishClass(foreignKeyword) {
+  finishClass(attribute_specifiers, foreignKeyword) {
     var name = consume(TokenType.name, "Expect class name.")
 
     var superclass
@@ -384,7 +386,7 @@ class Parser {
     }
     consume(TokenType.rightBrace, "Expect '}' after class definition.")
 
-    return ClassStmt.new(foreignKeyword, name, superclass, methods)
+    return ClassStmt.new(attribute_specifiers, foreignKeyword, name, superclass, methods);
   }
 
   method() {

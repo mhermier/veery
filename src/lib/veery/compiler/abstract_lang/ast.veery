@@ -538,13 +538,15 @@ class WhileStmt is Stmt {
 }
 
 class ClassStmt is Stmt {
-  construct new(foreignKeyword, name, superclass, methods) {
+  construct new(attribute_specifiers, foreignKeyword, name, superclass, methods) {
+    _attribute_specifiers = attribute_specifiers;
     _foreignKeyword = foreignKeyword
     _name = name
     _superclass = superclass
     _methods = methods
   }
 
+  attribute_specifiers { _attribute_specifiers }
   foreignKeyword { _foreignKeyword }
   name { _name }
   superclass { _superclass }
@@ -553,6 +555,6 @@ class ClassStmt is Stmt {
   accept(visitor, visitor_data) { visitor.visitClassStmt(this, visitor_data) }
 
   toString {
-    return "Class(%(_foreignKeyword) %(_name) %(_superclass) %(_methods))"
+    return "Class(%(_attribute_specifiers) %(_foreignKeyword) %(_name) %(_superclass) %(_methods))";
   }
 }
