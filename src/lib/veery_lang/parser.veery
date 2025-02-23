@@ -447,6 +447,8 @@ class Parser {
     // Note: This parses more permissively than the grammar actually is. For
     // example, it will allow "static construct *()". We'll report errors on
     // invalid forms later.
+    var attribute_specifiers = this.attribute_specifiers();
+
     var foreignKeyword
     if (match(TokenType.foreignKeyword)) {
       foreignKeyword = _previous
@@ -519,7 +521,7 @@ class Parser {
       body = finishBody(parameters)
     }
 
-    return Method.new(foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body)
+    return Method.new(attribute_specifiers, foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body);
   }
 
   statement(right) {

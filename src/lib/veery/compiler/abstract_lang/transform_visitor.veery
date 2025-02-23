@@ -73,6 +73,7 @@ class TransformVisitor is AbstractVisitor {
 
   visitMethod(node, visitor_data) {
     var newNode = Method.new(
+        node.attribute_specifiers, // FIXME ? acceptAll_(node.attribute_specifiers)
         node.foreignKeyword,
         node.staticKeyword,
         node.constructKeyword,

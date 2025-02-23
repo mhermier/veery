@@ -14,7 +14,7 @@ class EnumTransform is TransformVisitor {
     var staticKeyword = "static";
     var methods = [];
     for (definition in node.definitions) {
-      methods.add(Method.new(null, staticKeyword, null, definition, null, null, null,
+      methods.add(Method.new(null, null, staticKeyword, null, definition, null, null, null,
         Body.new(null, [
 //          ReturnStmt.new(null, StaticFieldExpr.new("__" + definition.text)),
           ReturnStmt.new(null, StringExpr.new("\"%(definition.text)\"")),

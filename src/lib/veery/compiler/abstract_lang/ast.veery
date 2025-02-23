@@ -33,7 +33,8 @@ class MapEntryNode {
 }
 
 class Method {
-  construct new(foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body) {
+  construct new(attribute_specifiers, foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body) {
+    _attribute_specifiers  = attribute_specifiers;
     _foreignKeyword        = foreignKeyword
     _staticKeyword         = staticKeyword
     _constructKeyword      = constructKeyword
@@ -44,6 +45,7 @@ class Method {
     _body                  = body
   }
 
+  attribute_specifiers  { _attribute_specifiers }
   foreignKeyword        { _foreignKeyword }
   staticKeyword         { _staticKeyword }
   constructKeyword      { _constructKeyword }
@@ -56,7 +58,7 @@ class Method {
   accept(visitor, visitor_data) { visitor.visitMethod(this, visitor_data) }
 
   toString {
-    return "Method(%(_staticKeyword) %(_constructKeyword) %(_name) %(_body))"
+    return "Method(%(_attribute_specifiers) %(_staticKeyword) %(_constructKeyword) %(_name) %(_body))";
   }
 }
 
