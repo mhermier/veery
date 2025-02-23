@@ -105,7 +105,7 @@ class Lexer {
 
     // Handle "//", and "/*".
     if (c == '/') {
-      if (match('/')) return readLineComment()
+      if (match('/')) return readLine(TokenType.comment);
       if (match('*')) return readBlockComment()
     }
 
@@ -147,14 +147,14 @@ class Lexer {
     return makeToken(TokenType.error)
   }
 
-  // Reads a line comment until the end of the line is reached.
-  readLineComment() {
-    // A line comment stops at the newline since newlines are significant.
+  // Reads a line and return a token of the given tokenType.
+  readLine(tokenType) {
+    // A line token stops at the newline.
     while (peek() != '\n' && !isAtEnd) {
       advance()
     }
 
-    return makeToken(TokenType.comment)
+    return makeToken(tokenType);
   }
 
   readBlockComment() {
