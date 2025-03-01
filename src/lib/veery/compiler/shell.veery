@@ -4,13 +4,12 @@ import "os" for Platform
 
 import "veery/argument_parser" for ArgumentParser, Option
 import "veery/repl/repl" for AnsiRepl, SimpleRepl
+import "veery/veery_version" for VEERY_VERSION_STRING;
 
 class Shell {
   construct new() {}
 
   run(arguments) {
-    var VEERY_VERSION_STRING = "0.0.0"
-
     var show_usage = false
     var show_version = false
 

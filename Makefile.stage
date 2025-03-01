@@ -38,6 +38,7 @@ ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/repl/action.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/repl/actions.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/repl/repl.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/veery.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/veery_version.wren
 
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery_lang/lexer.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery_lang/parser.wren

@@ -13,8 +13,6 @@ class Veery {
   construct new() {}
 
   run(arguments) {
-    var VEERY_VERSION_STRING = "0.0.0"
-
     var show_usage = false
     var show_version = false
 
