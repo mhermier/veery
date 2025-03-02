@@ -297,6 +297,8 @@ class Parser {
 
   construct new(compiler) {
     _compiler = compiler;
+
+    _compatibility = _compiler.register_warning("compatibility", "A compatibility error", Severity.Warning);
   }
 
   // TODO: Remove, added to simulate local variable access
@@ -798,7 +800,7 @@ class Parser {
     }
 
     if (peek() != TokenType.semicolon) {
-      .report(compilation_context, Severity.Warning, error, [next_token]);
+      .report(compilation_context, _compatibility, error, [next_token]);
       return
     }
 
