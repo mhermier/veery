@@ -544,7 +544,11 @@ class Parser {
     if (match(TokenType.returnKeyword)) {
       var keyword = _previous
       var value
-      if (peek() != TokenType.line) {
+      // FIXME: ignoreLine();
+      var next_token = .peek();
+      if (next_token != TokenType.line &&
+          next_token != TokenType.semicolon &&
+          next_token != right) {
         value = expression()
       }
       expectSemicolon("Expect ';' after 'return' statement.", right)
