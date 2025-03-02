@@ -8,6 +8,7 @@ var GRAY = "\x1b[30;1m"
 var NORMAL = "\x1b[0m"
 
 enum Severity {
+  None,
   Warning,
   Error,
 }
@@ -152,6 +153,10 @@ class Reporter {
   }
 
   call(severity, message, tokens) {
+    if (severity == Severity.None) {
+      // Ignore suppressed report
+      return
+    }
     if (severity == Severity.Error) {
       _error_count = _error_count + 1
     }
