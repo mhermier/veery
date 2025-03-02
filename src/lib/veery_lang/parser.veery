@@ -299,6 +299,7 @@ class Parser {
     _compiler = compiler;
 
     _compatibility = _compiler.register_warning("compatibility", "A compatibility error", Severity.Warning);
+    _pedantic =      _compiler.register_warning("pedantic",      "A pedantic error",      Severity.None);
   }
 
   // TODO: Remove, added to simulate local variable access
@@ -659,7 +660,9 @@ class Parser {
       elements.add(matchElementFn.call())
       ignoreLine()
       if (!match(TokenType.comma)) break
-      // TODO pedentic: Warn at missing ',' ?
+      if (peek() == right) {
+        .report(compilation_context, _pedantic, "comma at end of %(elementsName)");
+      }
       ignoreLine()
     }
 
@@ -795,7 +798,7 @@ class Parser {
 
     if (peek() == right) {
       // Found the closing scope right token
-      // TODO pedentic: Warn at missing ';' ?
+      .report(compilation_context, _pedantic, error, [next_token]);
       return
     }
 
