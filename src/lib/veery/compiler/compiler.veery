@@ -1,11 +1,13 @@
 
 import "io" for Directory, File
 
+import "veery/argument_parser" for ArgumentParser;
 import "veery/character_string" for CharacterString
 import "veery/compiler/abstract_lang/composed_visitor" for ComposedVisitor
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
-import "veery/compiler/reporter" for PrettyReporter, Reporter
+import "veery/compiler/reporter" for JsonReporter, PrettyReporter, Reporter;
+import "veery/veery_version" for VEERY_VERSION_STRING;
 
 import "veery_lang/lexer" for Lexer
 import "veery_lang/parser" for Parser
@@ -36,12 +38,42 @@ class Compiler {
   }
 
   run(arguments) {
-//    if (arguments.count > 0 && arguments[0] == "--json") {
-//      _reporter = JsonReporter.new()
-//      arguments.removeAt(0)
-//    } else {
-      _reporter = Reporter.new(PrettyReporter.new())
-//    }
+    var language;
+    var reporter_class = PrettyReporter;
+
+    var argument_parser = ArgumentParser.new {|argument_parser|
+      argument_parser.program_name    = "veery compile";
+      argument_parser.program_version = VEERY_VERSION_STRING;
+
+      // Compatibility option: add some ouput format option
+      argument_parser.add_option {|option|
+        option.long_name = "json";
+        option.help      = "Output result in json format";
+        option.callback  = Fn.new {
+          reporter_class = JsonReporter;
+        }
+      }
+
+      argument_parser.add_option {|option|
+        option.long_name = "lang";
+        option.help      = "Change the language";
+        option.arity     = 1;
+        option.callback  = Fn.new {|result|
+          // TODO Check values
+          language = result.arguments_shift();
+        }
+      }
+    }
+
+    var result = argument_parser.parse(arguments);
+    arguments = result.arguments;
+
+    _reporter = Reporter.new(reporter_class.new());
+
+    if (language != null) {
+      System.print("Support other languages than veery");
+      return 1;
+    }
 
     // FIXME Handle arguments more gracefully
     if (arguments.count != 2) {
