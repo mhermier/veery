@@ -60,6 +60,8 @@ class ArgumentParser {
   construct new(setupFn) {
     _options = {}
 
+    setupFn.call(this);
+
     add_option {|option|
         option.short_name = 'h'
         option.long_name = "help"
@@ -81,8 +83,6 @@ class ArgumentParser {
         }
       }
 */
-
-    setupFn.call(this)
   }
 
   program_name { _program_name }
