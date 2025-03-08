@@ -59,14 +59,16 @@ class Veery {
     var sub_commands = {
       "analyze": Analyzer,
       "compile": Compiler,
-      "shell":    Shell,
+      "shell":   Shell,
     }
 
-    var sub_command = sub_commands[arguments[0]] // sub_commands.at(arguments[0], Shell)
-    if (sub_command == null) {
-      sub_command = Shell // default is shell
-    } else {
-      arguments = arguments[1..-1]
+    var sub_command = Shell // default is shell
+    if (arguments.count > 0) {
+      var maybe_subcommand;
+      if (maybe_subcommand = sub_commands[arguments[0]]) {
+        sub_command = maybe_subcommand;
+        arguments   = arguments[1..-1];
+      }
     }
 
     return sub_command.new().run(arguments)
