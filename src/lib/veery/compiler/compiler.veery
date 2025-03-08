@@ -3,6 +3,7 @@ import "io" for Directory, File
 
 import "veery/abort" for Abort;
 import "veery/argument_parser" for ArgumentParser;
+import "veery/character" for Character;
 import "veery/character_string" for CharacterString
 import "veery/compiler/abstract_lang/identity_visitor" for IdentityVisitor;
 import "veery/compiler/abstract_lang/source_file" for SourceFile
@@ -69,6 +70,7 @@ class Compiler {
   run(arguments) {
     var language;
     var reporter_class = PrettyReporter;
+    var warning_modifiers = [];
 
     var argument_parser = ArgumentParser.new {|argument_parser|
       argument_parser.program_name    = "veery compile";
@@ -90,6 +92,25 @@ class Compiler {
         option.callback  = Fn.new {|result|
           // TODO Check values
           language = result.arguments_shift();
+        }
+      }
+
+      argument_parser.add_option {|option|
+        option.short_name = 'w';
+        option.help       = "Inhibit all warning messages";
+        option.callback   = Fn.new {|result|
+          // TODO Check values
+          warning_modifiers.add("no-warning");
+        }
+      }
+
+      argument_parser.add_option {|option|
+        option.short_name = 'W';
+        option.help       = "Enable warning messages";
+        option.arity      = 1;
+        option.callback   = Fn.new {|result|
+          // TODO Check values
+          warning_modifiers.add(result.arguments_shift());
         }
       }
     }
@@ -124,6 +145,49 @@ class Compiler {
 
     // Output AST validation
     if (false) pipeline = pipeline | CallReceiverValidator.new();
+
+    // TODO: Use a reporter here ?
+    var has_warning_modifiers_errors = false;
+    for (warning_modifier in warning_modifiers) {
+      var enable = true;
+      var warning = warning_modifier;
+      // TODO: handle warning with arguments
+
+      if (warning_modifier.startsWith("no-")) {
+        enable = false;
+        warning = warning_modifier[3..-1];
+      }
+
+      // TODO: Make report context handle the arguments?
+      if (warning == "error") {
+        if (enable) {
+          for (report_context in .warnings.values) {
+            if (report_context.severity == Severity.Warning) {
+              report_context.severity = Severity.Error;
+            }
+          }
+        } else {
+          has_warning_modifiers_errors = true;
+          System.print("Unable to lower errors");
+        }
+      } else if (warning == "warning") {
+        for (report_context in .warnings.values) {
+          report_context.severity = enable ? Severity.Warning : Severity.None;
+        }
+      } else {
+        var report_context = .warning(warning);
+        if (report_context == null) {
+          has_warning_modifiers_errors = true;
+          System.print("Unkonwn warning: %(warning)");
+        } else {
+          report_context.severity = enable ? Severity.Warning : Severity.None;
+        }
+      }
+    }
+    if (has_warning_modifiers_errors) {
+      System.print("Unknown warning modifiers");
+      return 1;
+    }
 
     var compilation_context = CompilationContext.new(this, reporter_class.new());
 
