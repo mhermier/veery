@@ -2,7 +2,7 @@
 import "io" for Stdin
 import "os" for Platform
 
-import "veery/argument_parser" for ArgumentParser, Option
+import "veery/argument_parser" for ArgumentParser;
 import "veery/repl/repl" for AnsiRepl, SimpleRepl
 import "veery/veery_version" for VEERY_VERSION_STRING;
 
