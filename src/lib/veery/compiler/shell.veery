@@ -10,50 +10,29 @@ class Shell {
   construct new() {}
 
   run(arguments) {
-    var show_usage = false
-    var show_version = false
+    var language;
 
-    while (arguments.count > 0) {
-      if (arguments[0] == "-h" || arguments[0] == "--help") {
-        show_usage = true
-      } else if (arguments[0] == "-v" || arguments[0] == "--version") {
-        show_version = true
-      } else if (arguments[0] == "--") {
-        // End of options
-        arguments = arguments[1..-1]
-        break
-    /*
-      } else if (arguments[0] ~= "--*" || arguments[0] ~= "-?") {
-        echo "${self} : Invalid option -- '$(echo "$1" | sed 's/^-\{1,2\}//')'" >&2
-        echo "Try '${self} -h' for more information." >&2
-      } else if (arguments[0] ~= "-*" || arguments[0] ~= "-?") {
-        // Combined short options
-        var split = arguments[0]
-        arguments = arguments[1..-1]
-        arguments.insert(0, "$(echo "${split}" | cut -c -2)")
-        arguments.insert(1, "-$(echo "${split}" | cut -c 3-)")
-        continue
-    */
-      } else {
-        // Not an option
-        break
+    var argument_parser = ArgumentParser.new {|argument_parser|
+      argument_parser.add_option {|option|
+        option.long_name = "lang";
+        option.help      = "Change the language";
+        option.arity     = 1;
+        option.callback  = Fn.new {|result|
+          // TODO Check values
+          language = result.arguments_shift();
+        }
       }
-      arguments = arguments[1..-1]
     }
 
-    if (show_usage) {
-      System.print("Show usage")
-      return 1
+    var result = argument_parser.parse(arguments);
+    arguments = result.arguments;
+
+    if (language != "wren") {
+      Fiber.abort("Properly implement language support");
     }
 
-    if (show_version) {
-      System.print("Show version")
-      return 1
-    }
-
-    if (arguments.count < 1 || arguments[0] != "--lang=wren") {
-      System.print(arguments.join(", "))
-      Fiber.abort("Properly implement arguments and language support")
+    if (arguments.count > 0) {
+      Fiber.abort("Properly implement arguments support");
     }
 
     System.print("\\\\/\"-")
