@@ -37,7 +37,7 @@ class Analyzer {
   }
 
   run(arguments) {
-    var langage
+    var language;
     var reporter_class = PrettyReporter
 
     var argument_parser = ArgumentParser.new {|argument_parser|
@@ -52,19 +52,19 @@ class Analyzer {
 
       argument_parser.add_option {|option|
         option.long_name = "lang"
-        option.help      = "change the langage"
+        option.help      = "Change the language";
         option.arity     = 1
         option.callback  = Fn.new {|result|
           // TODO Check values
-          langage = result.arguments_shift()
+          language = result.arguments_shift();
         }
       }
     }
 
     var result = argument_parser.parse(arguments)
 
-    if (langage != "wren") {
-      Fiber.abort("Properly implement arguments and langage support")
+    if (language != "wren") {
+      Fiber.abort("Properly implement arguments and language support");
     }
     _reporter = Reporter.new(reporter_class.new())
 
