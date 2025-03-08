@@ -63,23 +63,23 @@ class ArgumentParser {
     setupFn.call(this);
 
     add_option {|option|
-        option.short_name = 'h'
-        option.long_name = "help"
-        option.help = "show this help message and exit"
-        option.callback = Fn.new {
-          System.print("Implement")
-          Fiber.abort()
-        }
+      option.short_name = 'h';
+      option.long_name  = "help";
+      option.help       = "show this help message and exit";
+      option.callback   = Fn.new {
+        System.print("Implement");
+        Fiber.abort();
       }
+    }
 
     if (_program_version != null) {
       add_option {|option|
-        option.short_name = 'v'
-        option.long_name = "version"
-        option.help = "show version informations and exit"
-        option.callback = Fn.new {
+        option.short_name = 'v';
+        option.long_name  = "version";
+        option.help       = "show version informations and exit";
+        option.callback   = Fn.new {
           System.print(_program_version);
-          Fiber.abort()
+          Fiber.abort();
         }
       }
     }
