@@ -72,21 +72,24 @@ class ArgumentParser {
         }
       }
 
-/*
-    add_option {|option|
+    if (_program_version != null) {
+      add_option {|option|
         option.short_name = 'v'
         option.long_name = "version"
         option.help = "show version informations and exit"
         option.callback = Fn.new {
-          System.print("Implement")
+          System.print(_program_version);
           Fiber.abort()
         }
       }
-*/
+    }
   }
 
   program_name { _program_name }
   program_name=(program_name) { _program_name = program_name }
+
+  program_version { _program_version }
+  program_version=(program_version) { _program_version = program_version }
 
   add_option(setupFn) {
     var option = Option.new(setupFn)
