@@ -1,7 +1,7 @@
 
-import "veery/abort" for Abort
+import "veery/compiler/abstract_lang/visitor" for AbstractVisitor;
 
-class ComposedVisitor {
+class ComposedVisitor is AbstractVisitor {
   construct new(lhs, rhs) {
     _lhs = lhs
     _rhs = rhs
