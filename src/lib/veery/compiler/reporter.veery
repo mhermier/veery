@@ -21,7 +21,8 @@ class JsonReporter {
   // Reports an error with [message] stemming from the given list of [tokens].
   // The last token, if there is more than one, is consideRED the primary
   // token that led to the error. The others are informative and related to it.
-  call(severity, message, tokens) {
+  call(warning, message, tokens) {
+    var severity = warning.severity;
     var source = tokens[-1].source
 
     var tokensJson = tokens.map {|token|
@@ -94,7 +95,8 @@ class PrettyReporter {
   // Reports an error with [message] stemming from the given list of [tokens].
   // The last token, if there is more than one, is considered the primary
   // token that led to the error. The others are informative and related to it.
-  call(severity, message, tokens) {
+  call(warning, message, tokens) {
+    var severity = warning.severity;
     // The main erroneous token is always the last.
     var mainToken = tokens[-1]
 

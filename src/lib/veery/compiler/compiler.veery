@@ -1,13 +1,15 @@
 
 import "io" for Directory, File
 
+import "veery/abort" for Abort;
 import "veery/argument_parser" for ArgumentParser;
 import "veery/character_string" for CharacterString
 import "veery/compiler/abstract_lang/identity_visitor" for IdentityVisitor;
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
 import "veery/compiler/compilation_context" for CompilationContext;
-import "veery/compiler/reporter" for JsonReporter, PrettyReporter;
+import "veery/compiler/reporter" for JsonReporter, PrettyReporter, Severity;
+import "veery/compiler/warning" for Warning;
 import "veery/veery_version" for VEERY_VERSION_STRING;
 
 import "veery_lang/lexer" for Lexer
@@ -23,7 +25,33 @@ import "wren_lang/transform/this_module_transform" for ThisModuleTransform
 import "veery/compiler/abstract_lang/validator/call_receiver_validator" for CallReceiverValidator
 
 class Compiler {
-  construct new () {}
+  construct new () {
+    _warnings = {};
+
+    _generic_notice  = register_warning("notice",  "Generic notice report context",  Severity.Notice);
+    _generic_warning = register_warning("warning", "Generic warning report context", Severity.Warning);
+    _generic_error   = register_warning("error",   "Generic error report context",   Severity.Error);
+
+    // TODO: Remove compatibility aliases
+    _warnings[Severity.Warning] = _generic_warning;
+    _warnings[Severity.Error]   = _generic_error;
+  }
+
+  // TODO: Add generic_warning(severity) to transform any severity to a Generic context?
+  generic_notice  { _generic_notice }
+  generic_warning { _generic_warning }
+  generic_error   { _generic_error }
+
+  warnings { _warnings }
+  warning(name) { _warnings[name] }
+
+  register_warning(name, desc, severity) {
+    if (warning(name) != null) {
+      Abort.internal_error("Already registered reporter context named: %(name)");
+    }
+
+    return _warnings[name] = Warning.new_(this, name, desc, severity);
+  }
 
   parseFile(path) {
 //    System.print("Parsing %(path)")

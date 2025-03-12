@@ -1,0 +1,27 @@
+
+import "veery/compiler/reporter" for Severity;
+
+class Warning {
+  construct new_(compiler, name, desc, severity) {
+    // TODO: Validate severity levels orders
+    _compiler = compiler;
+    _name     = name;
+    _desc     = desc;
+    _severity = severity;
+  }
+
+  compiler { _compiler }
+
+  name { _name }
+
+  desc { _desc }
+
+  severity { _severity }
+  severity = (severity) {
+    // Only errors can't be altered
+    if (_severity != Severity.Error) {
+      _severity = severity;
+    }
+    return _severity;
+  }
+}

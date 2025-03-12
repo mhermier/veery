@@ -1,5 +1,6 @@
 
 import "veery/compiler/reporter" for Severity;
+import "veery/compiler/warning" for Warning;
 
 class CompilationContext {
   construct new(compiler, reporter) {
@@ -18,7 +19,12 @@ class CompilationContext {
   // TODO: Remove
   call(severity, message, tokens) { .report(severity, message, tokens) }
 
-  report(severity, message, tokens) {
+  // TODO: Only support warning
+  report(severity_or_warning, message, tokens) {
+    var warning = severity_or_warning is Warning ?
+        severity_or_warning : _compiler.warning(severity_or_warning);
+    var severity = warning.severity;
+
     if (severity == Severity.None) {
       // Ignore suppressed report
       return
@@ -27,6 +33,6 @@ class CompilationContext {
       _error_count = _error_count + 1;
     }
 
-    _reporter.call(severity, message, tokens);
+    _reporter.call(warning, message, tokens);
   }
 }
