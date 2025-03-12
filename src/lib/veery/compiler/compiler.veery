@@ -53,20 +53,8 @@ class Compiler {
     var ast = parseFile(path)
     //System.print(ast)
 
-    if (false) {
-      var nullTransformedAST = ast.accept(TransformVisitor.new())
-      System.print("NullTransform equality check: %(ast == nullTransformedAST)")
-      System.print("NullTransform same check: %(Object.same(ast, nullTransformedAST))")
-
-      // Check if nullTransform is loss less at minimum
-      ast = nullTransformedAST
-    }
-
     var file = File.create(arguments[1])
     var visitor = SourcePrinter.new(file)
-
-    // self test
-    if (false) visitor = ComposedVisitor.new(visitor, TransformVisitor.new()) // Null transform check
 
     // veery
 
