@@ -4,44 +4,46 @@ import "veery/abort" for Abort
 // TODO: Make it an interface
 
 class AbstractVisitor {
-  visitBody(node) { Abort.subclass_responsibility() }
-  visitMapEntry(node) { Abort.subclass_responsibility() }
-  visitMethod(node) { Abort.subclass_responsibility() }
-  visitModule(node) { Abort.subclass_responsibility() }
+  visit                        (node) { Abort.subclass_responsibility(.type) }
+
+  visitBody                    (node) { .visit(node) }
+  visitMapEntry                (node) { .visit(node) }
+  visitMethod                  (node) { .visit(node) }
+  visitModule                  (node) { .visit(node) }
 
   // Expressions.
 
-  visitAssignmentExpr(node) { Abort.subclass_responsibility() }
-  visitBoolExpr(node) { Abort.subclass_responsibility() }
-  visitCallExpr(node) { Abort.subclass_responsibility() }
-  visitCharacterExpr(node) { Abort.subclass_responsibility() }
-  visitConditionalExpr(node) { Abort.subclass_responsibility() }
-  visitFieldExpr(node) { Abort.subclass_responsibility() }
-  visitGroupingExpr(node) { Abort.subclass_responsibility() }
-  visitInfixExpr(node) { Abort.subclass_responsibility() }
-  visitInterpolationExpr(node) { Abort.subclass_responsibility() }
-  visitListExpr(node) { Abort.subclass_responsibility() }
-  visitMapExpr(node) { Abort.subclass_responsibility() }
-  visitNullExpr(node) { Abort.subclass_responsibility() }
-  visitNumExpr(node) { Abort.subclass_responsibility() }
-  visitPrefixExpr(node) { Abort.subclass_responsibility() }
-  visitStaticFieldExpr(node) { Abort.subclass_responsibility() }
-  visitStringExpr(node) { Abort.subclass_responsibility() }
-  visitSubscriptExpr(node) { Abort.subclass_responsibility() }
-  visitSuperExpr(node) { Abort.subclass_responsibility() }
-  visitThisExpr(node) { Abort.subclass_responsibility() }
-  visitThisModuleExpr(node) { Abort.subclass_responsibility() }
+  visitAssignmentExpr          (node) { .visit(node) }
+  visitBoolExpr                (node) { .visit(node) }
+  visitCallExpr                (node) { .visit(node) }
+  visitCharacterExpr           (node) { .visit(node) }
+  visitConditionalExpr         (node) { .visit(node) }
+  visitFieldExpr               (node) { .visit(node) }
+  visitGroupingExpr            (node) { .visit(node) }
+  visitInfixExpr               (node) { .visit(node) }
+  visitInterpolationExpr       (node) { .visit(node) }
+  visitListExpr                (node) { .visit(node) }
+  visitMapExpr                 (node) { .visit(node) }
+  visitNullExpr                (node) { .visit(node) }
+  visitNumExpr                 (node) { .visit(node) }
+  visitPrefixExpr              (node) { .visit(node) }
+  visitStaticFieldExpr         (node) { .visit(node) }
+  visitStringExpr              (node) { .visit(node) }
+  visitSubscriptExpr           (node) { .visit(node) }
+  visitSuperExpr               (node) { .visit(node) }
+  visitThisExpr                (node) { .visit(node) }
+  visitThisModuleExpr          (node) { .visit(node) }
 
   // Statements.
 
-  visitBlockStmt(node) { Abort.subclass_responsibility() }
-  visitBreakStmt(node) { Abort.subclass_responsibility() }
-  visitClassStmt(node) { Abort.subclass_responsibility() }
-  visitContinueStmt(node) { Abort.subclass_responsibility() }
-  visitForStmt(node) { Abort.subclass_responsibility() }
-  visitIfStmt(node) { Abort.subclass_responsibility() }
-  visitImportStmt(node) { Abort.subclass_responsibility() }
-  visitReturnStmt(node) { Abort.subclass_responsibility() }
-  visitVarStmt(node) { Abort.subclass_responsibility() }
-  visitWhileStmt(node) { Abort.subclass_responsibility() }
+  visitBlockStmt               (node) { .visit(node) }
+  visitBreakStmt               (node) { .visit(node) }
+  visitClassStmt               (node) { .visit(node) }
+  visitContinueStmt            (node) { .visit(node) }
+  visitForStmt                 (node) { .visit(node) }
+  visitIfStmt                  (node) { .visit(node) }
+  visitImportStmt              (node) { .visit(node) }
+  visitReturnStmt              (node) { .visit(node) }
+  visitVarStmt                 (node) { .visit(node) }
+  visitWhileStmt               (node) { .visit(node) }
 }
