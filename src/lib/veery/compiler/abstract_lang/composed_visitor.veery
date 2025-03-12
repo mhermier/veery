@@ -7,46 +7,5 @@ class ComposedVisitor is AbstractVisitor {
     _rhs = rhs
   }
 
-  visit_(node) { node.accept(_rhs).accept(_lhs) }
-
-  visitBody(node) { visit_(node) }
-  visitMapEntry(node) { visit_(node) }
-  visitMethod(node) { visit_(node) }
-  visitModule(node) { visit_(node) }
-
-  // Expressions.
-
-  visitAssignmentExpr(node) { visit_(node) }
-  visitBoolExpr(node) { visit_(node) }
-  visitCallExpr(node) { visit_(node) }
-  visitCharacterExpr(node) { visit_(node) }
-  visitConditionalExpr(node) { visit_(node) }
-  visitFieldExpr(node) { visit_(node) }
-  visitGroupingExpr(node) { visit_(node) }
-  visitInfixExpr(node) { visit_(node) }
-  visitInterpolationExpr(node) { visit_(node) }
-  visitListExpr(node) { visit_(node) }
-  visitMapExpr(node) { visit_(node) }
-  visitNullExpr(node) { visit_(node) }
-  visitNumExpr(node) { visit_(node) }
-  visitPrefixExpr(node) { visit_(node) }
-  visitStaticFieldExpr(node) { visit_(node) }
-  visitStringExpr(node) { visit_(node) }
-  visitSubscriptExpr(node) { visit_(node) }
-  visitSuperExpr(node) { visit_(node) }
-  visitThisExpr(node) { visit_(node) }
-  visitThisModuleExpr(node) { visit_(node) }
-
-  // Statements.
-
-  visitBlockStmt(node) { visit_(node) }
-  visitBreakStmt(node) { visit_(node) }
-  visitClassStmt(node) { visit_(node) }
-  visitContinueStmt(node) { visit_(node) }
-  visitForStmt(node) { visit_(node) }
-  visitIfStmt(node) { visit_(node) }
-  visitImportStmt(node) { visit_(node) }
-  visitReturnStmt(node) { visit_(node) }
-  visitVarStmt(node) { visit_(node) }
-  visitWhileStmt(node) { visit_(node) }
+  visit(node) { node.accept(_rhs).accept(_lhs) }
 }
