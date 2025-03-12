@@ -4,6 +4,8 @@ import "veery/abort" for Abort
 // TODO: Make it an interface
 
 class AbstractVisitor {
+  |(rhs) { ComposedVisitor.new(this, rhs) }
+
   visit                        (node, visitor_data) { Abort.subclass_responsibility(.type) }
 
   visitBody                    (node, visitor_data) { .visit(node, visitor_data) }
@@ -47,3 +49,5 @@ class AbstractVisitor {
   visitVarStmt                 (node, visitor_data) { .visit(node, visitor_data) }
   visitWhileStmt               (node, visitor_data) { .visit(node, visitor_data) }
 }
+
+import "veery/compiler/abstract_lang/composed_visitor" for ComposedVisitor;

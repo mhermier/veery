@@ -3,7 +3,7 @@ import "io" for Directory, File
 
 import "veery/argument_parser" for ArgumentParser;
 import "veery/character_string" for CharacterString
-import "veery/compiler/abstract_lang/composed_visitor" for ComposedVisitor
+import "veery/compiler/abstract_lang/identity_visitor" for IdentityVisitor;
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
 import "veery/compiler/reporter" for JsonReporter, PrettyReporter, Reporter;
@@ -81,28 +81,29 @@ class Compiler {
       return 1
     }
 
-    var path = arguments[0]
-    var ast = parseFile(path)
-    //System.print(ast)
-
-    var file = File.create(arguments[1])
-    var visitor = SourcePrinter.new(file)
+    var pipeline = IdentityVisitor.new();
 
     // veery
 
     // wren
-    if (true)  visitor = ComposedVisitor.new(visitor, CharacterTransform.new())
-    if (true)  visitor = ComposedVisitor.new(visitor, EnumTransform.new())
-    if (true)  visitor = ComposedVisitor.new(visitor, StrictEqualityTransform.new())
-    if (true)  visitor = ComposedVisitor.new(visitor, ThisModuleTransform.new())
+    if (true)  pipeline = pipeline | CharacterTransform.new();
+    if (true)  pipeline = pipeline | EnumTransform.new();
+    if (true)  pipeline = pipeline | StrictEqualityTransform.new();
+    if (true)  pipeline = pipeline | ThisModuleTransform.new();
 
     // Optimization
-    if (true)  visitor = ComposedVisitor.new(visitor, ConstantFoldingTransform.new())
+    if (true)  pipeline = pipeline | ConstantFoldingTransform.new();
 
     // Output AST validation
-    if (false) visitor = ComposedVisitor.new(visitor, CallReceiverValidator.new());
+    if (false) pipeline = pipeline | CallReceiverValidator.new();
 
-    ast.accept(visitor, null);
+    var path = arguments[0];
+    var ast = parseFile(path);
+    //System.print(ast);
+
+    var file = File.create(arguments[1]);
+    pipeline = pipeline | SourcePrinter.new(file);
+    ast.accept(pipeline, null);
     file.close()
 
     if (_reporter.has_errors) {

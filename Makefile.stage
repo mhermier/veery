@@ -13,6 +13,7 @@ ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast/enum_defi
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast/this_module_expression.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/ast_generator.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/composed_visitor.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/identity_visitor.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/recursive_visitor.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/source_file.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/token_type.wren
