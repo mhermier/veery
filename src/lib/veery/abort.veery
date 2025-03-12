@@ -16,8 +16,13 @@ class Abort {
     call("Runtime error: %(msg)")
   }
 
+  // deprecated
   static subclass_responsibility() {
     call("subclass responsibility")
+  }
+
+  static subclass_responsibility(class_instance) {
+    .call("subclass responsibility of %(class_instance.name) class");
   }
 
   static todo() {
