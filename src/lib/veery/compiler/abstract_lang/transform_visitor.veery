@@ -41,37 +41,37 @@ class TransformVisitor is AbstractVisitor {
   construct new() {
   }
 
-  accept_(node) {
+  accept_(node, visitor_data) {
     if (node == null) return null
 
-    return node.accept(this)
+    return node.accept(this, visitor_data);
   }
 
-  acceptAll_(nodes) {
+  acceptAll_(nodes, visitor_data) {
     if (nodes == null) return null
 
     var newNodes = []
     for (node in nodes) {
-      newNodes.add(accept_(node))
+      newNodes.add(accept_(node, visitor_data));
     }
     return newNodes
   }
 
-  visitBody(node) {
+  visitBody(node, visitor_data) {
     var newNode = Body.new(
         node.parameters,
-        acceptAll_(node.statements))
+        acceptAll_(node.statements, visitor_data));
     return newNode
   }
 
-  visitMapEntry(node) {
+  visitMapEntry(node, visitor_data) {
     var newNode = MapEntryNode.new(
-        accept_(node.key),
-        accept_(node.value))
+        accept_(node.key, visitor_data),
+        accept_(node.value, visitor_data));
     return newNode
   }
 
-  visitMethod(node) {
+  visitMethod(node, visitor_data) {
     var newNode = Method.new(
         node.foreignKeyword,
         node.staticKeyword,
@@ -80,182 +80,182 @@ class TransformVisitor is AbstractVisitor {
         node.subscriptParameters,
         node.setter,
         node.parenthesisParameters,
-        accept_(node.body))
+        accept_(node.body, visitor_data));
     return newNode
   }
 
-  visitModule(node) {
+  visitModule(node, visitor_data) {
     var newNode = Module.new(
-        acceptAll_(node.statements))
+        acceptAll_(node.statements, visitor_data));
     return newNode
   }
 
   // Expressions.
 
-  visitAssignmentExpr(node) {
+  visitAssignmentExpr(node, visitor_data) {
     var newNode = AssignmentExpr.new(
-        accept_(node.target),
+        accept_(node.target, visitor_data),
         node.equal,
-        accept_(node.value))
+        accept_(node.value, visitor_data));
     return newNode
   }
 
-  visitBoolExpr(node) { node }
+  visitBoolExpr(node, visitor_data) { node }
 
-  visitCallExpr(node) {
+  visitCallExpr(node, visitor_data) {
     var newNode = CallExpr.new(
-        accept_(node.receiver),
+        accept_(node.receiver, visitor_data),
         node.name,
-        acceptAll_(node.arguments),
-        accept_(node.blockArgument))
+        acceptAll_(node.arguments, visitor_data),
+        accept_(node.blockArgument, visitor_data));
     return newNode
   }
 
-  visitCharacterExpr(node) { node }
+  visitCharacterExpr(node, visitor_data) { node }
 
-  visitConditionalExpr(node) {
+  visitConditionalExpr(node, visitor_data) {
     var newNode = ConditionalExpr.new(
-        accept_(node.condition),
+        accept_(node.condition, visitor_data),
         node.question,
-        accept_(node.thenBranch),
+        accept_(node.thenBranch, visitor_data),
         node.colon,
-        accept_(node.elseBranch))
+        accept_(node.elseBranch, visitor_data));
     return newNode
   }
 
-  visitFieldExpr(node) { node }
+  visitFieldExpr(node, visitor_data) { node }
 
-  visitGroupingExpr(node) {
+  visitGroupingExpr(node, visitor_data) {
     var newNode = GroupingExpr.new(
         node.leftParen,
-        accept_(node.expression),
+        accept_(node.expression, visitor_data),
         node.rightParen)
     return newNode
   }
 
-  visitInfixExpr(node) {
+  visitInfixExpr(node, visitor_data) {
     var newNode = InfixExpr.new(
-        accept_(node.left),
+        accept_(node.left, visitor_data),
         node.operator,
-        accept_(node.right))
+        accept_(node.right, visitor_data));
     return newNode
   }
 
-  visitInterpolationExpr(node) {
+  visitInterpolationExpr(node, visitor_data) {
     var newNode = InterpolationExpr.new(
         node.strings,
-        acceptAll_(node.expressions))
+        acceptAll_(node.expressions, visitor_data));
     return newNode
   }
 
-  visitListExpr(node) {
+  visitListExpr(node, visitor_data) {
     var newNode = ListExpr.new(
         node.leftBracket,
-        acceptAll_(node.elements),
+        acceptAll_(node.elements, visitor_data),
         node.rightBracket)
     return newNode
   }
 
-  visitMapExpr(node) {
+  visitMapExpr(node, visitor_data) {
     var newNode = MapExpr.new(
         node.leftBrace,
-        acceptAll_(node.entries),
+        acceptAll_(node.entries, visitor_data),
         node.rightBrace)
     return newNode
   }
 
-  visitNullExpr(node) { node }
-  visitNumExpr(node) { node }
+  visitNullExpr(node, visitor_data) { node }
+  visitNumExpr(node, visitor_data) { node }
 
-  visitPrefixExpr(node) {
+  visitPrefixExpr(node, visitor_data) {
     var newNode = PrefixExpr.new(
         node.operator,
-        accept_(node.right))
+        accept_(node.right, visitor_data));
     return newNode
   }
 
-  visitStaticFieldExpr(node) { node }
-  visitStringExpr(node) { node }
+  visitStaticFieldExpr(node, visitor_data) { node }
+  visitStringExpr(node, visitor_data) { node }
 
-  visitSubscriptExpr(node) {
+  visitSubscriptExpr(node, visitor_data) {
     var newNode = SubscriptExpr.new(
-        accept_(node.receiver),
+        accept_(node.receiver, visitor_data),
         node.leftBracket,
-        acceptAll_(node.arguments),
+        acceptAll_(node.arguments, visitor_data),
         node.rightBracket)
     return newNode
   }
 
-  visitSuperExpr(node) {
+  visitSuperExpr(node, visitor_data) {
     var newNode = SuperExpr.new(
         node.name,
-        acceptAll_(node.arguments),
-        accept_(node.blockArgument))
+        acceptAll_(node.arguments, visitor_data),
+        accept_(node.blockArgument, visitor_data));
     return newNode
   }
 
-  visitThisExpr(node) { node }
-  visitThisModuleExpr(node) { node }
+  visitThisExpr(node, visitor_data) { node }
+  visitThisModuleExpr(node, visitor_data) { node }
 
   // Statements.
 
-  visitBlockStmt(node) {
+  visitBlockStmt(node, visitor_data) {
     var newNode = BlockStmt.new(
-        acceptAll_(node.statements))
+        acceptAll_(node.statements, visitor_data));
     return newNode
   }
 
-  visitBreakStmt(node) { node }
+  visitBreakStmt(node, visitor_data) { node }
 
-  visitClassStmt(node) {
+  visitClassStmt(node, visitor_data) {
     var newNode = ClassStmt.new(
         node.foreignKeyword,
         node.name,
         node.superclass, // FIXME ? accept_(node.superclass)
-        acceptAll_(node.methods))
+        acceptAll_(node.methods, visitor_data));
     return newNode
   }
 
-  visitContinueStmt(node) { node }
+  visitContinueStmt(node, visitor_data) { node }
 
-  visitEnumDefinition(node) { node }
+  visitEnumDefinition(node, visitor_data) { node }
 
-  visitForStmt(node) {
+  visitForStmt(node, visitor_data) {
     var newNode = ForStmt.new(
         node.variable,
-        accept_(node.iterator),
-        accept_(node.body))
+        accept_(node.iterator, visitor_data),
+        accept_(node.body, visitor_data));
     return newNode
   }
 
-  visitIfStmt(node) {
+  visitIfStmt(node, visitor_data) {
     var newNode = IfStmt.new(
-        accept_(node.condition),
-        accept_(node.thenBranch),
-        accept_(node.elseBranch))
+        accept_(node.condition, visitor_data),
+        accept_(node.thenBranch, visitor_data),
+        accept_(node.elseBranch, visitor_data));
     return newNode
   }
 
-  visitImportStmt(node) { node }
+  visitImportStmt(node, visitor_data) { node }
 
-  visitReturnStmt(node) {
+  visitReturnStmt(node, visitor_data) {
     var newNode = ReturnStmt.new(
         node.keyword,
-        accept_(node.value))
+        accept_(node.value, visitor_data));
     return newNode
   }
 
-  visitVarStmt(node) {
+  visitVarStmt(node, visitor_data) {
     var newNode = VarStmt.new(
         node.name,
-        accept_(node.initializer))
+        accept_(node.initializer, visitor_data));
     return newNode
   }
 
-  visitWhileStmt(node) {
+  visitWhileStmt(node, visitor_data) {
     var newNode = WhileStmt.new(
-        accept_(node.condition),
-        accept_(node.body))
+        accept_(node.condition, visitor_data),
+        accept_(node.body, visitor_data));
     return newNode
   }
 }

@@ -4,46 +4,46 @@ import "veery/abort" for Abort
 // TODO: Make it an interface
 
 class AbstractVisitor {
-  visit                        (node) { Abort.subclass_responsibility(.type) }
+  visit                        (node, visitor_data) { Abort.subclass_responsibility(.type) }
 
-  visitBody                    (node) { .visit(node) }
-  visitMapEntry                (node) { .visit(node) }
-  visitMethod                  (node) { .visit(node) }
-  visitModule                  (node) { .visit(node) }
+  visitBody                    (node, visitor_data) { .visit(node, visitor_data) }
+  visitMapEntry                (node, visitor_data) { .visit(node, visitor_data) }
+  visitMethod                  (node, visitor_data) { .visit(node, visitor_data) }
+  visitModule                  (node, visitor_data) { .visit(node, visitor_data) }
 
   // Expressions.
 
-  visitAssignmentExpr          (node) { .visit(node) }
-  visitBoolExpr                (node) { .visit(node) }
-  visitCallExpr                (node) { .visit(node) }
-  visitCharacterExpr           (node) { .visit(node) }
-  visitConditionalExpr         (node) { .visit(node) }
-  visitFieldExpr               (node) { .visit(node) }
-  visitGroupingExpr            (node) { .visit(node) }
-  visitInfixExpr               (node) { .visit(node) }
-  visitInterpolationExpr       (node) { .visit(node) }
-  visitListExpr                (node) { .visit(node) }
-  visitMapExpr                 (node) { .visit(node) }
-  visitNullExpr                (node) { .visit(node) }
-  visitNumExpr                 (node) { .visit(node) }
-  visitPrefixExpr              (node) { .visit(node) }
-  visitStaticFieldExpr         (node) { .visit(node) }
-  visitStringExpr              (node) { .visit(node) }
-  visitSubscriptExpr           (node) { .visit(node) }
-  visitSuperExpr               (node) { .visit(node) }
-  visitThisExpr                (node) { .visit(node) }
-  visitThisModuleExpr          (node) { .visit(node) }
+  visitAssignmentExpr          (node, visitor_data) { .visit(node, visitor_data) }
+  visitBoolExpr                (node, visitor_data) { .visit(node, visitor_data) }
+  visitCallExpr                (node, visitor_data) { .visit(node, visitor_data) }
+  visitCharacterExpr           (node, visitor_data) { .visit(node, visitor_data) }
+  visitConditionalExpr         (node, visitor_data) { .visit(node, visitor_data) }
+  visitFieldExpr               (node, visitor_data) { .visit(node, visitor_data) }
+  visitGroupingExpr            (node, visitor_data) { .visit(node, visitor_data) }
+  visitInfixExpr               (node, visitor_data) { .visit(node, visitor_data) }
+  visitInterpolationExpr       (node, visitor_data) { .visit(node, visitor_data) }
+  visitListExpr                (node, visitor_data) { .visit(node, visitor_data) }
+  visitMapExpr                 (node, visitor_data) { .visit(node, visitor_data) }
+  visitNullExpr                (node, visitor_data) { .visit(node, visitor_data) }
+  visitNumExpr                 (node, visitor_data) { .visit(node, visitor_data) }
+  visitPrefixExpr              (node, visitor_data) { .visit(node, visitor_data) }
+  visitStaticFieldExpr         (node, visitor_data) { .visit(node, visitor_data) }
+  visitStringExpr              (node, visitor_data) { .visit(node, visitor_data) }
+  visitSubscriptExpr           (node, visitor_data) { .visit(node, visitor_data) }
+  visitSuperExpr               (node, visitor_data) { .visit(node, visitor_data) }
+  visitThisExpr                (node, visitor_data) { .visit(node, visitor_data) }
+  visitThisModuleExpr          (node, visitor_data) { .visit(node, visitor_data) }
 
   // Statements.
 
-  visitBlockStmt               (node) { .visit(node) }
-  visitBreakStmt               (node) { .visit(node) }
-  visitClassStmt               (node) { .visit(node) }
-  visitContinueStmt            (node) { .visit(node) }
-  visitForStmt                 (node) { .visit(node) }
-  visitIfStmt                  (node) { .visit(node) }
-  visitImportStmt              (node) { .visit(node) }
-  visitReturnStmt              (node) { .visit(node) }
-  visitVarStmt                 (node) { .visit(node) }
-  visitWhileStmt               (node) { .visit(node) }
+  visitBlockStmt               (node, visitor_data) { .visit(node, visitor_data) }
+  visitBreakStmt               (node, visitor_data) { .visit(node, visitor_data) }
+  visitClassStmt               (node, visitor_data) { .visit(node, visitor_data) }
+  visitContinueStmt            (node, visitor_data) { .visit(node, visitor_data) }
+  visitForStmt                 (node, visitor_data) { .visit(node, visitor_data) }
+  visitIfStmt                  (node, visitor_data) { .visit(node, visitor_data) }
+  visitImportStmt              (node, visitor_data) { .visit(node, visitor_data) }
+  visitReturnStmt              (node, visitor_data) { .visit(node, visitor_data) }
+  visitVarStmt                 (node, visitor_data) { .visit(node, visitor_data) }
+  visitWhileStmt               (node, visitor_data) { .visit(node, visitor_data) }
 }

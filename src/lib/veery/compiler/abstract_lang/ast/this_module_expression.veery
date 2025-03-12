@@ -8,7 +8,7 @@ class ThisModuleExpr is Expr {
 
   keyword { _keyword }
 
-  accept(visitor) { visitor.visitThisModuleExpr(this) }
+  accept(visitor, visitor_data) { visitor.visitThisModuleExpr(this, visitor_data) }
 
   toString {
     return "ThisModule(%(_keyword))"

@@ -7,8 +7,8 @@ import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor;
 class ThisModuleTransform is TransformVisitor {
   construct new() {}
 
-  visitCallExpr(node) {
-    node = super(node);
+  visitCallExpr(node, visitor_data) {
+    node = super(node, visitor_data);
     if (!(node.receiver is ThisModuleExpr)) {
       return node;
     }

@@ -8,8 +8,8 @@ import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor;
 class EnumTransform is TransformVisitor {
   construct new() {}
 
-  visitEnumDefinition(node) {
-    node = super(node);
+  visitEnumDefinition(node, visitor_data) {
+    node = super(node, visitor_data);
 
     var staticKeyword = "static";
     var methods = [];

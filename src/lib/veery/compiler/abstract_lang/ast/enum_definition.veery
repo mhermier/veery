@@ -10,7 +10,7 @@ class EnumDefinition is Stmt {
   name { _name }
   definitions { _definitions }
 
-  accept(visitor) { visitor.visitEnumDefinition(this) }
+  accept(visitor, visitor_data) { visitor.visitEnumDefinition(this, visitor_data) }
 
   toString {
     return "EnumDefinition(%(_name) %(_definitions))"

@@ -22,7 +22,8 @@ class Analyzer {
     var ast = parser.parseModule()
 
     var resolver = Resolver.new(_reporter)
-    resolver.resolve(ast)
+    var compilation_context;
+    resolver.resolve(ast, compilation_context);
 
     //System.print(ast)
   }

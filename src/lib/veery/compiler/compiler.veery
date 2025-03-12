@@ -102,7 +102,7 @@ class Compiler {
     // Output AST validation
     if (false) visitor = ComposedVisitor.new(visitor, CallReceiverValidator.new());
 
-    ast.accept(visitor);
+    ast.accept(visitor, null);
     file.close()
 
     if (_reporter.has_errors) {

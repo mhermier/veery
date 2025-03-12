@@ -7,5 +7,7 @@ class ComposedVisitor is AbstractVisitor {
     _rhs = rhs
   }
 
-  visit(node) { node.accept(_rhs).accept(_lhs) }
+  visit(node, visitor_data) {
+    return node.accept(_rhs, visitor_data).accept(_lhs, visitor_data);
+  }
 }
