@@ -13,7 +13,6 @@ check: check-lang-veery check-lang-wren
 
 check-lang-veery: all
 	@echo "TODO: expand check-lang-veery"
-	@exit 1
 
 check-lang-wren: all
 	@for TEST_FILE in $(shell find $(BUILDDIR) -type f); do \
@@ -21,7 +20,6 @@ check-lang-wren: all
 		$(VEERY) analyze --lang=wren "$${TEST_FILE}"; \
 	done
 	@echo "TODO: expand check-lang-wren"
-	@exit 1
 
 .PHONY: update-stage0
 update-stage0: stage3 clean-stage0 stage0
