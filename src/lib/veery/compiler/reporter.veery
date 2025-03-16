@@ -147,27 +147,3 @@ class PrettyReporter {
   }
 }
 PrettyReporter.init_();
-
-class Reporter {
-  construct new(delegate) {
-    _delegate = delegate
-    _error_count = 0
-  }
-
-  call(severity, message, tokens) {
-    if (severity == Severity.None) {
-      // Ignore suppressed report
-      return
-    }
-    if (severity == Severity.Error) {
-      _error_count = _error_count + 1
-    }
-
-    _delegate.call(severity, message, tokens)
-  }
-
-  delegate { _delegate }
-
-  has_errors { _error_count > 0 }
-  error_count { _error_count }
-}

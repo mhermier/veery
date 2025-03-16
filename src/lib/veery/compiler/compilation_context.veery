@@ -1,0 +1,32 @@
+
+import "veery/compiler/reporter" for Severity;
+
+class CompilationContext {
+  construct new(compiler, reporter) {
+    _compiler    = compiler;
+    _reporter    = reporter;
+
+    _error_count = 0;
+  }
+
+  compiler { _compiler }
+  reporter { _reporter }
+
+  has_errors  { _error_count > 0 }
+  error_count { _error_count }
+
+  // TODO: Remove
+  call(severity, message, tokens) { .report(severity, message, tokens) }
+
+  report(severity, message, tokens) {
+    if (severity == Severity.None) {
+      // Ignore suppressed report
+      return
+    }
+    if (severity == Severity.Error) {
+      _error_count = _error_count + 1;
+    }
+
+    _reporter.call(severity, message, tokens);
+  }
+}

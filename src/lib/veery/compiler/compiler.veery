@@ -6,7 +6,8 @@ import "veery/character_string" for CharacterString
 import "veery/compiler/abstract_lang/identity_visitor" for IdentityVisitor;
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
-import "veery/compiler/reporter" for JsonReporter, PrettyReporter, Reporter;
+import "veery/compiler/compilation_context" for CompilationContext;
+import "veery/compiler/reporter" for JsonReporter, PrettyReporter;
 import "veery/veery_version" for VEERY_VERSION_STRING;
 
 import "veery_lang/lexer" for Lexer
@@ -68,8 +69,6 @@ class Compiler {
     var result = argument_parser.parse(arguments);
     arguments = result.arguments;
 
-    _reporter = Reporter.new(reporter_class.new());
-
     if (language != null) {
       System.print("Support other languages than veery");
       return 1;
@@ -97,16 +96,19 @@ class Compiler {
     // Output AST validation
     if (false) pipeline = pipeline | CallReceiverValidator.new();
 
+    var compilation_context = CompilationContext.new(this, reporter_class.new());
+    _reporter = compilation_context;
+
     var path = arguments[0];
     var ast = parseFile(path);
     //System.print(ast);
 
     var file = File.create(arguments[1]);
     pipeline = pipeline | SourcePrinter.new(file);
-    ast.accept(pipeline, null);
+    ast.accept(pipeline, compilation_context);
     file.close()
 
-    if (_reporter.has_errors) {
+    if (compilation_context.has_errors) {
       System.print("Build has errors")
       return 1
     }

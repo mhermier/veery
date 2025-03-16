@@ -24,6 +24,7 @@ ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/transform_vis
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/validator/call_receiver_validator.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/abstract_lang/visitor.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/analyzer.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/compilation_context.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/compiler.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/reporter.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/shell.wren
