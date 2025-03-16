@@ -17,15 +17,8 @@ class Analyzer {
 //    System.print("Parsing %(path)")
     var code = CharacterString.fromString(File.read(path))
     var source = SourceFile.new(path, code)
-    var lexer = Lexer.new(source)
 
-//    while (true) {
-//      var token = lexer.readToken()
-//      System.print("%(token.type) '%(token.text)'")
-//      if (token == TokenType.eof) break
-//    }
-
-    var parser = Parser.new(lexer, _reporter)
+    var parser = Parser.from_source(source, _reporter);
     var ast = parser.parseModule()
 
     var resolver = Resolver.new(_reporter)
