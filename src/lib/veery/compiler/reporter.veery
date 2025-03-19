@@ -2,6 +2,7 @@ import "veery/compiler/abstract_lang/token" for Token, TokenType
 
 // ANSI color escapes.
 var RED = "\x1b[31m"
+var YELLOW = "\x1b[33m";
 var CYAN = "\x1b[36m"
 var GRAY = "\x1b[30;1m"
 var NORMAL = "\x1b[0m"
@@ -78,6 +79,13 @@ class JsonReporter {
 
 // Outputs errors and other analysis results in a human-friendly form.
 class PrettyReporter {
+  static init_() {
+    __severity_color = {
+      Severity.Error:   RED,
+      Severity.Warning: YELLOW,
+    }
+  }
+
   construct new() {}
 
   // Reports an error with [message] stemming from the given list of [tokens].
@@ -88,9 +96,10 @@ class PrettyReporter {
     var mainToken = tokens[-1]
 
     var source = mainToken.source
+    var severity_color = __severity_color[severity];
     System.print(
         "[%(source.path) %(mainToken.lineStart):%(mainToken.columnStart)] " +
-        "%(RED)%(severity):%(NORMAL) %(message)")
+        "%(severity_color)%(severity):%(NORMAL) %(message)");
 
     var lineWidth = 0
     for (token in tokens) {
@@ -100,7 +109,7 @@ class PrettyReporter {
 
     // TODO: Collapse output if multiple tokens are on the same line.
     for (token in tokens) {
-      var color = token == mainToken ? RED : CYAN
+      var color = token == mainToken ? severity_color : CYAN;
       var end = token == mainToken ? "^" : "."
       var mid = token == mainToken ? "-" : "."
 
@@ -134,6 +143,7 @@ class PrettyReporter {
     return result
   }
 }
+PrettyReporter.init_();
 
 class Reporter {
   construct new(delegate) {
