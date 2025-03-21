@@ -26,19 +26,19 @@ update-stage0: stage3 clean-stage0 stage0
 
 .PHONY: stage0
 stage0: stage3
-	make -f Makefile.stage BUILDDIR="stage0" VEERY="$(WREN) stage3/bin/veery" bootstrap
+	make -f Makefile.stage BUILDDIR="stage0" VEERY="$(WREN) stage3/bin/veery" VEERY_ARGS="$(VEERY_ARGS)" bootstrap
 
 .PHONY: stage1
 stage1:
-	make -f Makefile.stage BUILDDIR="stage1" VEERY="$(WREN) stage0/bin/veery" bootstrap
+	make -f Makefile.stage BUILDDIR="stage1" VEERY="$(WREN) stage0/bin/veery" VEERY_ARGS="$(VEERY_BOOTSTRAP_ARGS)" bootstrap
 
 .PHONY: stage2
 stage2: stage1
-	make -f Makefile.stage BUILDDIR="stage2" VEERY="$(WREN) stage1/bin/veery" all
+	make -f Makefile.stage BUILDDIR="stage2" VEERY="$(WREN) stage1/bin/veery" VEERY_ARGS="$(VEERY_ARGS)" all
 
 .PHONY: stage3
 stage3: stage2
-	make -f Makefile.stage BUILDDIR="stage3" VEERY="$(WREN) stage2/bin/veery" all
+	make -f Makefile.stage BUILDDIR="stage3" VEERY="$(WREN) stage2/bin/veery" VEERY_ARGS="$(VEERY_ARGS)" all
 
 	# Test for a sound build
 	diff -rq stage2 stage3
