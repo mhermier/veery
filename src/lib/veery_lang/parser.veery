@@ -435,7 +435,7 @@ class Parser {
     ignoreLine()
     var name = consume(TokenType.name, "Expect enum name.")
 
-    var list = list("enum name", TokenType.leftBrace, "enumerator definitions", TokenType.rightBrace) {
+    var list = list("`enum`", TokenType.leftBrace, "enumerator definitions", TokenType.rightBrace) {
       return consume(TokenType.name, "Expect enummerator name.")
       /* TODO: support constant expression values ? */
     }
