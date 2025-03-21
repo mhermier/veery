@@ -36,6 +36,7 @@ var PUNCTUATORS = {
   '\n'.codePoint: [TokenType.line],
 
   '#'.codePoint:  [TokenType.numberSign],
+  '@'.codePoint:  [TokenType.at],
 
   '('.codePoint:  [TokenType.leftParen],
   ')'.codePoint:  [TokenType.rightParen],

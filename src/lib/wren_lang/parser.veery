@@ -180,6 +180,7 @@ class Parser {
 
     __grammar_rules = {
       TokenType.numberSign       : UNUSED,
+      TokenType.at               : UNUSED,
 
       TokenType.leftParen        : PREFIX.call(grouping),
       TokenType.rightParen       : UNUSED,
