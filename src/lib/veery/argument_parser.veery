@@ -14,13 +14,6 @@ class ArgumentParserResult {
   program_name { _program_name }
   program_name=(program_name) { _program_name = program_name }
 
-  show_usage { _show_usage }
-  show_usage=(show_usage) { _show_usage = show_usage }
-
-  show_usage() {
-    Fiber.abort("Show usage")
-  }
-
   arguments { _arguments }
   arguments_shift() { _arguments.removeAt(0) }
 }
@@ -67,8 +60,7 @@ class ArgumentParser {
       option.long_name  = "help";
       option.help       = "show this help message and exit";
       option.callback   = Fn.new {
-        System.print("Implement");
-        Fiber.abort();
+        .show_help();
       }
     }
 
@@ -78,8 +70,7 @@ class ArgumentParser {
         option.long_name  = "version";
         option.help       = "show version informations and exit";
         option.callback   = Fn.new {
-          System.print(_program_version);
-          Fiber.abort();
+          .show_version();
         }
       }
     }
@@ -192,11 +183,23 @@ class ArgumentParser {
         break // Not an option
       }
     }
-
-    if (result.show_usage) {
-      result.show_usage()
-      return null
-    }
     return result
+  }
+
+  show_help() {
+    // TODO: Implement
+    .show_usage();
+    Fiber.abort("Exit more gracefully");
+  }
+
+  show_usage() {
+    // TODO: Implement option display
+    System.print("Usage: %(program_name) [OPTIONS]...");
+    Fiber.abort("Exit more gracefully");
+  }
+
+  show_version() {
+    System.print(_program_version);
+    Fiber.abort("Exit more gracefully");
   }
 }

@@ -14,9 +14,6 @@ class Veery {
   construct new() {}
 
   run(arguments) {
-    var show_usage = false
-    var show_version = false
-
     var argument_parser = ArgumentParser.new {|argument_parser|
       argument_parser.program_name    = "veery";
       argument_parser.program_version = VEERY_VERSION_STRING;
