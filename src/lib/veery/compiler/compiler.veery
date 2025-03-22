@@ -69,6 +69,7 @@ class Compiler {
 
   run(arguments) {
     var language;
+    var output_file_path;
     var reporter_class = PrettyReporter;
     var warning_modifiers = [];
 
@@ -92,6 +93,16 @@ class Compiler {
         option.callback  = Fn.new {|result|
           // TODO Check values
           language = result.arguments_shift();
+        }
+      }
+
+      argument_parser.add_option {|option|
+        option.short_name = 'o';
+        option.long_name  = "output";
+        option.help       = "Set the destination output file name";
+        option.callback   = Fn.new {|result|
+          // TODO Check values
+          output_file_path = result.arguments_shift();
         }
       }
 
@@ -123,10 +134,19 @@ class Compiler {
       return 1;
     }
 
-    // FIXME Handle arguments more gracefully
-    if (arguments.count != 2) {
-      System.print("Usage: veery-c <source file> <output file>")
-      return 1
+    //System.print("Usage: veery-c <source file> <output file>")
+    if (arguments.count == 1) {
+      if (output_file_path == null) {
+        output_file_path = "a.out";
+      }
+    } else if (arguments.count == 2 &&
+        output_file_path == null) {
+      System.print("Warning: output file path moved to the -o option");
+      System.print("         compatibility support will be remove in the next release");
+      output_file_path = arguments[1];
+    } else {
+      argument_parser.show_usage();
+      return 1;
     }
 
     var pipeline = IdentityVisitor.new();
@@ -195,7 +215,7 @@ class Compiler {
     var ast = parseFile(compilation_context, path);
     //System.print(ast);
 
-    var file = File.create(arguments[1]);
+    var file = File.create(output_file_path);
     pipeline = pipeline | SourcePrinter.new(file);
     ast.accept(pipeline, compilation_context);
     file.close()
