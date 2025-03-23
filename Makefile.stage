@@ -64,11 +64,11 @@ bootstrap: $(ALL_OBJECTS)
 
 $(BUILDDIR)/bin/%: src/bin/%.veery
 	mkdir -p $(dir $@)
-	$(VEERY) compile $(VEERY_ARGS) $< $@
+	$(VEERY) compile $(VEERY_ARGS) -o $@ $<
 
 $(BUILDDIR)/wren_modules/%.wren: src/lib/%.veery
 	mkdir -p $(dir $@)
-	$(VEERY) compile $(VEERY_ARGS) $< $@
+	$(VEERY) compile $(VEERY_ARGS) -o $@ $<
 
 .PHONY: clean
 clean:

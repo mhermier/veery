@@ -139,11 +139,6 @@ class Compiler {
       if (output_file_path == null) {
         output_file_path = "a.out";
       }
-    } else if (arguments.count == 2 &&
-        output_file_path == null) {
-      System.print("Warning: output file path moved to the -o option");
-      System.print("         compatibility support will be remove in the next release");
-      output_file_path = arguments[1];
     } else {
       argument_parser.show_usage();
       return 1;
