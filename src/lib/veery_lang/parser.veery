@@ -582,7 +582,8 @@ class Parser {
 
     // If there's no line after the "{", it's a single-expression body.
     if (!matchLine() && peek() != TokenType.returnKeyword) {
-      warn("Single-expression body")
+      // TODO: Make it a compatibility warning when the new syntax is available
+      .report(compilation_context, _compiler.generic_notice, "Single-expression body");
       var expr = expression()
       ignoreLine()
       consume(TokenType.rightBrace, "Expect '}' at end of block.")
