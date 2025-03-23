@@ -16,6 +16,9 @@ class Abort {
   static subclass_responsibility() {
     call("subclass responsibility")
   }
+  static subclass_responsibility(class_instance) {
+    this.call("subclass responsibility of %(class_instance.name) class")
+  }
   static todo() {
     call("TODO")
   }

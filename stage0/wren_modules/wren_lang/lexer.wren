@@ -5,7 +5,7 @@ import "veery/character" for Character
 import "veery/chars" for Chars
 import "veery/compiler/abstract_lang/token" for Token, TokenType
 var KEYWORDS = {"break": TokenType.breakKeyword, "class": TokenType.classKeyword, "construct": TokenType.constructKeyword, "continue": TokenType.continueKeyword, "else": TokenType.elseKeyword, "false": TokenType.falseKeyword, "for": TokenType.forKeyword, "foreign": TokenType.foreignKeyword, "if": TokenType.ifKeyword, "import": TokenType.importKeyword, "in": TokenType.inKeyword, "is": TokenType.isKeyword, "null": TokenType.nullKeyword, "return": TokenType.returnKeyword, "static": TokenType.staticKeyword, "super": TokenType.superKeyword, "this": TokenType.thisKeyword, "true": TokenType.trueKeyword, "var": TokenType.varKeyword, "while": TokenType.whileKeyword}
-var PUNCTUATORS = {Character.fromCodePoint(10).codePoint: [TokenType.line], Character.fromCodePoint(40).codePoint: [TokenType.leftParen], Character.fromCodePoint(41).codePoint: [TokenType.rightParen], Character.fromCodePoint(91).codePoint: [TokenType.leftBracket], Character.fromCodePoint(93).codePoint: [TokenType.rightBracket], Character.fromCodePoint(123).codePoint: [TokenType.leftBrace], Character.fromCodePoint(125).codePoint: [TokenType.rightBrace], Character.fromCodePoint(58).codePoint: [TokenType.colon], Character.fromCodePoint(44).codePoint: [TokenType.comma], Character.fromCodePoint(42).codePoint: [TokenType.star], Character.fromCodePoint(47).codePoint: [TokenType.slash], Character.fromCodePoint(37).codePoint: [TokenType.percent], Character.fromCodePoint(43).codePoint: [TokenType.plus], Character.fromCodePoint(45).codePoint: [TokenType.minus], Character.fromCodePoint(126).codePoint: [TokenType.tilde], Character.fromCodePoint(94).codePoint: [TokenType.caret], Character.fromCodePoint(63).codePoint: [TokenType.question], Character.fromCodePoint(124).codePoint: [TokenType.pipe, Character.fromCodePoint(124), TokenType.pipePipe], Character.fromCodePoint(38).codePoint: [TokenType.amp, Character.fromCodePoint(38), TokenType.ampAmp], Character.fromCodePoint(33).codePoint: [TokenType.bang, Character.fromCodePoint(61), TokenType.bangEqual], Character.fromCodePoint(61).codePoint: [TokenType.equal, Character.fromCodePoint(61), TokenType.equalEqual], Character.fromCodePoint(46).codePoint: [TokenType.dot, Character.fromCodePoint(46), TokenType.dotDot, Character.fromCodePoint(46), TokenType.dotDotDot]}
+var PUNCTUATORS = {Character.fromCodePoint(10).codePoint: [TokenType.line], Character.fromCodePoint(35).codePoint: [TokenType.numberSign], Character.fromCodePoint(64).codePoint: [TokenType.at], Character.fromCodePoint(40).codePoint: [TokenType.leftParen], Character.fromCodePoint(41).codePoint: [TokenType.rightParen], Character.fromCodePoint(91).codePoint: [TokenType.leftBracket], Character.fromCodePoint(93).codePoint: [TokenType.rightBracket], Character.fromCodePoint(123).codePoint: [TokenType.leftBrace], Character.fromCodePoint(125).codePoint: [TokenType.rightBrace], Character.fromCodePoint(58).codePoint: [TokenType.colon], Character.fromCodePoint(44).codePoint: [TokenType.comma], Character.fromCodePoint(42).codePoint: [TokenType.star], Character.fromCodePoint(47).codePoint: [TokenType.slash], Character.fromCodePoint(37).codePoint: [TokenType.percent], Character.fromCodePoint(43).codePoint: [TokenType.plus], Character.fromCodePoint(45).codePoint: [TokenType.minus], Character.fromCodePoint(126).codePoint: [TokenType.tilde], Character.fromCodePoint(94).codePoint: [TokenType.caret], Character.fromCodePoint(63).codePoint: [TokenType.question], Character.fromCodePoint(124).codePoint: [TokenType.pipe, Character.fromCodePoint(124), TokenType.pipePipe], Character.fromCodePoint(38).codePoint: [TokenType.amp, Character.fromCodePoint(38), TokenType.ampAmp], Character.fromCodePoint(33).codePoint: [TokenType.bang, Character.fromCodePoint(61), TokenType.bangEqual], Character.fromCodePoint(61).codePoint: [TokenType.equal, Character.fromCodePoint(61), TokenType.equalEqual], Character.fromCodePoint(46).codePoint: [TokenType.dot, Character.fromCodePoint(46), TokenType.dotDot, Character.fromCodePoint(46), TokenType.dotDotDot]}
 class Lexer {
   construct new(source) {
     _source = source
@@ -31,8 +31,11 @@ class Lexer {
       }
     }
     if (c == Character.fromCodePoint(47)) {
-      if (match(Character.fromCodePoint(47))) return readLineComment()
+      if (match(Character.fromCodePoint(47))) return readLine(TokenType.comment)
       if (match(Character.fromCodePoint(42))) return readBlockComment()
+    }
+    if (c == Character.fromCodePoint(35)) {
+      if (match(Character.fromCodePoint(33))) return this.readLine(TokenType.interpreter_arguments)
     }
     if (PUNCTUATORS.containsKey(d)) {
       var punctuator = PUNCTUATORS[d]
@@ -63,11 +66,11 @@ class Lexer {
     if (c.isAlpha) return readName()
     return makeToken(TokenType.error)
   }
-  readLineComment() {
+  readLine(tokenType) {
     while (peek() != Character.fromCodePoint(10) && !isAtEnd) {
       advance()
     }
-    return makeToken(TokenType.comment)
+    return makeToken(tokenType)
   }
   readBlockComment() {
     var nesting = 1

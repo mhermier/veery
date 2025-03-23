@@ -5,32 +5,33 @@ import "veery/argument_parser" for ArgumentParser
 import "veery/character_string" for CharacterString
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/token" for Token, TokenType
-import "veery/compiler/reporter" for JsonReporter, PrettyReporter, Reporter
+import "veery/compiler/compilation_context" for CompilationContext
+import "veery/compiler/compiler" for Compiler
+import "veery/compiler/reporter" for JsonReporter, PrettyReporter
 import "wren_lang/lexer" for Lexer
 import "wren_lang/parser" for Parser
 import "wren_lang/resolver" for Resolver
 class Analyzer {
   construct new() {
   }
-  parseFile(path) {
+  parseFile(compilation_context, path) {
     var code = CharacterString.fromString(File.read(path))
     var source = SourceFile.new(path, code)
-    var lexer = Lexer.new(source)
-    var parser = Parser.new(lexer, _reporter)
-    var ast = parser.parseModule()
-    var resolver = Resolver.new(_reporter)
-    resolver.resolve(ast)
+    var ast = _parser.parse(compilation_context, source)
+    var resolver = Resolver.new(compilation_context)
+    resolver.resolve(ast, compilation_context)
   }
-  processDirectory(path) {
+  processDirectory(compilation_context, path) {
     for (entry in Directory.list(path)) {
       entry = "%(path)/%(entry)"
       if (entry.endsWith(".wren") && File.exists(entry)) {
-        parseFile(entry)
+        this.parseFile(compilation_context, entry)
       }
     }
   }
   run(arguments) {
-    var langage
+    var compiler = Compiler.new()
+    var language
     var reporter_class = PrettyReporter
     var argument_parser = ArgumentParser.new{|argument_parser|
       argument_parser.add_option{|option|
@@ -42,29 +43,30 @@ class Analyzer {
       }
       argument_parser.add_option{|option|
         option.long_name = "lang"
-        option.help = "change the langage"
+        option.help = "Change the language"
         option.arity = 1
         option.callback = Fn.new{|result|
-          langage = result.arguments_shift()
+          language = result.arguments_shift()
         }
       }
     }
     var result = argument_parser.parse(arguments)
-    if (langage != "wren") {
-      Fiber.abort("Properly implement arguments and langage support")
+    if (language != "wren") {
+      Fiber.abort("Properly implement arguments and language support")
     }
-    _reporter = Reporter.new(reporter_class.new())
     if (arguments.count != 1) {
       System.print("Usage: wrenalyzer [--json] <source file>")
       return 1
     }
+    _parser = Parser.new(compiler)
+    var compilation_context = CompilationContext.new(compiler, reporter_class.new())
     var path = arguments[0]
     if (Directory.exists(path)) {
-      processDirectory(path)
+      this.processDirectory(compilation_context, path)
     } else {
-      parseFile(path)
+      this.parseFile(compilation_context, path)
     }
-    if (_reporter.has_errors) {
+    if (compilation_context.has_errors) {
       System.print("Build has errors")
       return 1
     }

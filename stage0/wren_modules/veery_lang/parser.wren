@@ -1,6 +1,7 @@
 // DO NOT EDIT: This file is automagically generated
 
 import "veery/compiler/abstract_lang/ast" for AssignmentExpr, BlockStmt, Body, BoolExpr, BreakStmt, CallExpr, CharacterExpr, ClassStmt, ConditionalExpr, ContinueStmt, FieldExpr, ForStmt, GroupingExpr, IfStmt, ImportStmt, InfixExpr, InterpolationExpr, ListExpr, MapEntryNode, MapExpr, Method, Module, NullExpr, NumExpr, PrefixExpr, ReturnStmt, StaticFieldExpr, StringExpr, SubscriptExpr, SuperExpr, ThisExpr, VarStmt, WhileStmt
+import "veery/compiler/abstract_lang/ast/attribute_specifier" for AttributeSpecifier
 import "veery/compiler/abstract_lang/ast/enum_definition" for EnumDefinition
 import "veery/compiler/abstract_lang/ast/this_module_expression" for ThisModuleExpr
 import "veery/compiler/abstract_lang/token" for Token, TokenType
@@ -228,25 +229,32 @@ class Parser {
     var this_ = Fn.new{|token, parser, canAssign|
       return ThisExpr.new(token)
     }
-    __grammar_rules = {TokenType.leftParen: PREFIX.call(grouping), TokenType.rightParen: UNUSED, TokenType.leftBracket: GrammarRule.new(list, subscript, subscriptSignature, Precedence.CALL, null), TokenType.rightBracket: UNUSED, TokenType.leftBrace: PREFIX.call(map), TokenType.rightBrace: UNUSED, TokenType.colon: UNUSED, TokenType.semicolon: UNUSED, TokenType.dot: GrammarRule.new(this_call, call, null, Precedence.CALL, null), TokenType.dotDot: GrammarRule.new(this_module_call, infixOp, infixSignature, Precedence.RANGE, ".."), TokenType.dotDotDot: INFIX_OPERATOR.call(Precedence.RANGE, "..."), TokenType.comma: UNUSED, TokenType.star: INFIX_OPERATOR.call(Precedence.FACTOR, "*"), TokenType.slash: INFIX_OPERATOR.call(Precedence.FACTOR, "/"), TokenType.percent: INFIX_OPERATOR.call(Precedence.FACTOR, "\%"), TokenType.hash: UNUSED, TokenType.plus: INFIX_OPERATOR.call(Precedence.TERM, "+"), TokenType.minus: OPERATOR.call(Precedence.TERM, "-"), TokenType.lessLess: INFIX_OPERATOR.call(Precedence.BITWISE_SHIFT, "<<"), TokenType.greaterGreater: INFIX_OPERATOR.call(Precedence.BITWISE_SHIFT, ">>"), TokenType.pipe: INFIX_OPERATOR.call(Precedence.BITWISE_OR, "|"), TokenType.pipePipe: INFIX.call(Precedence.LOGICAL_OR, infixOp), TokenType.caret: INFIX_OPERATOR.call(Precedence.BITWISE_XOR, "^"), TokenType.amp: INFIX_OPERATOR.call(Precedence.BITWISE_AND, "&"), TokenType.ampAmp: INFIX.call(Precedence.LOGICAL_AND, infixOp), TokenType.bang: PREFIX_OPERATOR.call("!"), TokenType.tilde: PREFIX_OPERATOR.call("~"), TokenType.question: INFIX.call(Precedence.CONDITIONAL, conditional), TokenType.equal: GrammarRule.new(null, assign, null, Precedence.ASSIGNMENT, null), TokenType.less: INFIX_OPERATOR.call(Precedence.COMPARISON, "<"), TokenType.greater: INFIX_OPERATOR.call(Precedence.COMPARISON, ">"), TokenType.lessEqual: INFIX_OPERATOR.call(Precedence.COMPARISON, "<="), TokenType.greaterEqual: INFIX_OPERATOR.call(Precedence.COMPARISON, ">="), TokenType.equalEqual: INFIX_OPERATOR.call(Precedence.EQUALITY, "=="), TokenType.bangEqual: INFIX_OPERATOR.call(Precedence.EQUALITY, "!="), TokenType.strictEquality: INFIX_OPERATOR.call(Precedence.EQUALITY, "==="), TokenType.strictInequality: INFIX_OPERATOR.call(Precedence.EQUALITY, "!=="), TokenType.reservedKeyword: UNUSED, TokenType.breakKeyword: UNUSED, TokenType.continueKeyword: UNUSED, TokenType.classKeyword: UNUSED, TokenType.constructKeyword: GrammarRule.new(null, null, constructorSignature, Precedence.NONE, null), TokenType.elseKeyword: UNUSED, TokenType.enumKeyword: UNUSED, TokenType.falseKeyword: PREFIX.call(boolean), TokenType.forKeyword: UNUSED, TokenType.foreignKeyword: UNUSED, TokenType.ifKeyword: UNUSED, TokenType.importKeyword: UNUSED, TokenType.asKeyword: UNUSED, TokenType.inKeyword: UNUSED, TokenType.isKeyword: INFIX_OPERATOR.call(Precedence.IS, "is"), TokenType.nullKeyword: PREFIX.call(null_), TokenType.returnKeyword: UNUSED, TokenType.staticKeyword: UNUSED, TokenType.superKeyword: PREFIX.call(super_), TokenType.thisKeyword: PREFIX.call(this_), TokenType.thisModuleKeyword: UNUSED, TokenType.trueKeyword: PREFIX.call(boolean), TokenType.varKeyword: UNUSED, TokenType.whileKeyword: UNUSED, TokenType.field: PREFIX.call(field), TokenType.staticField: PREFIX.call(staticField), TokenType.character: PREFIX.call(character), TokenType.name: GrammarRule.new(name, null, namedSignature, Precedence.NONE, null), TokenType.number: PREFIX.call(number), TokenType.string: PREFIX.call(string), TokenType.interpolation: PREFIX.call(stringInterpolation), TokenType.line: UNUSED, TokenType.error: UNUSED, TokenType.eof: UNUSED}
+    __grammar_rules = {TokenType.numberSign: UNUSED, TokenType.at: UNUSED, TokenType.leftParen: PREFIX.call(grouping), TokenType.rightParen: UNUSED, TokenType.leftBracket: GrammarRule.new(list, subscript, subscriptSignature, Precedence.CALL, null), TokenType.rightBracket: UNUSED, TokenType.leftBrace: PREFIX.call(map), TokenType.rightBrace: UNUSED, TokenType.colon: UNUSED, TokenType.semicolon: UNUSED, TokenType.dot: GrammarRule.new(this_call, call, null, Precedence.CALL, null), TokenType.dotDot: GrammarRule.new(this_module_call, infixOp, infixSignature, Precedence.RANGE, ".."), TokenType.dotDotDot: INFIX_OPERATOR.call(Precedence.RANGE, "..."), TokenType.comma: UNUSED, TokenType.star: INFIX_OPERATOR.call(Precedence.FACTOR, "*"), TokenType.slash: INFIX_OPERATOR.call(Precedence.FACTOR, "/"), TokenType.percent: INFIX_OPERATOR.call(Precedence.FACTOR, "\%"), TokenType.hash: UNUSED, TokenType.plus: INFIX_OPERATOR.call(Precedence.TERM, "+"), TokenType.minus: OPERATOR.call(Precedence.TERM, "-"), TokenType.lessLess: INFIX_OPERATOR.call(Precedence.BITWISE_SHIFT, "<<"), TokenType.greaterGreater: INFIX_OPERATOR.call(Precedence.BITWISE_SHIFT, ">>"), TokenType.pipe: INFIX_OPERATOR.call(Precedence.BITWISE_OR, "|"), TokenType.pipePipe: INFIX.call(Precedence.LOGICAL_OR, infixOp), TokenType.caret: INFIX_OPERATOR.call(Precedence.BITWISE_XOR, "^"), TokenType.amp: INFIX_OPERATOR.call(Precedence.BITWISE_AND, "&"), TokenType.ampAmp: INFIX.call(Precedence.LOGICAL_AND, infixOp), TokenType.bang: PREFIX_OPERATOR.call("!"), TokenType.tilde: PREFIX_OPERATOR.call("~"), TokenType.question: INFIX.call(Precedence.CONDITIONAL, conditional), TokenType.equal: GrammarRule.new(null, assign, null, Precedence.ASSIGNMENT, null), TokenType.less: INFIX_OPERATOR.call(Precedence.COMPARISON, "<"), TokenType.greater: INFIX_OPERATOR.call(Precedence.COMPARISON, ">"), TokenType.lessEqual: INFIX_OPERATOR.call(Precedence.COMPARISON, "<="), TokenType.greaterEqual: INFIX_OPERATOR.call(Precedence.COMPARISON, ">="), TokenType.equalEqual: INFIX_OPERATOR.call(Precedence.EQUALITY, "=="), TokenType.bangEqual: INFIX_OPERATOR.call(Precedence.EQUALITY, "!="), TokenType.strictEquality: INFIX_OPERATOR.call(Precedence.EQUALITY, "==="), TokenType.strictInequality: INFIX_OPERATOR.call(Precedence.EQUALITY, "!=="), TokenType.reservedKeyword: UNUSED, TokenType.breakKeyword: UNUSED, TokenType.continueKeyword: UNUSED, TokenType.classKeyword: UNUSED, TokenType.constructKeyword: GrammarRule.new(null, null, constructorSignature, Precedence.NONE, null), TokenType.elseKeyword: UNUSED, TokenType.enumKeyword: UNUSED, TokenType.falseKeyword: PREFIX.call(boolean), TokenType.forKeyword: UNUSED, TokenType.foreignKeyword: UNUSED, TokenType.ifKeyword: UNUSED, TokenType.importKeyword: UNUSED, TokenType.asKeyword: UNUSED, TokenType.inKeyword: UNUSED, TokenType.isKeyword: INFIX_OPERATOR.call(Precedence.IS, "is"), TokenType.nullKeyword: PREFIX.call(null_), TokenType.returnKeyword: UNUSED, TokenType.staticKeyword: UNUSED, TokenType.superKeyword: PREFIX.call(super_), TokenType.thisKeyword: PREFIX.call(this_), TokenType.thisModuleKeyword: UNUSED, TokenType.trueKeyword: PREFIX.call(boolean), TokenType.varKeyword: UNUSED, TokenType.whileKeyword: UNUSED, TokenType.field: PREFIX.call(field), TokenType.staticField: PREFIX.call(staticField), TokenType.character: PREFIX.call(character), TokenType.name: GrammarRule.new(name, null, namedSignature, Precedence.NONE, null), TokenType.number: PREFIX.call(number), TokenType.string: PREFIX.call(string), TokenType.interpolation: PREFIX.call(stringInterpolation), TokenType.line: UNUSED, TokenType.error: UNUSED, TokenType.eof: UNUSED}
   }
   static grammar_rule_for_token_type_(tokenType) {
     var grammar_rule = __grammar_rules[tokenType]
     Assert.call(grammar_rule, "Missing grammar_rule for token type: %(tokenType)")
     return grammar_rule
   }
-  static from_source(source, reporter) {
-    return new(Lexer.new(source), reporter)
+  construct new(compiler) {
+    _compiler = compiler
+    _compatibility = _compiler.register_warning("compatibility", "A compatibility error", Severity.Warning)
+    _pedantic = _compiler.register_warning("pedantic", "A pedantic error", Severity.None)
   }
-  construct new(lexer, reporter) {
-    _lexer = lexer
-    _reporter = reporter
+  compilation_context{
+    return _compilation_context_
+  }
+  parse(compilation_context, source) {
+    _compilation_context_ = compilation_context
+    _lexer = Lexer.new(source)
     _current = null
     peek()
+    return parseModule()
   }
   parseModule() {
+    var interpreter_arguments = match(TokenType.interpreter_arguments)
     var statements = definitions(TokenType.eof, "Expect end of input.")
-    return Module.new(statements)
+    return Module.new(interpreter_arguments, statements)
   }
   definitions(right, message) {
     var statements = []
@@ -259,13 +267,14 @@ class Parser {
     return statements
   }
   definition(right) {
+    var attribute_specifiers = this.attribute_specifiers()
     if (match(TokenType.classKeyword)) {
-      return finishClass(null)
+      return finishClass(attribute_specifiers, null)
     }
     if (match(TokenType.foreignKeyword)) {
       var foreignKeyword = _previous
       consume(TokenType.classKeyword, "Expect 'class' after 'foreign'.")
-      return finishClass(foreignKeyword)
+      return finishClass(attribute_specifiers, foreignKeyword)
     }
     if (match(TokenType.enumKeyword)) {
       return finishEnum()
@@ -299,7 +308,22 @@ class Parser {
     }
     return statement(right)
   }
-  finishClass(foreignKeyword) {
+  attribute_specifiers() {
+    var attribute_specifiers = []
+    var at
+    while (at = this.match(TokenType.at)) {
+      var list = this.list("`@`", TokenType.leftParen, "attribute specifiers", TokenType.rightParen){
+        var name = this.consume(TokenType.name, "Expect method name after '#'.")
+        var expression = this.methodCall(null, name)
+        this.ignoreLine()
+        return AttributeSpecifier.new(at, expression)
+      }
+      attribute_specifiers.addAll(list.elements)
+      this.ignoreLine()
+    }
+    return attribute_specifiers
+  }
+  finishClass(attribute_specifiers, foreignKeyword) {
     ignoreLine()
     var name = consume(TokenType.name, "Expect class name.")
     var superclass
@@ -314,17 +338,18 @@ class Parser {
       ignoreLine()
     }
     consume(TokenType.rightBrace, "Expect '}' after class definition.")
-    return ClassStmt.new(foreignKeyword, name, superclass, methods)
+    return ClassStmt.new(attribute_specifiers, foreignKeyword, name, superclass, methods)
   }
   finishEnum() {
     ignoreLine()
     var name = consume(TokenType.name, "Expect enum name.")
-    var list = list("enum name", TokenType.leftBrace, "enumerator definitions", TokenType.rightBrace){
+    var list = list("`enum`", TokenType.leftBrace, "enumerator definitions", TokenType.rightBrace){
       return consume(TokenType.name, "Expect enummerator name.")
     }
     return EnumDefinition.new(name, list.elements)
   }
   method() {
+    var attribute_specifiers = this.attribute_specifiers()
     var foreignKeyword
     if (match(TokenType.foreignKeyword)) {
       foreignKeyword = _previous
@@ -379,7 +404,7 @@ class Parser {
       consume(TokenType.leftBrace, "Expect '{' before method body.")
       body = finishBody(parameters)
     }
-    return Method.new(foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body)
+    return Method.new(attribute_specifiers, foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body)
   }
   statement(right) {
     if (match(TokenType.breakKeyword)) {
@@ -423,7 +448,8 @@ class Parser {
     if (match(TokenType.returnKeyword)) {
       var keyword = _previous
       var value
-      if (peek() != TokenType.line) {
+      var next_token = this.peek()
+      if (next_token != TokenType.line && next_token != TokenType.semicolon && next_token != right) {
         value = expression()
       }
       expectSemicolon("Expect ';' after 'return' statement.", right)
@@ -440,7 +466,7 @@ class Parser {
   finishBody(parameters) {
     if (match(TokenType.rightBrace)) return Body.new(parameters, [])
     if (!matchLine() && peek() != TokenType.returnKeyword) {
-      warn("Single-expression body")
+      this.report(compilation_context, _compiler.generic_notice, "Single-expression body")
       var expr = expression()
       ignoreLine()
       consume(TokenType.rightBrace, "Expect '}' at end of block.")
@@ -486,6 +512,9 @@ class Parser {
       elements.add(matchElementFn.call())
       ignoreLine()
       if (!match(TokenType.comma)) break
+      if (peek() == right) {
+        this.report(compilation_context, _pedantic, "comma at end of %(elementsName)")
+      }
       ignoreLine()
     }
     var rightToken = consume(right, "Expect '%(tokenTypeToString_(right))' after %(elementsName).")
@@ -582,10 +611,11 @@ class Parser {
     var next_token = peek()
     ignoreLine()
     if (peek() == right) {
+      this.report(compilation_context, _pedantic, error, [next_token])
       return
     }
     if (peek() != TokenType.semicolon) {
-      _reporter.call(Severity.Warning, error, [next_token])
+      this.report(compilation_context, _compatibility, error, [next_token])
       return
     }
     consume(TokenType.semicolon, error)
@@ -611,11 +641,17 @@ class Parser {
     }
     return _current
   }
+  report(compilation_context, warning, message) {
+    this.report(compilation_context, warning, message, [_current != null? _current : _previous])
+  }
+  report(compilation_context, warning, message, tokens) {
+    compilation_context.report(warning, message, tokens)
+  }
   error(message) {
-    _reporter.call(Severity.Error, message, [_current != null? _current : _previous])
+    return this.report(compilation_context, Severity.Error, message)
   }
   warn(message) {
-    _reporter.call(Severity.Warning, message, [_current != null? _current : _previous])
+    return this.report(compilation_context, Severity.Warning, message)
   }
   parsePrecedence(precedence) {
     consume()

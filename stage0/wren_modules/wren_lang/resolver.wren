@@ -9,63 +9,63 @@ class Resolver is RecursiveVisitor {
     _reporter = reporter
     _scope = Scope.new(reporter)
   }
-  resolve(node) {
-    node.accept(this)
+  resolve(node, visitor_data) {
+    node.accept(this, visitor_data)
   }
-  visitModule(node) {
-    super(node)
+  visitModule(node, visitor_data) {
+    super(node, visitor_data)
     _scope.checkForwardReferences()
   }
-  visitBody(node) {
+  visitBody(node, visitor_data) {
     _scope.begin()
     declareVariables(node.parameters)
-    super(node)
+    super(node, visitor_data)
     _scope.end()
   }
-  visitAssignmentExpr(node) {
+  visitAssignmentExpr(node, visitor_data) {
     var target_type = node.target.type
     if (target_type == AssignmentExpr || target_type == CallExpr || target_type == FieldExpr || target_type == StaticFieldExpr || target_type == SubscriptExpr) {
       return
     }
     _reporter.call(Severity.Error, "Invalid left argument type: %(node.target.type)", [node.equal])
   }
-  visitCallExpr(node) {
+  visitCallExpr(node, visitor_data) {
     if (node.receiver != null) {
-      node.receiver.accept(this)
+      node.receiver.accept(this, visitor_data)
     } else {
       _scope.resolve(node.name)
     }
     if (node.arguments != null) {
       for (argument in node.arguments) {
-        argument.accept(this)
+        argument.accept(this, visitor_data)
       }
     }
-    if (node.blockArgument != null) node.blockArgument.accept(this)
+    if (node.blockArgument != null) node.blockArgument.accept(this, visitor_data)
   }
-  visitBlockStmt(node) {
+  visitBlockStmt(node, visitor_data) {
     _scope.begin()
-    super(node)
+    super(node, visitor_data)
     _scope.end()
   }
-  visitClassStmt(node) {
+  visitClassStmt(node, visitor_data) {
     _scope.declare(node.name)
     _scope.beginClass()
-    super(node)
+    super(node, visitor_data)
     _scope.endClass()
   }
-  visitForStmt(node) {
+  visitForStmt(node, visitor_data) {
     _scope.begin()
     _scope.declare(node.variable)
-    super(node)
+    super(node, visitor_data)
     _scope.end()
   }
-  visitImportStmt(node) {
+  visitImportStmt(node, visitor_data) {
     declareVariables(node.variables)
-    super(node)
+    super(node, visitor_data)
   }
-  visitVarStmt(node) {
+  visitVarStmt(node, visitor_data) {
     _scope.declare(node.name)
-    super(node)
+    super(node, visitor_data)
   }
   declareVariables(variables) {
     if (variables == null) return

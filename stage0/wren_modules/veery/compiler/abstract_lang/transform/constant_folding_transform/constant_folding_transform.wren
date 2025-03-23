@@ -5,8 +5,8 @@ import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
 class ConstantFoldingTransform is TransformVisitor {
   construct new() {
   }
-  visitIfStmt(node) {
-    node = super(node)
+  visitIfStmt(node, visitor_data) {
+    node = super(node, visitor_data)
     if (node.condition is BoolExpr) {
       if (node.condition.nativeValue) {
         return node.thenBranch

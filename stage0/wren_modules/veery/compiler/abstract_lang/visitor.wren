@@ -2,106 +2,116 @@
 
 import "veery/abort" for Abort
 class AbstractVisitor {
-  visitBody(node) {
-    return Abort.subclass_responsibility()
+  |(rhs) {
+    return ComposedVisitor.new(this, rhs)
   }
-  visitMapEntry(node) {
-    return Abort.subclass_responsibility()
+  visit(node, visitor_data) {
+    return Abort.subclass_responsibility(this.type)
   }
-  visitMethod(node) {
-    return Abort.subclass_responsibility()
+  visitBody(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitModule(node) {
-    return Abort.subclass_responsibility()
+  visitMapEntry(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitAssignmentExpr(node) {
-    return Abort.subclass_responsibility()
+  visitMethod(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitBoolExpr(node) {
-    return Abort.subclass_responsibility()
+  visitModule(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitCallExpr(node) {
-    return Abort.subclass_responsibility()
+  visitAssignmentExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitCharacterExpr(node) {
-    return Abort.subclass_responsibility()
+  visitBoolExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitConditionalExpr(node) {
-    return Abort.subclass_responsibility()
+  visitCallExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitFieldExpr(node) {
-    return Abort.subclass_responsibility()
+  visitCharacterExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitGroupingExpr(node) {
-    return Abort.subclass_responsibility()
+  visitConditionalExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitInfixExpr(node) {
-    return Abort.subclass_responsibility()
+  visitFieldExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitInterpolationExpr(node) {
-    return Abort.subclass_responsibility()
+  visitGroupingExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitListExpr(node) {
-    return Abort.subclass_responsibility()
+  visitInfixExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitMapExpr(node) {
-    return Abort.subclass_responsibility()
+  visitInterpolationExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitNullExpr(node) {
-    return Abort.subclass_responsibility()
+  visitListExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitNumExpr(node) {
-    return Abort.subclass_responsibility()
+  visitMapExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitPrefixExpr(node) {
-    return Abort.subclass_responsibility()
+  visitNullExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitStaticFieldExpr(node) {
-    return Abort.subclass_responsibility()
+  visitNumExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitStringExpr(node) {
-    return Abort.subclass_responsibility()
+  visitPrefixExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitSubscriptExpr(node) {
-    return Abort.subclass_responsibility()
+  visitStaticFieldExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitSuperExpr(node) {
-    return Abort.subclass_responsibility()
+  visitStringExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitThisExpr(node) {
-    return Abort.subclass_responsibility()
+  visitSubscriptExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitThisModuleExpr(node) {
-    return Abort.subclass_responsibility()
+  visitSuperExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitBlockStmt(node) {
-    return Abort.subclass_responsibility()
+  visitThisExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitBreakStmt(node) {
-    return Abort.subclass_responsibility()
+  visitThisModuleExpr(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitClassStmt(node) {
-    return Abort.subclass_responsibility()
+  visitAttributeSpecifier(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitContinueStmt(node) {
-    return Abort.subclass_responsibility()
+  visitBlockStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitForStmt(node) {
-    return Abort.subclass_responsibility()
+  visitBreakStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitIfStmt(node) {
-    return Abort.subclass_responsibility()
+  visitClassStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitImportStmt(node) {
-    return Abort.subclass_responsibility()
+  visitContinueStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitReturnStmt(node) {
-    return Abort.subclass_responsibility()
+  visitForStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitVarStmt(node) {
-    return Abort.subclass_responsibility()
+  visitIfStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
-  visitWhileStmt(node) {
-    return Abort.subclass_responsibility()
+  visitImportStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
+  }
+  visitReturnStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
+  }
+  visitVarStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
+  }
+  visitWhileStmt(node, visitor_data) {
+    return this.visit(node, visitor_data)
   }
 }
+import "veery/compiler/abstract_lang/composed_visitor" for ComposedVisitor

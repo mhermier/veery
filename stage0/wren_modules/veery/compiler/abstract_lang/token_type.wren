@@ -1,6 +1,15 @@
 // DO NOT EDIT: This file is automagically generated
 
 class TokenType {
+  static interpreter_arguments{
+    return "interpreter_arguments"
+  }
+  static numberSign{
+    return "numberSign"
+  }
+  static at{
+    return "at"
+  }
   static leftParen{
     return "leftParen"
   }

@@ -7,7 +7,7 @@ class SourcePrinter is AbstractVisitor {
     _file = file
     _indent_level = 0
   }
-  visitBody(node) {
+  visitBody(node, visitor_data) {
     write_("{")
     if (node.parameters && node.parameters.count > 0) {
       write_("|")
@@ -15,15 +15,16 @@ class SourcePrinter is AbstractVisitor {
       write_("|")
     }
     print_()
-    printAllNodeIndent_(node.statements)
+    printAllNodeIndent_(node.statements, visitor_data)
     write_("}")
   }
-  visitMapEntry(node) {
-    node.key.accept(this)
+  visitMapEntry(node, visitor_data) {
+    node.key.accept(this, visitor_data)
     write_(": ")
-    node.value.accept(this)
+    node.value.accept(this, visitor_data)
   }
-  visitMethod(node) {
+  visitMethod(node, visitor_data) {
+    this.printAllAttributeSpecifiers_(node.attribute_specifiers, visitor_data)
     if (node.foreignKeyword) {
       write_("foreign ")
     }
@@ -49,134 +50,142 @@ class SourcePrinter is AbstractVisitor {
       write_(node.parenthesisParameters.join(", "))
       write_(") ")
     }
-    node.body.accept(this)
+    node.body.accept(this, visitor_data)
   }
-  visitModule(node) {
+  visitModule(node, visitor_data) {
+    if (node.interpreter_arguments) {
+      this.print_(node.interpreter_arguments)
+    }
     print_("// DO NOT EDIT: This file is automagically generated")
     print_()
     for (statement in node.statements) {
-      statement.accept(this)
+      statement.accept(this, visitor_data)
       print_()
     }
   }
-  visitAssignmentExpr(node) {
-    node.target.accept(this)
+  visitAssignmentExpr(node, visitor_data) {
+    node.target.accept(this, visitor_data)
     if (node.value != null) {
       write_(" = ")
-      node.value.accept(this)
+      node.value.accept(this, visitor_data)
     }
   }
-  visitBoolExpr(node) {
+  visitBoolExpr(node, visitor_data) {
     write_(node.value)
   }
-  visitCallExpr(node) {
+  visitCallExpr(node, visitor_data) {
     if (node.receiver != null) {
-      node.receiver.accept(this)
+      node.receiver.accept(this, visitor_data)
       write_(".")
     }
     write_(node.name)
     if (node.arguments != null) {
       write_("(")
-      writeAllNodes_(node.arguments, ", ")
+      writeAllNodes_(node.arguments, visitor_data, ", ")
       write_(")")
     }
     if (node.blockArgument != null) {
-      node.blockArgument.accept(this)
+      node.blockArgument.accept(this, visitor_data)
     }
   }
-  visitCharacterExpr(node) {
+  visitCharacterExpr(node, visitor_data) {
     Fiber.abort("Character litteral are not supported")
   }
-  visitConditionalExpr(node) {
-    node.condition.accept(this)
+  visitConditionalExpr(node, visitor_data) {
+    node.condition.accept(this, visitor_data)
     write_("? ")
-    node.thenBranch.accept(this)
+    node.thenBranch.accept(this, visitor_data)
     write_(" : ")
-    node.elseBranch.accept(this)
+    node.elseBranch.accept(this, visitor_data)
   }
-  visitFieldExpr(node) {
+  visitFieldExpr(node, visitor_data) {
     write_(node.name)
   }
-  visitGroupingExpr(node) {
+  visitGroupingExpr(node, visitor_data) {
     write_("(")
-    node.expression.accept(this)
+    node.expression.accept(this, visitor_data)
     write_(")")
   }
-  visitInfixExpr(node) {
-    node.left.accept(this)
+  visitInfixExpr(node, visitor_data) {
+    node.left.accept(this, visitor_data)
     write_(" ")
     write_(node.operator)
     write_(" ")
-    node.right.accept(this)
+    node.right.accept(this, visitor_data)
   }
-  visitInterpolationExpr(node) {
+  visitInterpolationExpr(node, visitor_data) {
     var strings = node.strings
     var expressions = node.expressions
     var count = expressions.count
     for (i in 0 ... expressions.count) {
       write_(strings[i])
-      expressions[i].accept(this)
+      expressions[i].accept(this, visitor_data)
     }
     write_(strings[count])
   }
-  visitListExpr(node) {
+  visitListExpr(node, visitor_data) {
     write_("[")
-    writeAllNodes_(node.elements, ", ")
+    writeAllNodes_(node.elements, visitor_data, ", ")
     write_("]")
   }
-  visitMapExpr(node) {
+  visitMapExpr(node, visitor_data) {
     write_("{")
-    writeAllNodes_(node.entries, ", ")
+    writeAllNodes_(node.entries, visitor_data, ", ")
     write_("}")
   }
-  visitNullExpr(node) {
+  visitNullExpr(node, visitor_data) {
     write_("null")
   }
-  visitNumExpr(node) {
+  visitNumExpr(node, visitor_data) {
     write_(node.value)
   }
-  visitPrefixExpr(node) {
+  visitPrefixExpr(node, visitor_data) {
     write_(node.operator)
-    node.right.accept(this)
+    node.right.accept(this, visitor_data)
   }
-  visitStaticFieldExpr(node) {
+  visitStaticFieldExpr(node, visitor_data) {
     write_(node.name)
   }
-  visitStringExpr(node) {
+  visitStringExpr(node, visitor_data) {
     write_(node.value)
   }
-  visitSubscriptExpr(node) {
-    node.receiver.accept(this)
+  visitSubscriptExpr(node, visitor_data) {
+    node.receiver.accept(this, visitor_data)
     write_("[")
-    writeAllNodes_(node.arguments, ", ")
+    writeAllNodes_(node.arguments, visitor_data, ", ")
     write_("]")
   }
-  visitSuperExpr(node) {
+  visitSuperExpr(node, visitor_data) {
     write_("super")
     if (node.name) {
       write_(".")
       write_(node.name)
     }
     write_("(")
-    writeAllNodes_(node.arguments, ", ")
+    writeAllNodes_(node.arguments, visitor_data, ", ")
     write_(")")
     if (node.blockArgument) {
-      node.blockArgument.accept(this)
+      node.blockArgument.accept(this, visitor_data)
     }
   }
-  visitThisExpr(node) {
+  visitThisExpr(node, visitor_data) {
     write_("this")
   }
-  visitThisModuleExpr(node) {
+  visitThisModuleExpr(node, visitor_data) {
     Fiber.abort("this_module's are not supported")
   }
-  visitBlockStmt(node) {
-    printAllBraced_(node.statements)
+  visitAttributeSpecifier(node, visitor_data) {
+    write_(Character.fromCodePoint(35))
+    node.expression.accept(this, visitor_data)
   }
-  visitBreakStmt(node) {
+  visitBlockStmt(node, visitor_data) {
+    printAllBraced_(node.statements, visitor_data)
+  }
+  visitBreakStmt(node, visitor_data) {
     write_("break")
   }
-  visitClassStmt(node) {
+  visitClassStmt(node, visitor_data) {
+    this.printAllAttributeSpecifiers_(node.attribute_specifiers, visitor_data)
     if (node.foreignKeyword != null) {
       write_("foreign ")
     }
@@ -187,33 +196,33 @@ class SourcePrinter is AbstractVisitor {
       write_(node.superclass)
     }
     write_(" ")
-    printAllBraced_(node.methods)
+    printAllBraced_(node.methods, visitor_data)
   }
-  visitContinueStmt(node) {
+  visitContinueStmt(node, visitor_data) {
     write_("continue")
   }
-  visitEnumDefinition(node) {
+  visitEnumDefinition(node, visitor_data) {
     Fiber.abort("enum's are not supported")
   }
-  visitForStmt(node) {
+  visitForStmt(node, visitor_data) {
     write_("for (")
     write_(node.variable)
     write_(" in ")
-    node.iterator.accept(this)
+    node.iterator.accept(this, visitor_data)
     write_(") ")
-    node.body.accept(this)
+    node.body.accept(this, visitor_data)
   }
-  visitIfStmt(node) {
+  visitIfStmt(node, visitor_data) {
     write_("if (")
-    node.condition.accept(this)
+    node.condition.accept(this, visitor_data)
     write_(") ")
-    node.thenBranch.accept(this)
+    node.thenBranch.accept(this, visitor_data)
     if (node.elseBranch != null) {
       write_(" else ")
-      node.elseBranch.accept(this)
+      node.elseBranch.accept(this, visitor_data)
     }
   }
-  visitImportStmt(node) {
+  visitImportStmt(node, visitor_data) {
     write_("import ")
     write_(node.path)
     if (node.variables) {
@@ -221,26 +230,26 @@ class SourcePrinter is AbstractVisitor {
       write_(node.variables.join(", "))
     }
   }
-  visitReturnStmt(node) {
+  visitReturnStmt(node, visitor_data) {
     write_("return")
     if (node.value != null) {
       write_(" ")
-      node.value.accept(this)
+      node.value.accept(this, visitor_data)
     }
   }
-  visitVarStmt(node) {
+  visitVarStmt(node, visitor_data) {
     write_("var ")
     write_(node.name)
     if (node.initializer != null) {
       write_(" = ")
-      node.initializer.accept(this)
+      node.initializer.accept(this, visitor_data)
     }
   }
-  visitWhileStmt(node) {
+  visitWhileStmt(node, visitor_data) {
     write_("while (")
-    node.condition.accept(this)
+    node.condition.accept(this, visitor_data)
     write_(") ")
-    node.body.accept(this)
+    node.body.accept(this, visitor_data)
   }
   indent_() {
     for (i in 0 ... _indent_level) {
@@ -260,23 +269,32 @@ class SourcePrinter is AbstractVisitor {
     write_(obj)
     print_()
   }
-  printAll_(nodes) {
+  printAll_(nodes, visitor_data) {
     for (node in nodes) {
       indent_()
-      node.accept(this)
+      node.accept(this, visitor_data)
       print_()
     }
   }
-  printAllNodeIndent_(nodes) {
+  printAllNodeIndent_(nodes, visitor_data) {
     indent_level_inc_()
-    printAll_(nodes)
+    printAll_(nodes, visitor_data)
     indent_level_dec_()
     indent_()
   }
-  printAllBraced_(nodes) {
+  printAllBraced_(nodes, visitor_data) {
     print_("{")
-    printAllNodeIndent_(nodes)
+    printAllNodeIndent_(nodes, visitor_data)
     write_("}")
+  }
+  printAllAttributeSpecifiers_(attribute_specifiers, visitor_data) {
+    if (attribute_specifiers != null) {
+      for (attribute_specifier in attribute_specifiers) {
+        attribute_specifier.accept(this, visitor_data)
+        print_()
+        indent_()
+      }
+    }
   }
   write_(obj) {
     return _file.writeBytes(obj.toString)
@@ -289,12 +307,12 @@ class SourcePrinter is AbstractVisitor {
       write_(element)
     }
   }
-  writeAllNodes_(nodes, sep) {
+  writeAllNodes_(nodes, visitor_data, sep) {
     var first = true
     for (node in nodes) {
       if (!first) write_(sep)
       first = false
-      node.accept(this)
+      node.accept(this, visitor_data)
     }
   }
 }

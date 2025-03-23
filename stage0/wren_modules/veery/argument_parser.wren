@@ -16,15 +16,6 @@ class ArgumentParserResult {
   program_name=(program_name) {
     return _program_name = program_name
   }
-  show_usage{
-    return _show_usage
-  }
-  show_usage=(show_usage) {
-    return _show_usage = show_usage
-  }
-  show_usage() {
-    Fiber.abort("Show usage")
-  }
   arguments{
     return _arguments
   }
@@ -79,22 +70,37 @@ class ArgumentParser {
   }
   construct new(setupFn) {
     _options = {}
+    setupFn.call(this)
     add_option{|option|
       option.short_name = Character.fromCodePoint(104)
       option.long_name = "help"
       option.help = "show this help message and exit"
       option.callback = Fn.new{
-        System.print("Implement")
-        Fiber.abort()
+        this.show_help()
       }
     }
-    setupFn.call(this)
+    if (_program_version != null) {
+      add_option{|option|
+        option.short_name = Character.fromCodePoint(118)
+        option.long_name = "version"
+        option.help = "show version informations and exit"
+        option.callback = Fn.new{
+          this.show_version()
+        }
+      }
+    }
   }
   program_name{
     return _program_name
   }
   program_name=(program_name) {
     return _program_name = program_name
+  }
+  program_version{
+    return _program_version
+  }
+  program_version=(program_version) {
+    return _program_version = program_version
   }
   add_option(setupFn) {
     var option = Option.new(setupFn)
@@ -162,10 +168,18 @@ class ArgumentParser {
         break
       }
     }
-    if (result.show_usage) {
-      result.show_usage()
-      return null
-    }
     return result
+  }
+  show_help() {
+    this.show_usage()
+    Fiber.abort("Exit more gracefully")
+  }
+  show_usage() {
+    System.print("Usage: %(program_name) [OPTIONS]...")
+    Fiber.abort("Exit more gracefully")
+  }
+  show_version() {
+    System.print(_program_version)
+    Fiber.abort("Exit more gracefully")
   }
 }
