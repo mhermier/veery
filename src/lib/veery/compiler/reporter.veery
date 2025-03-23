@@ -9,6 +9,7 @@ var NORMAL = "\x1b[0m"
 
 enum Severity {
   None,
+  Notice,
   Warning,
   Error,
 }
@@ -83,6 +84,7 @@ class PrettyReporter {
   static init_() {
     __severity_color = {
       Severity.Error:   RED,
+      Severity.Notice:  CYAN,
       Severity.Warning: YELLOW,
     }
   }
