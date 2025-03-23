@@ -1,36 +1,36 @@
-import "io" for Directory, File
+import "io" for Directory, File;
 
-import "veery/argument_parser" for ArgumentParser
-import "veery/character_string" for CharacterString
-import "veery/compiler/abstract_lang/source_file" for SourceFile
-import "veery/compiler/abstract_lang/token" for Token, TokenType
+import "veery/argument_parser" for ArgumentParser;
+import "veery/character_string" for CharacterString;
+import "veery/compiler/abstract_lang/source_file" for SourceFile;
+import "veery/compiler/abstract_lang/token" for Token, TokenType;
 import "veery/compiler/compilation_context" for CompilationContext;
 import "veery/compiler/compiler" for Compiler;
 import "veery/compiler/reporter" for JsonReporter, PrettyReporter;
 
-import "wren_lang/lexer" for Lexer
-import "wren_lang/parser" for Parser
-import "wren_lang/resolver" for Resolver
+import "wren_lang/lexer" for Lexer;
+import "wren_lang/parser" for Parser;
+import "wren_lang/resolver" for Resolver;
 
 class Analyzer {
   construct new () {}
 
   parseFile(compilation_context, path) {
-//    System.print("Parsing %(path)")
-    var code = CharacterString.fromString(File.read(path))
-    var source = SourceFile.new(path, code)
+//    System.print("Parsing %(path)");
+    var code = CharacterString.fromString(File.read(path));
+    var source = SourceFile.new(path, code);
 
     var ast = _parser.parse(compilation_context, source);
 
     var resolver = Resolver.new(compilation_context);
     resolver.resolve(ast, compilation_context);
 
-    //System.print(ast)
+    //System.print(ast);
   }
 
   processDirectory(compilation_context, path) {
     for (entry in Directory.list(path)) {
-      entry="%(path)/%(entry)"
+      entry="%(path)/%(entry)";
       if (entry.endsWith(".wren") && File.exists(entry)) {
         .parseFile(compilation_context, entry);
       }
@@ -41,45 +41,45 @@ class Analyzer {
     var compiler = Compiler.new();
 
     var language;
-    var reporter_class = PrettyReporter
+    var reporter_class = PrettyReporter;
 
     var argument_parser = ArgumentParser.new {|argument_parser|
       // Compatibility option: add some ouput format option
       argument_parser.add_option {|option|
-        option.long_name = "json"
-        option.help      = "output result in json format"
+        option.long_name = "json";
+        option.help      = "output result in json format";
         option.callback  = Fn.new {
-          reporter_class = JsonReporter
-        }
-      }
+          reporter_class = JsonReporter;
+        };
+      };
 
       argument_parser.add_option {|option|
-        option.long_name = "lang"
+        option.long_name = "lang";
         option.help      = "Change the language";
-        option.arity     = 1
+        option.arity     = 1;
         option.callback  = Fn.new {|result|
           // TODO Check values
           language = result.arguments_shift();
-        }
-      }
-    }
+        };
+      };
+    };
 
-    var result = argument_parser.parse(arguments)
+    var result = argument_parser.parse(arguments);
 
     if (language != "wren") {
       Fiber.abort("Properly implement arguments and language support");
     }
 
     if (arguments.count != 1) {
-      System.print("Usage: wrenalyzer [--json] <source file>")
-      return 1
+      System.print("Usage: wrenalyzer [--json] <source file>");
+      return 1;
     }
 
     _parser = Parser.new(compiler);
 
     var compilation_context = CompilationContext.new(compiler, reporter_class.new());
 
-    var path = arguments[0]
+    var path = arguments[0];
     // FIXME: Do not abuse the compilation context for multiple files
     if (Directory.exists(path)) {
       .processDirectory(compilation_context, path);
@@ -88,8 +88,8 @@ class Analyzer {
     }
 
     if (compilation_context.has_errors) {
-      System.print("Build has errors")
-      return 1
+      System.print("Build has errors");
+      return 1;
     }
   }
 }

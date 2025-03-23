@@ -1,4 +1,4 @@
-import "io" for File
+import "io" for File;
 
 // Generates the boilerplate-y "ast.wren" file from a short description of the
 // data stored in each AST node. This makes it much easier to add or change AST
@@ -27,7 +27,7 @@ var EXPRS = {
   "Super": ["name", "arguments", "blockArgument"],
   "This": ["keyword"],
   "ThisModule": ["keyword"],
-}
+};
 
 var STMTS = {
   "Block": ["statements"],
@@ -40,23 +40,23 @@ var STMTS = {
   "Return": ["keyword", "value"],
   "While": ["condition", "body"],
   "Var": ["name", "initializer"],
-}
+};
 
 class AstBuilder {
   construct new() {}
 
   build() {
-    _file = File.create("ast.veery")
+    _file = File.create("ast.veery");
 
-    writeLine("class Node {}
+    writeLine("class Node {};
 
-class Expr is Node {}
+class Expr is Node {};
 
-class Stmt is Node {}
+class Stmt is Node {};
 
 class Module is Node {
   construct new(statements) {
-    _statements = statements
+    _statements = statements;
   }
 
   statements { _statements }
@@ -68,8 +68,8 @@ class Module is Node {
 
 class MapEntryNode {
   construct new(key, value) {
-    _key = key
-    _value = value
+    _key = key;
+    _value = value;
   }
 
   key { _key }
@@ -82,14 +82,14 @@ class MapEntryNode {
 
 class Method {
   construct new(foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body) {
-    _foreignKeyword = foreignKeyword
-    _staticKeyword = staticKeyword
-    _constructKeyword = constructKeyword
-    _name = name
-    _subscriptParameters = subscriptParameters
-    _setter = setter
-    _parenthesisParameters = parenthesisParameters
-    _body = body
+    _foreignKeyword = foreignKeyword;
+    _staticKeyword = staticKeyword;
+    _constructKeyword = constructKeyword;
+    _name = name;
+    _subscriptParameters = subscriptParameters;
+    _setter = setter;
+    _parenthesisParameters = parenthesisParameters;
+    _body = body;
   }
 
   foreignKeyword        { _foreignKeyword }
@@ -104,15 +104,15 @@ class Method {
   accept(visitor) { visitor.visitMethod(this) }
 
   toString {
-    return \"Method(\%(_staticKeyword) \%(_constructKeyword) \%(_name) \%(_body))\"
+    return \"Method(\%(_staticKeyword) \%(_constructKeyword) \%(_name) \%(_body))\";
   }
 }
 
 // A block argument or method body.
 class Body {
   construct new(parameters, statements) {
-    _parameters = parameters
-    _statements = statements
+    _parameters = parameters;
+    _statements = statements;
   }
 
   parameters { _parameters }
@@ -121,54 +121,54 @@ class Body {
   accept(visitor) { visitor.visitBody(this) }
 
   toString {
-    return \"Body(\%(_parameters) \%(_statements))\"
+    return \"Body(\%(_parameters) \%(_statements))\";
   }
-}")
+}");
 
-    writeClasses(EXPRS, "Expr")
-    writeClasses(STMTS, "Stmt")
+    writeClasses(EXPRS, "Expr");
+    writeClasses(STMTS, "Stmt");
 
-    _file.close()
+    _file.close();
   }
 
   writeClasses(classes, superclass) {
     for (name in classes.keys) {
-      var fields = classes[name]
-      var params = fields.join(", ")
-      writeLine()
-      writeLine("class %(name)%(superclass) is %(superclass) {")
-      writeLine("  construct new(%(params)) {")
+      var fields = classes[name];
+      var params = fields.join(", ");
+      writeLine();
+      writeLine("class %(name)%(superclass) is %(superclass) {");
+      writeLine("  construct new(%(params)) {");
 
       for (field in fields) {
-        writeLine("    _%(field) = %(field)")
+        writeLine("    _%(field) = %(field)");
       }
 
-      writeLine("  }")
-      writeLine()
+      writeLine("  }");
+      writeLine();
 
       for (field in fields) {
-        writeLine("  %(field) { _%(field) }")
+        writeLine("  %(field) { _%(field) }");
       }
 
-      writeLine()
-      writeLine("  accept(visitor) { visitor.visit%(name)%(superclass)(this) }")
-      writeLine()
-      writeLine("  toString {")
-      var interpolation = fields.map {|field| "\%(_%(field))"}.join(" ")
-      writeLine("    return \"%(name)(%(interpolation))\"")
-      writeLine("  }")
+      writeLine();
+      writeLine("  accept(visitor) { visitor.visit%(name)%(superclass)(this) }");
+      writeLine();
+      writeLine("  toString {");
+      var interpolation = fields.map {|field| "\%(_%(field))"}.join(" ");
+      writeLine("    return \"%(name)(%(interpolation))\"");
+      writeLine("  }");
 
-      writeLine("}")
+      writeLine("}");
     }
   }
 
   writeLine() {
-    _file.writeBytes("\n")
+    _file.writeBytes("\n");
   }
 
   writeLine(line) {
-    _file.writeBytes(line + "\n")
+    _file.writeBytes(line + "\n");
   }
 }
 
-AstBuilder.new().build()
+AstBuilder.new().build();

@@ -1,42 +1,42 @@
 
-import "io" for Stdin
-import "veery/input_output/circular_buffer_reader" for Circular_buffer_reader
+import "io" for Stdin;
+import "veery/input_output/circular_buffer_reader" for Circular_buffer_reader;
 
 class Wren_Stdin_reader_adapter_ {
   construct new_(input) {
-    _input = input
+    _input = input;
 
-    _bufferedBytes = "".bytes
-    _index = 0
+    _bufferedBytes = "".bytes;
+    _index = 0;
   }
 
   read() {
     if (_index >= _bufferedBytes.count) {
       // fetch next buffer
-      _bufferedBytes = _input.readBytes()
-      _index = 0
+      _bufferedBytes = _input.readBytes();
+      _index = 0;
     }
 
     if (_index >= _bufferedBytes.count) {
-      Fiber.abort("bla")
+      Fiber.abort("bla");
     }
 
-    var byte = _bufferedBytes[_index]
-    _index = _index + 1
-    return byte
+    var byte = _bufferedBytes[_index];
+    _index = _index + 1;
+    return byte;
   }
 }
 
 class Wren_Stdin_reader_adapter is Circular_buffer_reader {
   static init_() {
-    __instance = new(Stdin)
+    __instance = new(Stdin);
   }
 
   static instance { __instance }
 
   // TODO: make private ?
   construct new(input) {
-    super(Wren_Stdin_reader_adapter_.new_(input), 8)
+    super(Wren_Stdin_reader_adapter_.new_(input), 8);
   }
 }
-Wren_Stdin_reader_adapter.init_()
+Wren_Stdin_reader_adapter.init_();

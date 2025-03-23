@@ -1,29 +1,29 @@
 
-import "io" for Directory, File
+import "io" for Directory, File;
 
 import "veery/abort" for Abort;
 import "veery/argument_parser" for ArgumentParser;
 import "veery/character" for Character;
-import "veery/character_string" for CharacterString
+import "veery/character_string" for CharacterString;
 import "veery/compiler/abstract_lang/identity_visitor" for IdentityVisitor;
-import "veery/compiler/abstract_lang/source_file" for SourceFile
-import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
+import "veery/compiler/abstract_lang/source_file" for SourceFile;
+import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor;
 import "veery/compiler/compilation_context" for CompilationContext;
 import "veery/compiler/reporter" for JsonReporter, PrettyReporter, Severity;
 import "veery/compiler/warning" for Warning;
 import "veery/veery_version" for VEERY_VERSION_STRING;
 
-import "veery_lang/lexer" for Lexer
-import "veery_lang/parser" for Parser
+import "veery_lang/lexer" for Lexer;
+import "veery_lang/parser" for Parser;
 
-import "veery/compiler/abstract_lang/transform/constant_folding_transform/constant_folding_transform" for ConstantFoldingTransform
-import "veery/compiler/abstract_lang/transform/character_transform" for CharacterTransform
-import "wren_lang/source_printer" for SourcePrinter
-import "wren_lang/transform/enum_transform" for EnumTransform
-import "wren_lang/transform/strict_equality_transform" for StrictEqualityTransform
-import "wren_lang/transform/this_module_transform" for ThisModuleTransform
+import "veery/compiler/abstract_lang/transform/constant_folding_transform/constant_folding_transform" for ConstantFoldingTransform;
+import "veery/compiler/abstract_lang/transform/character_transform" for CharacterTransform;
+import "wren_lang/source_printer" for SourcePrinter;
+import "wren_lang/transform/enum_transform" for EnumTransform;
+import "wren_lang/transform/strict_equality_transform" for StrictEqualityTransform;
+import "wren_lang/transform/this_module_transform" for ThisModuleTransform;
 
-import "veery/compiler/abstract_lang/validator/call_receiver_validator" for CallReceiverValidator
+import "veery/compiler/abstract_lang/validator/call_receiver_validator" for CallReceiverValidator;
 
 class Compiler {
   construct new () {
@@ -55,16 +55,16 @@ class Compiler {
   }
 
   parseFile(compilation_context, path) {
-//    System.print("Parsing %(path)")
-    var code = CharacterString.fromString(File.read(path))
-    var source = SourceFile.new(path, code)
+//    System.print("Parsing %(path)");
+    var code = CharacterString.fromString(File.read(path));
+    var source = SourceFile.new(path, code);
 
     var ast = _parser.parse(compilation_context, source);
 
-//    var resolver = Resolver.new(_reporter)
-//    resolver.resolve(ast)
+//    var resolver = Resolver.new(_reporter);
+//    resolver.resolve(ast);
 
-    return ast
+    return ast;
   }
 
   run(arguments) {
@@ -83,8 +83,8 @@ class Compiler {
         option.help      = "Output result in json format";
         option.callback  = Fn.new {
           reporter_class = JsonReporter;
-        }
-      }
+        };
+      };
 
       argument_parser.add_option {|option|
         option.long_name = "lang";
@@ -93,8 +93,8 @@ class Compiler {
         option.callback  = Fn.new {|result|
           // TODO Check values
           language = result.arguments_shift();
-        }
-      }
+        };
+      };
 
       argument_parser.add_option {|option|
         option.short_name = 'o';
@@ -103,8 +103,8 @@ class Compiler {
         option.callback   = Fn.new {|result|
           // TODO Check values
           output_file_path = result.arguments_shift();
-        }
-      }
+        };
+      };
 
       argument_parser.add_option {|option|
         option.short_name = 'w';
@@ -112,8 +112,8 @@ class Compiler {
         option.callback   = Fn.new {|result|
           // TODO Check values
           warning_modifiers.add("no-warning");
-        }
-      }
+        };
+      };
 
       argument_parser.add_option {|option|
         option.short_name = 'W';
@@ -122,9 +122,9 @@ class Compiler {
         option.callback   = Fn.new {|result|
           // TODO Check values
           warning_modifiers.add(result.arguments_shift());
-        }
-      }
-    }
+        };
+      };
+    };
 
     var result = argument_parser.parse(arguments);
     arguments = result.arguments;
@@ -218,11 +218,11 @@ class Compiler {
     var file = File.create(output_file_path);
     pipeline = pipeline | SourcePrinter.new(file);
     ast.accept(pipeline, compilation_context);
-    file.close()
+    file.close();
 
     if (compilation_context.has_errors) {
-      System.print("Build has errors")
-      return 1
+      System.print("Build has errors");
+      return 1;
     }
   }
 }

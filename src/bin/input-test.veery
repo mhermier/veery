@@ -1,26 +1,26 @@
 
-import "io" for Stdin
+import "io" for Stdin;
 
-import "veery/chars" for Chars
-import "veery/event/input" for Input
-import "veery/event/key" for Key
-import "veery/event/loop" for Loop
+import "veery/chars" for Chars;
+import "veery/event/input" for Input;
+import "veery/event/key" for Key;
+import "veery/event/loop" for Loop;
 
-Stdin.isRaw = true
+Stdin.isRaw = true;
 
-var event_loop = Loop.new()
-var input = Input.new()
+var event_loop = Loop.new();
+var input = Input.new();
 
-event_loop.run()
+event_loop.run();
 
 // FIXME: move to proper handler
 while (true) {
-  var key = input.read()
-  System.print(key)
+  var key = input.read();
+  System.print(key);
 
-  var byte = key.toKeyCode
+  var byte = key.toKeyCode;
   if (byte == Chars.ctrlC) {
-    event_loop.stop()
-    break
+    event_loop.stop();
+    break;
   }
 }

@@ -3,8 +3,8 @@ import "veery/compiler/abstract_lang/visitor" for AbstractVisitor;
 
 class ComposedVisitor is AbstractVisitor {
   construct new(lhs, rhs) {
-    _lhs = lhs
-    _rhs = rhs
+    _lhs = lhs;
+    _rhs = rhs;
   }
 
   visit(node, visitor_data) {

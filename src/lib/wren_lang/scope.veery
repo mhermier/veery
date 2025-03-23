@@ -1,9 +1,9 @@
-import "veery/chars" for Chars
-import "veery/compiler/reporter" for Severity
+import "veery/chars" for Chars;
+import "veery/compiler/reporter" for Severity;
 
 class Scope {
   construct new(reporter) {
-    _reporter = reporter
+    _reporter = reporter;
 
     // TODO: Hard-coding these is a hack (as is using "true" for their value
     // instead of a token). Should load the core library and implicitly import
@@ -29,48 +29,48 @@ class Scope {
       "StringCodePointSequence": true,
       "System": true,
       "WhereSequence": true
-    }
-    _scopes = [moduleScope]
+    };
+    _scopes = [moduleScope];
 
-    _forwardReferences = []
+    _forwardReferences = [];
   }
 
   // Declares a variable with [name] in the current scope.
   declare(name) {
-    var scope = _scopes[-1]
+    var scope = _scopes[-1];
     if (scope.containsKey(name.toString)) {
-      var token = scope[name.toString]
+      var token = scope[name.toString];
       if (token is Bool) {
         _reporter.call(Severity.Error,
             "A variable named '%(name)' is already defined in " +
-            "the core library", [name])
+            "the core library", [name]);
       } else {
         _reporter.call(Severity.Error,
             "A variable named '%(name)' is already defined in " +
             "this scope, on line %(scope[name].lineStart).",
-            [scope[name.toString], name])
+            [scope[name.toString], name]);
       }
-      return
+      return;
     }
 
-    scope[name.toString] = name
+    scope[name.toString] = name;
   }
 
   // Looks for a previously declared variable with [name].
   //
   // Reports an error if not found.
   resolve(name) {
-    var reachedClass = false
+    var reachedClass = false;
     for (i in (_scopes.count - 1)..0) {
       // Don't walk past a class definition.
       if (_scopes[i] == null) {
-        reachedClass = true
-        break
+        reachedClass = true;
+        break;
       }
 
       if (_scopes[i].containsKey(name.toString)) {
         // Found it in a containing lexical scope.
-        return _scopes[i][name.toString]
+        return _scopes[i][name.toString];
       }
     }
 
@@ -78,32 +78,32 @@ class Scope {
       if (Chars.isLowerAlpha(name.text[0].codePoint)) {
         // A lowercase name inside a class is treated like a self-send so do
         // nothing.
-        return null
+        return null;
       } else {
         // A capitalized name is resolved at the module level.
         if (_scopes[0].containsKey(name.toString)) {
           // Found it in a containing lexical scope.
-          return _scopes[0][name.toString]
+          return _scopes[0][name.toString];
         } else {
           // Assume it's a forward reference for now.
-          _forwardReferences.add(name)
-          return
+          _forwardReferences.add(name);
+          return;
         }
       }
     }
 
     // If we got here, it's not defined.
-    _reporter.call(Severity.Error, "Variable '%(name)' is not defined.", [name])
+    _reporter.call(Severity.Error, "Variable '%(name)' is not defined.", [name]);
   }
 
   // Begins a new lexical block scope.
   begin() {
-    _scopes.add({})
+    _scopes.add({});
   }
 
   // Ends the innermost scope.
   end() {
-    _scopes.removeAt(-1)
+    _scopes.removeAt(-1);
   }
 
   // Marks that we are inside a class definition.
@@ -112,12 +112,12 @@ class Scope {
   // so we can detect implicit self sends.
   beginClass() {
     // TODO: Using a null scope as a sentinel is kind of hacky.
-    _scopes.add(null)
+    _scopes.add(null);
   }
 
   // Ends the current class definition.
   endClass() {
-    _scopes.removeAt(-1)
+    _scopes.removeAt(-1);
   }
 
   // Report errors for any module-level variables that were referenced but
@@ -125,7 +125,7 @@ class Scope {
   checkForwardReferences() {
     for (use in _forwardReferences) {
       if (!_scopes[0].containsKey(use.toString)) {
-        _reporter.call(Severity.Error, "Variable '%(use)' is not defined.", [use])
+        _reporter.call(Severity.Error, "Variable '%(use)' is not defined.", [use]);
       }
     }
   }

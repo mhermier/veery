@@ -31,8 +31,8 @@ import "veery/compiler/abstract_lang/ast" for
     SuperExpr,
     ThisExpr,
     VarStmt,
-    WhileStmt
-import "veery/compiler/abstract_lang/visitor" for AbstractVisitor
+    WhileStmt;
+import "veery/compiler/abstract_lang/visitor" for AbstractVisitor;
 
 // Base transform visitor class that walks the entire AST.
 // By default should perform a null transform
@@ -42,33 +42,33 @@ class TransformVisitor is AbstractVisitor {
   }
 
   accept_(node, visitor_data) {
-    if (node == null) return null
+    if (node == null) return null;
 
     return node.accept(this, visitor_data);
   }
 
   acceptAll_(nodes, visitor_data) {
-    if (nodes == null) return null
+    if (nodes == null) return null;
 
-    var newNodes = []
+    var newNodes = [];
     for (node in nodes) {
       newNodes.add(accept_(node, visitor_data));
     }
-    return newNodes
+    return newNodes;
   }
 
   visitBody(node, visitor_data) {
     var newNode = Body.new(
         node.parameters,
         acceptAll_(node.statements, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitMapEntry(node, visitor_data) {
     var newNode = MapEntryNode.new(
         accept_(node.key, visitor_data),
         accept_(node.value, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitMethod(node, visitor_data) {
@@ -82,14 +82,14 @@ class TransformVisitor is AbstractVisitor {
         node.setter,
         node.parenthesisParameters,
         accept_(node.body, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitModule(node, visitor_data) {
     var newNode = Module.new(
         node.interpreter_arguments,
         acceptAll_(node.statements, visitor_data));
-    return newNode
+    return newNode;
   }
 
   // Expressions.
@@ -99,7 +99,7 @@ class TransformVisitor is AbstractVisitor {
         accept_(node.target, visitor_data),
         node.equal,
         accept_(node.value, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitBoolExpr(node, visitor_data) { node }
@@ -110,7 +110,7 @@ class TransformVisitor is AbstractVisitor {
         node.name,
         acceptAll_(node.arguments, visitor_data),
         accept_(node.blockArgument, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitCharacterExpr(node, visitor_data) { node }
@@ -122,7 +122,7 @@ class TransformVisitor is AbstractVisitor {
         accept_(node.thenBranch, visitor_data),
         node.colon,
         accept_(node.elseBranch, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitFieldExpr(node, visitor_data) { node }
@@ -131,8 +131,8 @@ class TransformVisitor is AbstractVisitor {
     var newNode = GroupingExpr.new(
         node.leftParen,
         accept_(node.expression, visitor_data),
-        node.rightParen)
-    return newNode
+        node.rightParen);
+    return newNode;
   }
 
   visitInfixExpr(node, visitor_data) {
@@ -140,30 +140,30 @@ class TransformVisitor is AbstractVisitor {
         accept_(node.left, visitor_data),
         node.operator,
         accept_(node.right, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitInterpolationExpr(node, visitor_data) {
     var newNode = InterpolationExpr.new(
         node.strings,
         acceptAll_(node.expressions, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitListExpr(node, visitor_data) {
     var newNode = ListExpr.new(
         node.leftBracket,
         acceptAll_(node.elements, visitor_data),
-        node.rightBracket)
-    return newNode
+        node.rightBracket);
+    return newNode;
   }
 
   visitMapExpr(node, visitor_data) {
     var newNode = MapExpr.new(
         node.leftBrace,
         acceptAll_(node.entries, visitor_data),
-        node.rightBrace)
-    return newNode
+        node.rightBrace);
+    return newNode;
   }
 
   visitNullExpr(node, visitor_data) { node }
@@ -173,7 +173,7 @@ class TransformVisitor is AbstractVisitor {
     var newNode = PrefixExpr.new(
         node.operator,
         accept_(node.right, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitStaticFieldExpr(node, visitor_data) { node }
@@ -184,8 +184,8 @@ class TransformVisitor is AbstractVisitor {
         accept_(node.receiver, visitor_data),
         node.leftBracket,
         acceptAll_(node.arguments, visitor_data),
-        node.rightBracket)
-    return newNode
+        node.rightBracket);
+    return newNode;
   }
 
   visitSuperExpr(node, visitor_data) {
@@ -193,7 +193,7 @@ class TransformVisitor is AbstractVisitor {
         node.name,
         acceptAll_(node.arguments, visitor_data),
         accept_(node.blockArgument, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitThisExpr(node, visitor_data) { node }
@@ -206,7 +206,7 @@ class TransformVisitor is AbstractVisitor {
   visitBlockStmt(node, visitor_data) {
     var newNode = BlockStmt.new(
         acceptAll_(node.statements, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitBreakStmt(node, visitor_data) { node }
@@ -218,7 +218,7 @@ class TransformVisitor is AbstractVisitor {
         node.name,
         node.superclass, // FIXME ? accept_(node.superclass)
         acceptAll_(node.methods, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitContinueStmt(node, visitor_data) { node }
@@ -230,7 +230,7 @@ class TransformVisitor is AbstractVisitor {
         node.variable,
         accept_(node.iterator, visitor_data),
         accept_(node.body, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitIfStmt(node, visitor_data) {
@@ -238,7 +238,7 @@ class TransformVisitor is AbstractVisitor {
         accept_(node.condition, visitor_data),
         accept_(node.thenBranch, visitor_data),
         accept_(node.elseBranch, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitImportStmt(node, visitor_data) { node }
@@ -247,20 +247,20 @@ class TransformVisitor is AbstractVisitor {
     var newNode = ReturnStmt.new(
         node.keyword,
         accept_(node.value, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitVarStmt(node, visitor_data) {
     var newNode = VarStmt.new(
         node.name,
         accept_(node.initializer, visitor_data));
-    return newNode
+    return newNode;
   }
 
   visitWhileStmt(node, visitor_data) {
     var newNode = WhileStmt.new(
         accept_(node.condition, visitor_data),
         accept_(node.body, visitor_data));
-    return newNode
+    return newNode;
   }
 }

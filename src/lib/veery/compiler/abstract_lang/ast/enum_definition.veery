@@ -1,10 +1,10 @@
 
-import "veery/compiler/abstract_lang/ast" for Stmt
+import "veery/compiler/abstract_lang/ast" for Stmt;
 
 class EnumDefinition is Stmt {
   construct new(name, definitions) {
-    _name = name
-    _definitions = definitions
+    _name = name;
+    _definitions = definitions;
   }
 
   name { _name }
@@ -13,6 +13,6 @@ class EnumDefinition is Stmt {
   accept(visitor, visitor_data) { visitor.visitEnumDefinition(this, visitor_data) }
 
   toString {
-    return "EnumDefinition(%(_name) %(_definitions))"
+    return "EnumDefinition(%(_name) %(_definitions))";
   }
 }

@@ -1,10 +1,10 @@
 
-import "veery/abort" for Abort
-import "veery/character" for Character
-import "veery/chars" for Chars
-import "veery/event/key" for Key
-import "veery/input_output/circular_buffer_reader" for Circular_buffer_reader
-import "veery/input_output/system_console" for System_console
+import "veery/abort" for Abort;
+import "veery/character" for Character;
+import "veery/chars" for Chars;
+import "veery/event/key" for Key;
+import "veery/input_output/circular_buffer_reader" for Circular_buffer_reader;
+import "veery/input_output/system_console" for System_console;
 
 class Input {
   static init_() {
@@ -37,7 +37,7 @@ class Input {
 //      'X'.codePoint: Key.fromString(""        ),
 //      'Y'.codePoint: Key.fromString(""        ),
 //      'Z'.codePoint: Key.fromString(""        ),
-    }
+    };
 
     __escape_left_braket_code_points = {
       'A'.codePoint: Key.fromString("Up"   ),
@@ -66,7 +66,7 @@ class Input {
 //      'X'.codePoint: Key.fromString(""     ),
 //      'Y'.codePoint: Key.fromString(""     ),
 //      'Z'.codePoint: Key.fromString(""     ),
-    }
+    };
 
     __escape_left_braket_key_codes = {
 //       1: Key.fromString("Home"    ),
@@ -106,19 +106,19 @@ class Input {
 //      33: Key.fromString("F19"     ),
 //      34: Key.fromString("F20"     ),
 //      35: Key.fromString(""        ),
-    }
+    };
   }
 
   static new() { new(System_console.input) }
   construct new(reader) {
-    _reader = Circular_buffer_reader.new(reader)
+    _reader = Circular_buffer_reader.new(reader);
   }
 
   read() {
-    var c = read_()
+    var c = read_();
 
     if (c.codePoint == Chars.escape) {
-      c = read_()
+      c = read_();
 
       /*
       <esc> <nochar>                                 -> esc
@@ -138,38 +138,38 @@ class Input {
       */
 
       if (c.codePoint == Chars.escape) {
-        return Key.fromString("Escape")
+        return Key.fromString("Escape");
       } else if (c == 'O') {
-        return handle_map_(__escape_O_code_points, read_().codePoint)
+        return handle_map_(__escape_O_code_points, read_().codePoint);
       } else if (c == '[') {
         if (peek_().isDigit) {
-          var key_code = null
-          var modifier = 1
+          var key_code = null;
+          var modifier = 1;
 
-          var key_code_or_modifier = readNumber_()
+          var key_code_or_modifier = readNumber_();
           if (peek_() == ';') {
-            Abort.todo("Handle keycode with modifier")
+            Abort.todo("Handle keycode with modifier");
           }
           if (peek_() == '~') {
           }
-          Abort.todo("Handle modifier or key code")
+          Abort.todo("Handle modifier or key code");
         }
 
-        return handle_map_(__escape_left_braket_code_points, read_().codePoint)
+        return handle_map_(__escape_left_braket_code_points, read_().codePoint);
       } else {
-        Abort.todo("Handle ESC %(c) sequences")
+        Abort.todo("Handle ESC %(c) sequences");
       }
     } else {
-      return Key.fromCharacter(c)
+      return Key.fromCharacter(c);
     }
   }
 
   handle_map_(map, code) {
-    var key = map[code]
+    var key = map[code];
     if (key == null) {
-      Abort.todo("Handle code %(code)")
+      Abort.todo("Handle code %(code)");
     }
-    return key
+    return key;
   }
 
   read_() { _reader.read() }
@@ -177,7 +177,7 @@ class Input {
   peek_(n) { _reader.peek(n) }
 
   readNumber_() {
-    Abort.todo("read number")
+    Abort.todo("read number");
   }
 }
-Input.init_()
+Input.init_();

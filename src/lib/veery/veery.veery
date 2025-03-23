@@ -1,14 +1,14 @@
 
-import "io" for Stdin
-import "os" for Platform
+import "io" for Stdin;
+import "os" for Platform;
 
 import "veery/argument_parser" for ArgumentParser;
 import "veery/veery_version" for VEERY_VERSION_STRING;
 
 // Subcommands
-import "veery/compiler/analyzer" for Analyzer
-import "veery/compiler/compiler" for Compiler
-import "veery/compiler/shell"    for Shell
+import "veery/compiler/analyzer" for Analyzer;
+import "veery/compiler/compiler" for Compiler;
+import "veery/compiler/shell"    for Shell;
 
 class Veery {
   construct new() {}
@@ -19,7 +19,7 @@ class Veery {
       argument_parser.program_version = VEERY_VERSION_STRING;
 
       // TODO: Add sub_command option parsing
-    }
+    };
 
     var result = argument_parser.parse(arguments);
     arguments = result.arguments;
@@ -28,9 +28,9 @@ class Veery {
       "analyze": Analyzer,
       "compile": Compiler,
       "shell":   Shell,
-    }
+    };
 
-    var sub_command = Shell // default is shell
+    var sub_command = Shell; // default is shell
     if (arguments.count > 0) {
       var maybe_subcommand;
       if (maybe_subcommand = sub_commands[arguments[0]]) {
@@ -39,6 +39,6 @@ class Veery {
       }
     }
 
-    return sub_command.new().run(arguments)
+    return sub_command.new().run(arguments);
   }
 }

@@ -1,5 +1,5 @@
 
-import "veery/compiler/abstract_lang/recursive_visitor" for RecursiveVisitor
+import "veery/compiler/abstract_lang/recursive_visitor" for RecursiveVisitor;
 
 class CallReceiverValidator is RecursiveVisitor {
   construct new() { }
@@ -7,7 +7,7 @@ class CallReceiverValidator is RecursiveVisitor {
   visitCallExpr(node, visitor_data) {
     if (node.receiver == null) {
       // TODO: Use a reporter
-      System.print("Missing receiver at %(node.name.lineStart),%(node.name.columnStart) %(node)")
+      System.print("Missing receiver at %(node.name.lineStart),%(node.name.columnStart) %(node)");
     }
 
     super(node, visitor_data);

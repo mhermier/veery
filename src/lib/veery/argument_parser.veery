@@ -1,12 +1,12 @@
 
-import "veery/character" for Character
+import "veery/character" for Character;
 
-import "os" for Process
+import "os" for Process;
 
 class ArgumentParserResult {
   construct new(argument_parser, arguments) {
-    _argument_parser = argument_parser
-    _arguments       = arguments
+    _argument_parser = argument_parser;
+    _arguments       = arguments;
   }
 
   argument_parser { _argument_parser }
@@ -20,13 +20,13 @@ class ArgumentParserResult {
 
 class Option {
   construct new() {
-    new {}
+    new {};
   }
 
   construct new(setupFn) {
-    _arity = 0
+    _arity = 0;
 
-    setupFn.call(this)
+    setupFn.call(this);
   }
 
   short_name { _short_name }
@@ -47,11 +47,11 @@ class Option {
 
 class ArgumentParser {
   construct new() {
-    new {}
+    new {};
   }
 
   construct new(setupFn) {
-    _options = {}
+    _options = {};
 
     setupFn.call(this);
 
@@ -62,7 +62,7 @@ class ArgumentParser {
       option.callback   = Fn.new {
         .show_help();
       }
-    }
+    };
 
     if (_program_version != null) {
       add_option {|option|
@@ -72,7 +72,7 @@ class ArgumentParser {
         option.callback   = Fn.new {
           .show_version();
         }
-      }
+      };
     }
   }
 
@@ -83,107 +83,107 @@ class ArgumentParser {
   program_version=(program_version) { _program_version = program_version }
 
   add_option(setupFn) {
-    var option = Option.new(setupFn)
+    var option = Option.new(setupFn);
 
     // TODO: support aliases (short and long names as lists basically)
-    register_option_short_name_(option, option.short_name)
-    register_option_long_name_(option, option.long_name)
-    return this
+    register_option_short_name_(option, option.short_name);
+    register_option_long_name_(option, option.long_name);
+    return this;
   }
 
   register_option_short_name_(option, short_name) {
-    if (short_name == null) return
+    if (short_name == null) return;
 
     // TODO sanitize short_name
 
-    _options["-%(short_name)"] = option
+    _options["-%(short_name)"] = option;
   }
 
   register_option_long_name_(option, long_name) {
-    if (long_name == null) return
+    if (long_name == null) return;
 
     // TODO sanitize long_name
 
-    _options["--%(long_name)"] = option
+    _options["--%(long_name)"] = option;
   }
 
   parse() {
-    return parse(Process.arguments)
+    return parse(Process.arguments);
   }
 
   parse(arguments) {
-    var result = ArgumentParserResult.new(this, arguments) 
+    var result = ArgumentParserResult.new(this, arguments);
 
 /*
-    var program_name = result.arguments_shift()
+    var program_name = result.arguments_shift();
 
     // Do not clobber possibly user provided program_name
-    if (!result.program_name) result.program_name = program_name
+    if (!result.program_name) result.program_name = program_name;
 */
 
     while (result.arguments.count > 0) {
-      var current = result.arguments[0]
+      var current = result.arguments[0];
 
       if (current == "--") {
-        break // End of options
+        break; // End of options
       }
 
-      var option
+      var option;
       if (option = _options[current]) {
         // TODO handle errors
         // TODO Check arity
 
-        result.arguments_shift()
-        option.callback.call(result)
+        result.arguments_shift();
+        option.callback.call(result);
       } else if (current.startsWith("--")) {
-        var assign_index = current.indexOf("=")
+        var assign_index = current.indexOf("=");
         if (assign_index < 0) {
-          Fiber.abort("Handle unknown long option")
+          Fiber.abort("Handle unknown long option");
         }
 
-        var lhs = current[0...assign_index]
-        var rhs = current[assign_index + 1..-1]
+        var lhs = current[0...assign_index];
+        var rhs = current[assign_index + 1..-1];
 
-        option = _options[lhs]
+        option = _options[lhs];
         if (!option) {
-          Fiber.abort("Handle unknown long option")
+          Fiber.abort("Handle unknown long option");
         }
 
         if (option.arity != 1) {
-          Fiber.abort("Handle assign long option must have an arity of 1 argument")
+          Fiber.abort("Handle assign long option must have an arity of 1 argument");
         }
 
         // Inject argument and value separately before trying to parse again
-        result.arguments[0] = lhs
-        result.arguments.insert(1, rhs)
-        continue
+        result.arguments[0] = lhs;
+        result.arguments.insert(1, rhs);
+        continue;
       } else if (current.startsWith("-") &&
                  current.count >= 2) {
-        var lhs = current[0..1]
-        var rhs = current[2..-1]
+        var lhs = current[0..1];
+        var rhs = current[2..-1];
 
-        option = _options[lhs]
+        option = _options[lhs];
         if (!option) {
-          Fiber.abort("Handle unknown short option")
+          Fiber.abort("Handle unknown short option");
         }
 
         if (option.arity == 0) {
           // Inject combined arguments separately before trying to parse again
-          result.arguments[0] = lhs
-          result.arguments.insert(1, "-%(rhs)")
+          result.arguments[0] = lhs;
+          result.arguments.insert(1, "-%(rhs)");
         } else if (option.arity == 1) {
           // Inject argument and value separately before trying to parse again
-          result.arguments[0] = lhs
-          result.arguments.insert(1, rhs)
+          result.arguments[0] = lhs;
+          result.arguments.insert(1, rhs);
         } else {
-          Fiber.abort("Handle assign short option must have an arity of 2+ argument")
+          Fiber.abort("Handle assign short option must have an arity of 2+ argument");
         }
-        continue
+        continue;
       } else {
-        break // Not an option
+        break; // Not an option
       }
     }
-    return result
+    return result;
   }
 
   show_help() {

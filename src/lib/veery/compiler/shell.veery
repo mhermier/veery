@@ -1,9 +1,9 @@
 
-import "io" for Stdin
-import "os" for Platform
+import "io" for Stdin;
+import "os" for Platform;
 
 import "veery/argument_parser" for ArgumentParser;
-import "veery/repl/repl" for AnsiRepl, SimpleRepl
+import "veery/repl/repl" for AnsiRepl, SimpleRepl;
 import "veery/veery_version" for VEERY_VERSION_STRING;
 
 class Shell {
@@ -20,9 +20,9 @@ class Shell {
         option.callback  = Fn.new {|result|
           // TODO Check values
           language = result.arguments_shift();
-        }
-      }
-    }
+        };
+      };
+    };
 
     var result = argument_parser.parse(arguments);
     arguments = result.arguments;
@@ -35,15 +35,15 @@ class Shell {
       Fiber.abort("Properly implement arguments support");
     }
 
-    System.print("\\\\/\"-")
-    System.print(" \\_/   veery v%(VEERY_VERSION_STRING)")
+    System.print("\\\\/\"-");
+    System.print(" \\_/   veery v%(VEERY_VERSION_STRING)");
 
     // Fire up the REPL. We use ANSI when talking to a POSIX TTY.
     if (Platform.isPosix && Stdin.isTerminal) {
-      AnsiRepl.new().run()
+      AnsiRepl.new().run();
     } else {
       // ANSI escape sequences probably aren't supported, so degrade.
-      SimpleRepl.new().run()
+      SimpleRepl.new().run();
     }
   }
 }

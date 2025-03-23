@@ -1,8 +1,8 @@
 
-import "veery/abort" for Abort
-import "veery/character" for Character
-import "veery/chars" for Chars
-import "veery/compiler/abstract_lang/token" for Token, TokenType
+import "veery/abort" for Abort;
+import "veery/character" for Character;
+import "veery/chars" for Chars;
+import "veery/compiler/abstract_lang/token" for Token, TokenType;
 
 var KEYWORDS = {
   "break":     TokenType.breakKeyword,
@@ -25,7 +25,7 @@ var KEYWORDS = {
   "true":      TokenType.trueKeyword,
   "var":       TokenType.varKeyword,
   "while":     TokenType.whileKeyword
-}
+};
 
 // Data table for tokens that are tokenized using maximal munch.
 //
@@ -62,7 +62,7 @@ var PUNCTUATORS = {
   '='.codePoint:  [TokenType.equal, '=', TokenType.equalEqual],
 
   '.'.codePoint:  [TokenType.dot,   '.', TokenType.dotDot, '.', TokenType.dotDotDot],
-}
+};
 
 // Tokenizes a string of input. This lexer differs from most in that it
 // silently ignores errors from incomplete input, like a string literal with
@@ -70,38 +70,38 @@ var PUNCTUATORS = {
 // input while the user is still typing it.
 class Lexer {
   construct new(source) {
-    _source = source
-    _start = 0
-    _current = 0
+    _source = source;
+    _start = 0;
+    _current = 0;
 
     // The stack of ongoing interpolated strings. Each element in the list is
     // a single level of interpolation nesting. The value of the element is the
     // number of unbalanced "(" still remaining to be closed.
-    _interpolations = []
+    _interpolations = [];
   }
 
   readToken() {
-    _start = _current
+    _start = _current;
 
-    var c = peek()
-    if (c == null) return makeToken(TokenType.eof)
-    advance()
+    var c = peek();
+    if (c == null) return makeToken(TokenType.eof);
+    advance();
 
-    var d = c.codePoint
+    var d = c.codePoint;
 
     if (!_interpolations.isEmpty) {
       if (c == '(') {
-        _interpolations[-1] = _interpolations[-1] + 1
+        _interpolations[-1] = _interpolations[-1] + 1;
       } else if (c == ')') {
-        _interpolations[-1] = _interpolations[-1] - 1
+        _interpolations[-1] = _interpolations[-1] - 1;
 
         // The last ")" in an interpolated expression ends the expression and
         // resumes the string.
         if (_interpolations[-1] == 0) {
           // This is the final ")", so the interpolation expression has ended.
           // This ")" now begins the next section of the template string.
-          _interpolations.removeAt(-1)
-          return readString()
+          _interpolations.removeAt(-1);
+          return readString();
         }
       }
     }
@@ -109,7 +109,7 @@ class Lexer {
     // Handle "//", and "/*".
     if (c == '/') {
       if (match('/')) return readLine(TokenType.comment);
-      if (match('*')) return readBlockComment()
+      if (match('*')) return readBlockComment();
     }
 
     if (c == '#') {
@@ -117,48 +117,48 @@ class Lexer {
     }
 
     if (PUNCTUATORS.containsKey(d)) {
-      var punctuator = PUNCTUATORS[d]
-      var type = punctuator[0]
-      var i = 1
+      var punctuator = PUNCTUATORS[d];
+      var type = punctuator[0];
+      var i = 1;
       while (i < punctuator.count) {
-        if (!match(punctuator[i])) break
-        type = punctuator[i + 1]
-        i = i + 2
+        if (!match(punctuator[i])) break;
+        type = punctuator[i + 1];
+        i = i + 2;
       }
 
-      return makeToken(type)
+      return makeToken(type);
     }
 
     // Handle "<", "<<", and "<=".
     if (c == '<') {
-      if (match('<')) return makeToken(TokenType.lessLess)
-      if (match('=')) return makeToken(TokenType.lessEqual)
-      return makeToken(TokenType.less)
+      if (match('<')) return makeToken(TokenType.lessLess);
+      if (match('=')) return makeToken(TokenType.lessEqual);
+      return makeToken(TokenType.less);
     }
 
     // Handle ">", ">>", and ">=".
     if (c == '>') {
-      if (match('>')) return makeToken(TokenType.greaterGreater)
-      if (match('=')) return makeToken(TokenType.greaterEqual)
-      return makeToken(TokenType.greater)
+      if (match('>')) return makeToken(TokenType.greaterGreater);
+      if (match('=')) return makeToken(TokenType.greaterEqual);
+      return makeToken(TokenType.greater);
     }
 
-    if (c == '_') return readField()
-    if (c == '"') return readString()
+    if (c == '_') return readField();
+    if (c == '"') return readString();
 
-    if (c == '0' && peek() == 'x') return readHexNumber()
-    if (Chars.isWhitespace(d)) return readWhitespace()
-    if (c.isDigit) return readNumber()
-    if (c.isAlpha) return readName()
+    if (c == '0' && peek() == 'x') return readHexNumber();
+    if (Chars.isWhitespace(d)) return readWhitespace();
+    if (c.isDigit) return readNumber();
+    if (c.isAlpha) return readName();
 
-    return makeToken(TokenType.error)
+    return makeToken(TokenType.error);
   }
 
   // Reads a line and return a token of the given tokenType.
   readLine(tokenType) {
     // A line token stops at the newline.
     while (peek() != '\n' && !isAtEnd) {
-      advance()
+      advance();
     }
 
     return makeToken(tokenType);
@@ -166,74 +166,74 @@ class Lexer {
 
   readBlockComment() {
     // Block comments can nest.
-    var nesting = 1
+    var nesting = 1;
     while (nesting > 0) {
       // TODO: Report error.
-      if (isAtEnd) break
+      if (isAtEnd) break;
 
       if (peek() == '/' && peek(1) == '*') {
-        advance()
-        advance()
-        nesting = nesting + 1
+        advance();
+        advance();
+        nesting = nesting + 1;
       } else if (peek() == '*' && peek(1) == '/') {
-        advance()
-        advance()
-        nesting = nesting - 1
-        if (nesting == 0) break
+        advance();
+        advance();
+        nesting = nesting - 1;
+        if (nesting == 0) break;
       } else {
-        advance()
+        advance();
       }
     }
 
-    return makeToken(TokenType.comment)
+    return makeToken(TokenType.comment);
   }
 
   // Reads a static or instance field.
   readField() {
-    var type = TokenType.field
-    if (match('_')) type = TokenType.staticField
+    var type = TokenType.field;
+    if (match('_')) type = TokenType.staticField;
 
     // Read the rest of the name.
     while (match {|c| c.isAlphaNumeric }) {}
 
-    return makeToken(type)
+    return makeToken(type);
   }
 
   // Reads a string literal.
   readString() {
-    var type = TokenType.string
+    var type = TokenType.string;
 
     while (!isAtEnd) {
-      var c = advance()
+      var c = advance();
 
       if (c == '\\') {
         // TODO: Process specific escapes and validate them.
-        advance()
+        advance();
       } else if (c == '%') {
         // Consume the '('.
-        advance()
+        advance();
         // TODO: Handle missing '('.
-        _interpolations.add(1)
-        type = TokenType.interpolation
-        break
+        _interpolations.add(1);
+        type = TokenType.interpolation;
+        break;
       } else if (c == '"') {
-        break
+        break;
       }
     }
 
     // TODO: Handle unterminated string.
 
-    return makeToken(type)
+    return makeToken(type);
   }
 
   // Reads a number literal.
   readHexNumber() {
     // Skip past the `x`.
-    advance()
+    advance();
 
     // Read the rest of the number.
     while (match {|c| c.isHexDigit }) {}
-    return makeToken(TokenType.number)
+    return makeToken(TokenType.number);
   }
 
   // Reads a series of whitespace characters.
@@ -241,7 +241,7 @@ class Lexer {
     // Read the rest of the whitespace.
     while (match {|c| Chars.isWhitespace(c.codePoint) }) {}
 
-    return makeToken(TokenType.whitespace)
+    return makeToken(TokenType.whitespace);
   }
 
   // Reads a number literal.
@@ -252,18 +252,18 @@ class Lexer {
     // Read floating point.
     if (peek(0) == '.' &&
         peek(1) != null && peek(1).isDigit) { // operator ?.
-        match('.')
+        match('.');
         while (match {|c| c.isDigit }) {}
     }
 
     // Handle scientific notation
     if (match('e')) {
       if (peek(0) == '+' || peek(0) == '-') {
-        advance()
+        advance();
       }
       while (match {|c| c.isDigit }) {}
     }
-    return makeToken(TokenType.number)
+    return makeToken(TokenType.number);
   }
 
   // Reads an identifier or keyword token.
@@ -271,13 +271,13 @@ class Lexer {
     // Read the rest of the name.
     while (match {|c| c.isAlphaNumeric }) {}
 
-    var text = _source.substring(_start, _current - _start)
-    var type = TokenType.name
+    var text = _source.substring(_start, _current - _start);
+    var type = TokenType.name;
     if (KEYWORDS.containsKey(text.toString)) {
-      type = KEYWORDS[text.toString]
+      type = KEYWORDS[text.toString];
     }
 
-    return Token.new(_source, type, _start, _current - _start)
+    return Token.new(_source, type, _start, _current - _start);
   }
 
   // Returns `true` if we have scanned all characters.
@@ -286,10 +286,10 @@ class Lexer {
   // Advances past the current character.
   advance() {
     if (!isAtEnd) {
-      _current = _current + 1
-      return peek(-1)
+      _current = _current + 1;
+      return peek(-1);
     }
-    return null
+    return null;
   }
 
   // Returns the byte value of the current character.
@@ -298,29 +298,29 @@ class Lexer {
   // Returns the byte value of the character [n] bytes past the current
   // character.
   peek(n) {
-    if (_current + n >= _source.count) return null
-    return _source[_current + n]
+    if (_current + n >= _source.count) return null;
+    return _source[_current + n];
   }
 
   // Consumes the current character if it matches [condition], which can be a
   // numeric code point value or a function that takes a code point and returns
   // `true` if the code point matches.
   match(condition) {
-    var c = peek()
-    if (c == null) return false
+    var c = peek();
+    if (c == null) return false;
 
     if (condition is Character) {
-      if (condition != c) return false
+      if (condition != c) return false;
     } else if (condition is Fn) {
-      if (!condition.call(c)) return false
+      if (!condition.call(c)) return false;
     } else if (c is Num) {
-      if (condition != c.codePoint) return false
+      if (condition != c.codePoint) return false;
     } else {
-      Abort.internal_error("Unsupported codition type")
+      Abort.internal_error("Unsupported codition type");
     }
 
-    advance()
-    return true
+    advance();
+    return true;
   }
 
   // Creates a token of [type] from the current character range.

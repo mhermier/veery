@@ -1,6 +1,6 @@
 
-import "veery/compiler/abstract_lang/ast" for BoolExpr
-import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
+import "veery/compiler/abstract_lang/ast" for BoolExpr;
+import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor;
 
 class ConstantFoldingTransform is TransformVisitor {
   construct new() {}
@@ -9,12 +9,12 @@ class ConstantFoldingTransform is TransformVisitor {
     node = super(node, visitor_data);
     if (node.condition is BoolExpr) {
       if (node.condition.nativeValue) {
-        return node.thenBranch
+        return node.thenBranch;
       } else {
         // FIXME: elseBranch can be null, ignore for now
-        //return node.elseBranch
+        //return node.elseBranch;
       }
     }
-    return node
+    return node;
   }
 }

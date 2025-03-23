@@ -3,17 +3,17 @@ import "veery/compiler/abstract_lang/ast" for
     CallExpr,
     FieldExpr,
     StaticFieldExpr,
-    SubscriptExpr
-import "veery/compiler/abstract_lang/recursive_visitor" for RecursiveVisitor
-import "veery/compiler/reporter" for Severity
+    SubscriptExpr;
+import "veery/compiler/abstract_lang/recursive_visitor" for RecursiveVisitor;
+import "veery/compiler/reporter" for Severity;
 
-import "wren_lang/scope" for Scope
+import "wren_lang/scope" for Scope;
 
 // Walks a parsed AST and resolves identifiers.
 class Resolver is RecursiveVisitor {
   construct new(reporter) {
-    _reporter = reporter
-    _scope = Scope.new(reporter)
+    _reporter = reporter;
+    _scope = Scope.new(reporter);
   }
 
   resolve(node, visitor_data) {
@@ -23,30 +23,30 @@ class Resolver is RecursiveVisitor {
   visitModule(node, visitor_data) {
     // TODO: Implicitly import core.
     super(node, visitor_data);
-    _scope.checkForwardReferences()
+    _scope.checkForwardReferences();
   }
 
 //  visitMethod(node, visitor_data) { super(node, visitor_data) }
 
   visitBody(node, visitor_data) {
-    _scope.begin()
-    declareVariables(node.parameters)
+    _scope.begin();
+    declareVariables(node.parameters);
     super(node, visitor_data);
-    _scope.end()
+    _scope.end();
   }
 
   // Expressions.
 
   visitAssignmentExpr(node, visitor_data) {
-      var target_type = node.target.type
+      var target_type = node.target.type;
       if (target_type == AssignmentExpr ||
           target_type == CallExpr ||
           target_type == FieldExpr ||
           target_type == StaticFieldExpr ||
           target_type == SubscriptExpr) {
-        return
+        return;
       }
-      _reporter.call(Severity.Error, "Invalid left argument type: %(node.target.type)", [node.equal])
+      _reporter.call(Severity.Error, "Invalid left argument type: %(node.target.type)", [node.equal]);
   }
 
 //  visitBoolExpr(node, visitor_data) { super(node, visitor_data) }
@@ -56,7 +56,7 @@ class Resolver is RecursiveVisitor {
     if (node.receiver != null) {
       node.receiver.accept(this, visitor_data);
     } else {
-      _scope.resolve(node.name)
+      _scope.resolve(node.name);
     }
 
     // TODO: Error if name is a variable and we have arguments.
@@ -92,34 +92,34 @@ class Resolver is RecursiveVisitor {
   // Statements.
 
   visitBlockStmt(node, visitor_data) {
-    _scope.begin()
+    _scope.begin();
     super(node, visitor_data);
-    _scope.end()
+    _scope.end();
   }
 
   // TODO: Warn on dead code.
 //  visitBreakStmt(node, visitor_data) { super(node, visitor_data) }
 
   visitClassStmt(node, visitor_data) {
-    _scope.declare(node.name)
-    _scope.beginClass()
+    _scope.declare(node.name);
+    _scope.beginClass();
     super(node, visitor_data);
-    _scope.endClass()
+    _scope.endClass();
   }
 
   visitForStmt(node, visitor_data) {
-    _scope.begin()
-    _scope.declare(node.variable)
+    _scope.begin();
+    _scope.declare(node.variable);
 
     super(node, visitor_data);
 
-    _scope.end()
+    _scope.end();
   }
 
 //  visitIfStmt(node, visitor_data) { super(node, visitor_data) }
 
   visitImportStmt(node, visitor_data) {
-    declareVariables(node.variables)
+    declareVariables(node.variables);
     super(node, visitor_data);
   }
 
@@ -127,7 +127,7 @@ class Resolver is RecursiveVisitor {
 //  visitReturnStmt(node, visitor_data) { super(node, visitor_data) }
 
   visitVarStmt(node, visitor_data) {
-    _scope.declare(node.name)
+    _scope.declare(node.name);
     super(node, visitor_data);
   }
 
@@ -136,9 +136,9 @@ class Resolver is RecursiveVisitor {
   // Declare [variables] in the current scope from the given list of name
   // tokens.
   declareVariables(variables) {
-    if (variables == null) return
+    if (variables == null) return;
     for (variable in variables) {
-      _scope.declare(variable)
+      _scope.declare(variable);
     }
   }
 }

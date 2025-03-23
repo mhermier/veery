@@ -1,19 +1,19 @@
 
-import "meta" for Meta
-import "io" for Stdin, Stdout
-import "os" for Platform
+import "meta" for Meta;
+import "io" for Stdin, Stdout;
+import "os" for Platform;
 
-import "ansi/color" for Color
-import "veery/compiler/abstract_lang/source_file" for SourceFile
-import "veery/compiler/abstract_lang/token" for Token, TokenType
-import "veery/character_string" for CharacterString
-import "veery/chars" for Chars
-import "veery/event/input" for Input
-import "veery/event/key" for Key
-import "veery/event/loop" for Loop
-import "veery/repl/action" for Action
-import "veery/repl/actions" for Actions
-import "wren_lang/lexer" for Lexer
+import "ansi/color" for Color;
+import "veery/compiler/abstract_lang/source_file" for SourceFile;
+import "veery/compiler/abstract_lang/token" for Token, TokenType;
+import "veery/character_string" for CharacterString;
+import "veery/chars" for Chars;
+import "veery/event/input" for Input;
+import "veery/event/key" for Key;
+import "veery/event/loop" for Loop;
+import "veery/repl/action" for Action;
+import "veery/repl/actions" for Actions;
+import "wren_lang/lexer" for Lexer;
 
 var TOKEN_COLORS = {
   TokenType.leftParen: Color.gray,
@@ -86,109 +86,109 @@ var TOKEN_COLORS = {
   TokenType.line: Color.none,
   TokenType.error: Color.red,
   TokenType.eof: Color.none,
-}
+};
 
 // Abstract base class for the REPL. Manages the input line and history, but
 // does not render.
 class Repl {
   construct new() {
-    _event_loop = Loop.new()
-    _input = Input.new()
+    _event_loop = Loop.new();
+    _input = Input.new();
 
-    _cursor = 0
-    _line = CharacterString.fromString("")
+    _cursor = 0;
+    _line = CharacterString.fromString("");
 
-    _history = []
-    _historyIndex = 0
+    _history = [];
+    _historyIndex = 0;
 
     _actions = Actions.new([
       Action.new("Quit").
         setKeyChord("Ctrl+C").
         setOnTriggered {
-          System.print()
-          _event_loop.stop()
+          System.print();
+          _event_loop.stop();
         },
       Action.new("Delete right or exit").
         setKeyChord("Ctrl+D").
         setOnTriggered {
           // If the line is empty, Ctrl_D exits.
           if (_line.isEmpty) {
-            System.print()
-            _event_loop.stop()
+            System.print();
+            _event_loop.stop();
           }
           // Otherwise, it deletes the character after the cursor.
-          deleteRight()
+          deleteRight();
         },
       Action.new("Automatic completion").
         setKeyChord(Chars.tab).
         setOnTriggered {
-          var completion = getCompletion()
+          var completion = getCompletion();
           if (completion != null) {
-            _line = _line + completion
-            _cursor = _line.count
+            _line = _line + completion;
+            _cursor = _line.count;
           }
         },
       Action.new("Execute input").
         setKeyChord(Chars.carriageReturn).
         setOnTriggered {
-          executeInput()
+          executeInput();
         },
       Action.new("Clear line").
         setKeyChord("Ctrl+U").
         setOnTriggered {
-          _line = ""
-          cursorBegin()
+          _line = "";
+          cursorBegin();
         },
       Action.new("History next").
         setKeyChord("Ctrl+N").
         setOnTriggered {
-          nextHistory()
+          nextHistory();
         },
       Action.new("History previous").
         setKeyChord("Ctrl+P").
         setOnTriggered {
-          previousHistory()
+          previousHistory();
         },
       Action.new("Delete left").
         setKeyChord(Chars.delete).
         setOnTriggered {
-          deleteLeft()
+          deleteLeft();
         },
 
       Action.new("Move cursor left").
         setKeyChord(Key.left).
         setOnTriggered {
-          cursorLeft()
+          cursorLeft();
         },
       Action.new("Move cursor right").
         setKeyChord(Key.right).
         setOnTriggered {
-          cursorRight()
+          cursorRight();
         },
       Action.new("History next").
         setKeyChord(Key.down).
         setOnTriggered {
-          nextHistory()
+          nextHistory();
         },
       Action.new("History previous").
         setKeyChord(Key.up).
         setOnTriggered {
-          previousHistory()
+          previousHistory();
         },
       Action.new("Delete right").
         setKeyChord(Key.delete).
         setOnTriggered {
-          deleteRight()
+          deleteRight();
         },
       Action.new("Move cursor at the end of line").
         setKeyChord("End").
         setOnTriggered {
-          cursorEnd()
+          cursorEnd();
         },
       Action.new("Move cursor at the begin of line").
         setKeyChord("Home").
         setOnTriggered {
-          cursorBegin()
+          cursorBegin();
         }
     ])
   }
@@ -199,135 +199,135 @@ class Repl {
   line=(value) { _line = value }
 
   run() {
-    Stdin.isRaw = true
-    refreshLine(false)
+    Stdin.isRaw = true;
+    refreshLine(false);
 
-    _event_loop.run()
+    _event_loop.run();
     while (true) {
-      var key = _input.read()
-      var byte = key.toKeyCode
+      var key = _input.read();
+      var byte = key.toKeyCode;
 
       if (_actions.onKeyPressed(byte)) {
         // Nothing to do
       } else if (byte < 0) {
-        System.print("Unhandled action key-code [dec]: %(byte)")
+        System.print("Unhandled action key-code [dec]: %(byte)");
       } else {
-        handleChar(byte)
+        handleChar(byte);
       }
 
-      if (!_event_loop.isRuning) break
-      refreshLine(true)
+      if (!_event_loop.isRuning) break;
+      refreshLine(true);
     }
   }
 
   handleChar(byte) {
     if (byte >= Chars.space) {
       // TODO: handle DEL (0x7f)
-      insertChar(byte)
+      insertChar(byte);
     } else if (byte == Chars.ctrlW) { // Handle Ctrl+w
       // Delete trailing spaces
       while (_cursor != 0 && _line[_cursor - 1] == " ") {
-        deleteLeft()
+        deleteLeft();
       }
       // Delete until the next space
       while (_cursor != 0 && _line[_cursor - 1] != " ") {
-        deleteLeft()
+        deleteLeft();
       }
     } else {
       // TODO: Other shortcuts?
-      System.print("Unhandled key-code [dec]: %(byte)")
+      System.print("Unhandled key-code [dec]: %(byte)");
     }
   }
 
   // Move the cursor at the begin of the line.
   cursorBegin() {
-    _cursor = 0
+    _cursor = 0;
   }
 
   // Move the cursor at the end of the line.
   cursorEnd() {
-    _cursor = line.count
+    _cursor = line.count;
   }
 
   // Move the cursor left one character.
   cursorLeft() {
-    if (_cursor > 0) _cursor = _cursor - 1
+    if (_cursor > 0) _cursor = _cursor - 1;
   }
 
   // Move the cursor right one character.
   cursorRight() {
     // TODO: Take into account multi-byte characters?
-    if (_cursor < line.count) _cursor = _cursor + 1
+    if (_cursor < line.count) _cursor = _cursor + 1;
   }
 
   // Inserts the character with [byte] value at the current cursor position.
   insertChar(byte) {
-    var char = String.fromCodePoint(byte)
-    _line = _line[0..._cursor] + char + _line[_cursor..-1]
-    _cursor = _cursor + 1
+    var char = String.fromCodePoint(byte);
+    _line = _line[0..._cursor] + char + _line[_cursor..-1];
+    _cursor = _cursor + 1;
   }
 
   // Deletes the character before the cursor, if any.
   deleteLeft() {
-    if (_cursor == 0) return
+    if (_cursor == 0) return;
 
     // Delete the character before the cursor.
-    _line = _line[0...(_cursor - 1)] + _line[_cursor..-1]
-    _cursor = _cursor - 1
+    _line = _line[0...(_cursor - 1)] + _line[_cursor..-1];
+    _cursor = _cursor - 1;
   }
 
   // Deletes the character after the cursor, if any.
   deleteRight() {
-    if (_cursor == _line.count) return
+    if (_cursor == _line.count) return;
 
     // Delete the character after the cursor.
-    _line = _line[0..._cursor] + _line[(_cursor + 1)..-1]
+    _line = _line[0..._cursor] + _line[(_cursor + 1)..-1];
   }
 
   previousHistory() {
-    if (_historyIndex == 0) return
+    if (_historyIndex == 0) return;
 
-    _historyIndex = _historyIndex - 1
-    _line = _history[_historyIndex]
-    _cursor = _line.count
+    _historyIndex = _historyIndex - 1;
+    _line = _history[_historyIndex];
+    _cursor = _line.count;
   }
 
   nextHistory() {
-    if (_historyIndex >= _history.count) return
+    if (_historyIndex >= _history.count) return;
 
-    _historyIndex = _historyIndex + 1
+    _historyIndex = _historyIndex + 1;
     if (_historyIndex < _history.count) {
-      _line = _history[_historyIndex]
-      _cursor = _line.count
+      _line = _history[_historyIndex];
+      _cursor = _line.count;
     } else {
-      _line = CharacterString.fromString("")
-      _cursor = 0
+      _line = CharacterString.fromString("");
+      _cursor = 0;
     }
   }
 
   executeInput() {
     // Remove the completion hint.
-    refreshLine(false)
+    refreshLine(false);
 
     // Add it to the history (if the line is interesting).
     if (_line != "" && (_history.isEmpty || _history[-1] != _line)) {
-      _history.add(_line)
-      _historyIndex = _history.count
+      _history.add(_line);
+      _historyIndex = _history.count;
     }
 
     // Reset the current line.
-    var input = _line
-    _line = CharacterString.fromString("")
-    _cursor = 0
+    var input = _line;
+    _line = CharacterString.fromString("");
+    _cursor = 0;
 
-    System.print()
+    System.print();
 
     // Guess if it looks like a statement or expression. If it looks like an
     // expression, we try to print the result.
-    var token = lexFirst(input)
+    var token = lexFirst(input);
 
     // No code, so do nothing.
-    if (token == null) return
+    if (token == null) return;
 
     var isStatement =
         token == TokenType.breakKeyword ||
@@ -338,56 +338,56 @@ class Repl {
         token == TokenType.importKeyword ||
         token == TokenType.returnKeyword ||
         token == TokenType.varKeyword ||
-        token == TokenType.whileKeyword
+        token == TokenType.whileKeyword;
 
-    var closure
+    var closure;
     if (isStatement) {
-      closure = Meta.compile(input.toString)
+      closure = Meta.compile(input.toString);
     } else {
-      closure = Meta.compileExpression(input.toString)
+      closure = Meta.compileExpression(input.toString);
     }
 
     // Stop if there was a compile error.
-    if (closure == null) return
+    if (closure == null) return;
 
-    var fiber = Fiber.new(closure)
+    var fiber = Fiber.new(closure);
 
-    var result = fiber.try()
+    var result = fiber.try();
     if (fiber.error != null) {
       // TODO: Include callstack.
-      showRuntimeError("Runtime error: %(fiber.error)")
-      return
+      showRuntimeError("Runtime error: %(fiber.error)");
+      return;
     }
 
     if (!isStatement) {
-      showResult(result)
+      showResult(result);
     }
   }
 
   lex(line, includeWhitespace) {
-    var lexer = Lexer.new(SourceFile.new("<input>", line))
-    var tokens = []
+    var lexer = Lexer.new(SourceFile.new("<input>", line));
+    var tokens = [];
     while (true) {
-      var token = lexer.readToken()
-      if (token == TokenType.eof) break
+      var token = lexer.readToken();
+      if (token == TokenType.eof) break;
 
       if (includeWhitespace ||
           (token.type != TokenType.comment && token.type != TokenType.whitespace)) {
-        tokens.add(token)
+        tokens.add(token);
       }
     }
 
-    return tokens
+    return tokens;
   }
 
   lexFirst(line) {
-    var lexer = Lexer.new(SourceFile.new("<input>", line))
+    var lexer = Lexer.new(SourceFile.new("<input>", line));
     while (true) {
-      var token = lexer.readToken()
-      if (token == TokenType.eof) return null
+      var token = lexer.readToken();
+      if (token == TokenType.eof) return null;
 
       if (token.type != TokenType.comment && token.type != TokenType.whitespace) {
-        return token
+        return token;
       }
     }
   }
@@ -396,16 +396,16 @@ class Repl {
   // there is none. The completion is the remaining string to append to the
   // line, not the entire completed line.
   getCompletion() {
-    if (_line.isEmpty) return null
+    if (_line.isEmpty) return null;
 
     // Only complete if the cursor is at the end.
-    if (_cursor != _line.count) return null
+    if (_cursor != _line.count) return null;
 
     for (name in Meta.getModuleVariables("veery/repl/repl")) {
       // TODO: Also allow completion if the line ends with an identifier but
       // has other stuff before it.
       if (name.startsWith(_line.toString)) {
-        return name[_line.count..-1]
+        return name[_line.count..-1];
       }
     }
   }
@@ -414,8 +414,8 @@ class Repl {
 // A reduced functionality REPL that doesn't use ANSI escape sequences.
 class SimpleRepl is Repl {
   construct new() {
-    super()
-    _erase = ""
+    super();
+    _erase = "";
   }
 
   refreshLine(showCompletion) {
@@ -423,103 +423,103 @@ class SimpleRepl is Repl {
     // We have to erase it manually. Since we can't use ANSI escapes, and we
     // don't know how wide the terminal is, erase the longest line we've seen
     // so far.
-    if (line.count > _erase.count) _erase = " " * line.count
-    System.write("\r  %(_erase)")
+    if (line.count > _erase.count) _erase = " " * line.count;
+    System.write("\r  %(_erase)");
 
     // Show the prompt at the beginning of the line.
-    System.write("\r> ")
+    System.write("\r> ");
 
     // Write the line.
-    System.write(line)
-    Stdout.flush()
+    System.write(line);
+    Stdout.flush();
   }
 
   showResult(value) {
     // TODO: Syntax color based on type? It might be nice to distinguish
     // between string results versus stringified results. Otherwise, the
     // user can't tell the difference between `true` and "true".
-    System.print(value)
+    System.print(value);
   }
 
   showRuntimeError(message) {
-    System.print(message)
+    System.print(message);
   }
 }
 
 class AnsiRepl is Repl {
   construct new() {
-    super()
+    super();
   }
 
   handleChar(byte) {
     if (byte == Chars.ctrlA) {
-      cursorBegin()
+      cursorBegin();
     } else if (byte == Chars.ctrlB) {
-      cursorLeft()
+      cursorLeft();
     } else if (byte == Chars.ctrlE) {
-      cursorEnd()
+      cursorEnd();
     } else if (byte == Chars.ctrlF) {
-      cursorRight()
+      cursorRight();
     } else if (byte == Chars.ctrlK) {
       // Delete everything after the cursor.
-      line = line[0...cursor]
+      line = line[0...cursor];
     } else if (byte == Chars.ctrlL) {
       // Clear the screen.
-      System.write("\x1b[2J")
+      System.write("\x1b[2J");
       // Move cursor to top left.
-      System.write("\x1b[H")
+      System.write("\x1b[H");
     } else {
       // TODO: Ctrl-T to swap chars.
       // TODO: ESC H and F to move to beginning and end of line. (Both ESC
       // [ and ESC 0 sequences?)
       // TODO: Ctrl-W delete previous word.
-      return super.handleChar(byte)
+      return super.handleChar(byte);
     }
 
-    return false
+    return false;
   }
 
   refreshLine(showCompletion) {
     // Erase the whole line.
-    System.write("\x1b[2K")
+    System.write("\x1b[2K");
 
     // Show the prompt at the beginning of the line.
-    System.write(Color.gray)
-    System.write("\r> ")
-    System.write(Color.none)
+    System.write(Color.gray);
+    System.write("\r> ");
+    System.write(Color.none);
 
     // Syntax highlight the line.
     for (token in lex(line, true)) {
-      if (token == TokenType.eof) break
+      if (token == TokenType.eof) break;
 
-      var color = TOKEN_COLORS[token.type]
-      if (color == null) color = Color.none
-      System.write(color)
-      System.write(token.text)
-      System.write(Color.none)
+      var color = TOKEN_COLORS[token.type];
+      if (color == null) color = Color.none;
+      System.write(color);
+      System.write(token.text);
+      System.write(Color.none);
     }
 
     if (showCompletion) {
-      var completion = getCompletion()
+      var completion = getCompletion();
       if (completion != null) {
-        System.write("%(Color.gray)%(completion)%(Color.none)")
+        System.write("%(Color.gray)%(completion)%(Color.none)");
       }
     }
 
     // Position the cursor.
-    System.write("\r\x1b[%(2 + cursor)C")
-    Stdout.flush()
+    System.write("\r\x1b[%(2 + cursor)C");
+    Stdout.flush();
   }
 
   showResult(value) {
     // TODO: Syntax color based on type? It might be nice to distinguish
     // between string results versus stringified results. Otherwise, the
     // user can't tell the difference between `true` and "true".
-    System.print("%(Color.brightWhite)%(value)%(Color.none)")
+    System.print("%(Color.brightWhite)%(value)%(Color.none)");
   }
 
   showRuntimeError(message) {
-    System.print("%(Color.red)%(message)%(Color.none)")
+    System.print("%(Color.red)%(message)%(Color.none)");
     // TODO: Print entire stack.
   }
 }

@@ -1,6 +1,6 @@
 
-import "veery/compiler/abstract_lang/ast" for CallExpr, ImportStmt, NumExpr
-import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor
+import "veery/compiler/abstract_lang/ast" for CallExpr, ImportStmt, NumExpr;
+import "veery/compiler/abstract_lang/transform_visitor" for TransformVisitor;
 
 class CharacterTransform is TransformVisitor {
   construct new() {}
@@ -9,13 +9,13 @@ class CharacterTransform is TransformVisitor {
     node = super(node, visitor_data);
     if (_shouldImport) {
       // FIXME: Add an import node to "Character" if required
-      var importNode = ImportStmt.new("veery/character", ["Character"])
+      var importNode = ImportStmt.new("veery/character", ["Character"]);
     }
-    return node
+    return node;
   }
 
   visitCharacterExpr(node, visitor_data) {
-    _shouldImport = true
+    _shouldImport = true;
 
     node = super(node, visitor_data);
     var newNode = CallExpr.new(CallExpr.new(null,
@@ -24,7 +24,7 @@ class CharacterTransform is TransformVisitor {
                                             null),
                                "fromCodePoint",
                                [NumExpr.new(node.nativeValue.codePoint)],
-                               null)
-    return newNode
+                               null);
+    return newNode;
   }
 }

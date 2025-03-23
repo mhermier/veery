@@ -1,5 +1,5 @@
 
-import "veery/abort" for Abort
+import "veery/abort" for Abort;
 
 class Magnitude {
   ==(other) { Abort.subclass_responsibility() }

@@ -8,15 +8,15 @@ class AstBuilder {
   }
   build() {
     _file = File.create("ast.veery")
-    writeLine("class Node {}
+    writeLine("class Node {};
 
-class Expr is Node {}
+class Expr is Node {};
 
-class Stmt is Node {}
+class Stmt is Node {};
 
 class Module is Node {
   construct new(statements) {
-    _statements = statements
+    _statements = statements;
   }
 
   statements { _statements }
@@ -28,8 +28,8 @@ class Module is Node {
 
 class MapEntryNode {
   construct new(key, value) {
-    _key = key
-    _value = value
+    _key = key;
+    _value = value;
   }
 
   key { _key }
@@ -42,14 +42,14 @@ class MapEntryNode {
 
 class Method {
   construct new(foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body) {
-    _foreignKeyword = foreignKeyword
-    _staticKeyword = staticKeyword
-    _constructKeyword = constructKeyword
-    _name = name
-    _subscriptParameters = subscriptParameters
-    _setter = setter
-    _parenthesisParameters = parenthesisParameters
-    _body = body
+    _foreignKeyword = foreignKeyword;
+    _staticKeyword = staticKeyword;
+    _constructKeyword = constructKeyword;
+    _name = name;
+    _subscriptParameters = subscriptParameters;
+    _setter = setter;
+    _parenthesisParameters = parenthesisParameters;
+    _body = body;
   }
 
   foreignKeyword        { _foreignKeyword }
@@ -64,15 +64,15 @@ class Method {
   accept(visitor) { visitor.visitMethod(this) }
 
   toString {
-    return \"Method(\%(_staticKeyword) \%(_constructKeyword) \%(_name) \%(_body))\"
+    return \"Method(\%(_staticKeyword) \%(_constructKeyword) \%(_name) \%(_body))\";
   }
 }
 
 // A block argument or method body.
 class Body {
   construct new(parameters, statements) {
-    _parameters = parameters
-    _statements = statements
+    _parameters = parameters;
+    _statements = statements;
   }
 
   parameters { _parameters }
@@ -81,7 +81,7 @@ class Body {
   accept(visitor) { visitor.visitBody(this) }
 
   toString {
-    return \"Body(\%(_parameters) \%(_statements))\"
+    return \"Body(\%(_parameters) \%(_statements))\";
   }
 }")
     writeClasses(EXPRS, "Expr")

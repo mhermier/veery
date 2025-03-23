@@ -31,15 +31,15 @@ import "veery/compiler/abstract_lang/ast" for
     SuperExpr,
     ThisExpr,
     VarStmt,
-    WhileStmt
+    WhileStmt;
 import "veery/compiler/abstract_lang/ast/attribute_specifier" for AttributeSpecifier;
-import "veery/compiler/abstract_lang/ast/enum_definition" for EnumDefinition
-import "veery/compiler/abstract_lang/ast/this_module_expression" for ThisModuleExpr
-import "veery/compiler/abstract_lang/token" for Token, TokenType
-import "veery/compiler/reporter" for Severity
-import "veery/assert" for Assert
-import "veery/character" for Character
-import "veery_lang/lexer" for Lexer
+import "veery/compiler/abstract_lang/ast/enum_definition" for EnumDefinition;
+import "veery/compiler/abstract_lang/ast/this_module_expression" for ThisModuleExpr;
+import "veery/compiler/abstract_lang/token" for Token, TokenType;
+import "veery/compiler/reporter" for Severity;
+import "veery/assert" for Assert;
+import "veery/character" for Character;
+import "veery_lang/lexer" for Lexer;
 
 var INFIX_OPERATORS = [
   TokenType.pipePipe,
@@ -97,7 +97,7 @@ class GrammarRule {
     _infix      = infix;
     _method     = method;
     _precedence = precedence;
-    _name       = name
+    _name       = name;
   }
 
   prefix     { _prefix     }
@@ -111,7 +111,7 @@ class ListResult {
   construct new(left, elements, right) {
     _left = left;
     _elements = elements;
-    _right = right
+    _right = right;
   }
 
   left { _left }
@@ -119,7 +119,7 @@ class ListResult {
   right { _right }
 
   toString {
-    return "ListResult(%(_left) %(_elements) %(_right))"
+    return "ListResult(%(_left) %(_elements) %(_right))";
   }
 }
 
@@ -136,80 +136,80 @@ class Parser {
       TokenType.leftBrace    : "{",
       TokenType.rightBrace   : "}",
       TokenType.pipe         : "|",
-    }
+    };
 
     var unaryOp = Fn.new {|token, parser, canAssign|
-      parser.ignoreLine()
-      var rhs = parser.parsePrecedence(Precedence.UNARY + 1)
-      return PrefixExpr.new(token, rhs)
-    }
+      parser.ignoreLine();
+      var rhs = parser.parsePrecedence(Precedence.UNARY + 1);
+      return PrefixExpr.new(token, rhs);
+    };
 
     var infixOp = Fn.new {|lhs, token, parser, canAssign|
-      parser.ignoreLine()
-      var rhs = parser.parsePrecedence(Parser.grammar_rule_for_token_type_(token.type).precedence + 1)
-      return InfixExpr.new(lhs, token, rhs)
-    }
+      parser.ignoreLine();
+      var rhs = parser.parsePrecedence(Parser.grammar_rule_for_token_type_(token.type).precedence + 1);
+      return InfixExpr.new(lhs, token, rhs);
+    };
 
     var assign = Fn.new {|lhs, token, parser, canAssign|
-      parser.ignoreLine()
-      var rhs = parser.parsePrecedence(Parser.grammar_rule_for_token_type_(token.type).precedence + 1)
-      return AssignmentExpr.new(lhs, token, rhs)
-    }
+      parser.ignoreLine();
+      var rhs = parser.parsePrecedence(Parser.grammar_rule_for_token_type_(token.type).precedence + 1);
+      return AssignmentExpr.new(lhs, token, rhs);
+    };
 
     var call = Fn.new {|lhs, token, parser, canAssign|
-      parser.ignoreLine()
-      var name = parser.consume(TokenType.name, "Expect method name after '.'.")
-      return parser.methodCall(lhs, name)
-    }
+      parser.ignoreLine();
+      var name = parser.consume(TokenType.name, "Expect method name after '.'.");
+      return parser.methodCall(lhs, name);
+    };
     var subscript = Fn.new {|lhs, token, parser, canAssign|
-      var arguments = parser.argumentList(TokenType.leftBracket, "subscript arguments", TokenType.rightBracket)
-      return SubscriptExpr.new(lhs, token, arguments.elements, arguments.right)
-    }
-    var this_call = Fn.new {|token, parser, canAssign| call.call(ThisExpr.new(token), token, parser, canAssign) }
-    var this_module_call = Fn.new {|token, parser, canAssign| call.call(ThisModuleExpr.new(token), token, parser, canAssign) }
+      var arguments = parser.argumentList(TokenType.leftBracket, "subscript arguments", TokenType.rightBracket);
+      return SubscriptExpr.new(lhs, token, arguments.elements, arguments.right);
+    };
+    var this_call = Fn.new {|token, parser, canAssign| call.call(ThisExpr.new(token), token, parser, canAssign) };
+    var this_module_call = Fn.new {|token, parser, canAssign| call.call(ThisModuleExpr.new(token), token, parser, canAssign) };
 
     var conditional = Fn.new {|lhs, token, parser, canAssign|
-      parser.ignoreLine()
-      var thenBranch = parser.expression()
+      parser.ignoreLine();
+      var thenBranch = parser.expression();
       var colon = parser.consume(TokenType.colon,
-          "Expect ':' after then branch of conditional operator.")
-      parser.ignoreLine()
-      var elseBranch = parser.expression()
-      return ConditionalExpr.new(lhs, token, thenBranch, colon, elseBranch)
-    }
-    var grouping    = Fn.new {|token, parser, canAssign| parser.grouping() }
+          "Expect ':' after then branch of conditional operator.");
+      parser.ignoreLine();
+      var elseBranch = parser.expression();
+      return ConditionalExpr.new(lhs, token, thenBranch, colon, elseBranch);
+    };
+    var grouping    = Fn.new {|token, parser, canAssign| parser.grouping() };
 
-    var constructorSignature = Fn.new {|parser, signature| todo() }
-    var infixSignature       = Fn.new {|parser, signature| todo() }
-    var unarySignature       = Fn.new {|parser, signature| todo() }
-    var mixedSignature       = Fn.new {|parser, signature| todo() }
-    var namedSignature       = Fn.new {|parser, signature| todo() }
-    var subscriptSignature   = Fn.new {|parser, signature| todo() }
+    var constructorSignature = Fn.new {|parser, signature| todo() };
+    var infixSignature       = Fn.new {|parser, signature| todo() };
+    var unarySignature       = Fn.new {|parser, signature| todo() };
+    var mixedSignature       = Fn.new {|parser, signature| todo() };
+    var namedSignature       = Fn.new {|parser, signature| todo() };
+    var subscriptSignature   = Fn.new {|parser, signature| todo() };
 
-    var UNUSED          =                      GrammarRule.new(null,    null,     null,           Precedence.NONE, null)
-    var PREFIX          = Fn.new {|fn|         GrammarRule.new(fn,      null,     null,           Precedence.NONE, null) }
-    var INFIX           = Fn.new {|prec, fn|   GrammarRule.new(null,    fn,       null,           prec,            null) }
-    var INFIX_OPERATOR  = Fn.new {|prec, name| GrammarRule.new(null,    infixOp,  infixSignature, prec,            name) }
-    var PREFIX_OPERATOR = Fn.new {|name|       GrammarRule.new(unaryOp, null,     unarySignature, Precedence.NONE, name) }
-    var OPERATOR        = Fn.new {|prec, name| GrammarRule.new(unaryOp, infixOp,  mixedSignature, prec,            name) }
+    var UNUSED          =                      GrammarRule.new(null,    null,     null,           Precedence.NONE, null);
+    var PREFIX          = Fn.new {|fn|         GrammarRule.new(fn,      null,     null,           Precedence.NONE, null) };
+    var INFIX           = Fn.new {|prec, fn|   GrammarRule.new(null,    fn,       null,           prec,            null) };
+    var INFIX_OPERATOR  = Fn.new {|prec, name| GrammarRule.new(null,    infixOp,  infixSignature, prec,            name) };
+    var PREFIX_OPERATOR = Fn.new {|name|       GrammarRule.new(unaryOp, null,     unarySignature, Precedence.NONE, name) };
+    var OPERATOR        = Fn.new {|prec, name| GrammarRule.new(unaryOp, infixOp,  mixedSignature, prec,            name) };
 
-    var boolean             = Fn.new {|token, parser, canAssign| BoolExpr.new(token, token == TokenType.trueKeyword) }
+    var boolean             = Fn.new {|token, parser, canAssign| BoolExpr.new(token, token == TokenType.trueKeyword) };
     var character           = Fn.new {|token, parser, canAssign|
-      return CharacterExpr.new(token, Character.fromEscapedString(token.toString[1..-2])) // Strip enclosing single quotes
-    }
-    var list                = Fn.new {|token, parser, canAssign| parser.listLiteral() }
-    var map                 = Fn.new {|token, parser, canAssign| parser.mapLiteral() }
-    var name                = Fn.new {|token, parser, canAssign| parser.methodCall(null, token) }
-    var number              = Fn.new {|token, parser, canAssign| NumExpr.new(token) }
-    var null_               = Fn.new {|token, parser, canAssign| NullExpr.new(token) }
-    var string              = Fn.new {|token, parser, canAssign| StringExpr.new(token) }
-    var stringInterpolation = Fn.new {|token, parser, canAssign| parser.stringInterpolation() }
+      return CharacterExpr.new(token, Character.fromEscapedString(token.toString[1..-2])); // Strip enclosing single quotes
+    };
+    var list                = Fn.new {|token, parser, canAssign| parser.listLiteral() };
+    var map                 = Fn.new {|token, parser, canAssign| parser.mapLiteral() };
+    var name                = Fn.new {|token, parser, canAssign| parser.methodCall(null, token) };
+    var number              = Fn.new {|token, parser, canAssign| NumExpr.new(token) };
+    var null_               = Fn.new {|token, parser, canAssign| NullExpr.new(token) };
+    var string              = Fn.new {|token, parser, canAssign| StringExpr.new(token) };
+    var stringInterpolation = Fn.new {|token, parser, canAssign| parser.stringInterpolation() };
 
     // TODO: Error if not inside class.
-    var field               = Fn.new {|token, parser, canAssign| FieldExpr.new(token) }
-    var super_              = Fn.new {|token, parser, canAssign| parser.superCall() }
-    var staticField         = Fn.new {|token, parser, canAssign| StaticFieldExpr.new(token) }
-    var this_               = Fn.new {|token, parser, canAssign| ThisExpr.new(token) }
+    var field               = Fn.new {|token, parser, canAssign| FieldExpr.new(token) };
+    var super_              = Fn.new {|token, parser, canAssign| parser.superCall() };
+    var staticField         = Fn.new {|token, parser, canAssign| StaticFieldExpr.new(token) };
+    var this_               = Fn.new {|token, parser, canAssign| ThisExpr.new(token) };
 
     __grammar_rules = {
       TokenType.numberSign       : UNUSED,
@@ -290,13 +290,13 @@ class Parser {
       TokenType.line             : UNUSED,
       TokenType.error            : UNUSED,
       TokenType.eof              : UNUSED,
-    }
+    };
   }
 
   static grammar_rule_for_token_type_(tokenType) {
-    var grammar_rule = __grammar_rules[tokenType]
-    Assert.call(grammar_rule, "Missing grammar_rule for token type: %(tokenType)")
-    return grammar_rule
+    var grammar_rule = __grammar_rules[tokenType];
+    Assert.call(grammar_rule, "Missing grammar_rule for token type: %(tokenType)");
+    return grammar_rule;
   }
 
   construct new(compiler) {
@@ -326,14 +326,14 @@ class Parser {
   }
 
   definitions(right, message) {
-    var statements = []
-    ignoreLine()
+    var statements = [];
+    ignoreLine();
     while (!(peek() == right || peek() == TokenType.eof)) {
-      statements.add(definition(right))
-      ignoreLine()
+      statements.add(definition(right));
+      ignoreLine();
     }
-    consume(right, message)
-    return statements    
+    consume(right, message);
+    return statements;
   }
 
   definition(right) {
@@ -344,50 +344,50 @@ class Parser {
     }
 
     if (match(TokenType.foreignKeyword)) {
-      var foreignKeyword = _previous
-      consume(TokenType.classKeyword, "Expect 'class' after 'foreign'.")
+      var foreignKeyword = _previous;
+      consume(TokenType.classKeyword, "Expect 'class' after 'foreign'.");
       return finishClass(attribute_specifiers, foreignKeyword);
     }
 
     if (match(TokenType.enumKeyword)) {
-      return finishEnum()
+      return finishEnum();
     }
 
     if (match(TokenType.importKeyword)) {
-      ignoreLine()
-      var path = consume(TokenType.string, "Expect import path.")
-      var variables
+      ignoreLine();
+      var path = consume(TokenType.string, "Expect import path.");
+      var variables;
 
       // Parse the variable list, if there is one.
       if (match(TokenType.forKeyword)) {
-        ignoreLine()
+        ignoreLine();
 
-        variables = []
+        variables = [];
         while (true) {
-          variables.add(consume(TokenType.name, "Expect imported variable name."))
-          if (!match(TokenType.comma)) break
-          ignoreLine()
+          variables.add(consume(TokenType.name, "Expect imported variable name."));
+          if (!match(TokenType.comma)) break;
+          ignoreLine();
         }
       }
-      expectSemicolon("Expect ';' after 'import' statement.", right)
+      expectSemicolon("Expect ';' after 'import' statement.", right);
 
-      return ImportStmt.new(path, variables)
+      return ImportStmt.new(path, variables);
     }
 
     if (match(TokenType.varKeyword)) {
-      ignoreLine()
-      var name = consume(TokenType.name, "Expect variable name.")
-      var initializer
+      ignoreLine();
+      var name = consume(TokenType.name, "Expect variable name.");
+      var initializer;
       if (match(TokenType.equal)) {
-        ignoreLine()
-        initializer = expression()
+        ignoreLine();
+        initializer = expression();
       }
-      expectSemicolon("Expect ';' after 'var' statement.", right)
+      expectSemicolon("Expect ';' after 'var' statement.", right);
 
-      return VarStmt.new(name, initializer)
+      return VarStmt.new(name, initializer);
     }
 
-    return statement(right)
+    return statement(right);
   }
 
   attribute_specifiers() {
@@ -399,7 +399,7 @@ class Parser {
         var expression = .methodCall(null, name);
         .ignoreLine();
         return AttributeSpecifier.new(at, expression);
-      }
+      };
       attribute_specifiers.addAll(list.elements);
       .ignoreLine();
     }
@@ -408,39 +408,39 @@ class Parser {
 
   // Parses the rest of a class definition after the "class" token.
   finishClass(attribute_specifiers, foreignKeyword) {
-    ignoreLine()
-    var name = consume(TokenType.name, "Expect class name.")
+    ignoreLine();
+    var name = consume(TokenType.name, "Expect class name.");
 
-    var superclass
+    var superclass;
     if (match(TokenType.isKeyword)) {
       // TODO: This is different from the VM (which is wrong). Need to make
       // sure we don't parse the class body as a block argument.
-      superclass = consume(TokenType.name, "Expect name of superclass.")
+      superclass = consume(TokenType.name, "Expect name of superclass.");
     }
 
-    var methods = []
-    consume(TokenType.leftBrace, "Expect '{' after class name.")
-    ignoreLine()
+    var methods = [];
+    consume(TokenType.leftBrace, "Expect '{' after class name.");
+    ignoreLine();
 
     while (peek() != TokenType.rightBrace && peek() != TokenType.eof) {
-      methods.add(method())
-      ignoreLine()
+      methods.add(method());
+      ignoreLine();
     }
-    consume(TokenType.rightBrace, "Expect '}' after class definition.")
+    consume(TokenType.rightBrace, "Expect '}' after class definition.");
 
     return ClassStmt.new(attribute_specifiers, foreignKeyword, name, superclass, methods);
   }
 
   finishEnum() {
-    ignoreLine()
-    var name = consume(TokenType.name, "Expect enum name.")
+    ignoreLine();
+    var name = consume(TokenType.name, "Expect enum name.");
 
     var list = list("`enum`", TokenType.leftBrace, "enumerator definitions", TokenType.rightBrace) {
-      return consume(TokenType.name, "Expect enummerator name.")
+      return consume(TokenType.name, "Expect enummerator name.");
       /* TODO: support constant expression values ? */
-    }
+    };
 
-    return EnumDefinition.new(name, list.elements)
+    return EnumDefinition.new(name, list.elements);
   }
 
   method() {
@@ -449,52 +449,52 @@ class Parser {
     // invalid forms later.
     var attribute_specifiers = this.attribute_specifiers();
 
-    var foreignKeyword
+    var foreignKeyword;
     if (match(TokenType.foreignKeyword)) {
-      foreignKeyword = _previous
+      foreignKeyword = _previous;
     }
 
-    var staticKeyword
+    var staticKeyword;
     if (match(TokenType.staticKeyword)) {
-      staticKeyword = _previous
+      staticKeyword = _previous;
     }
 
-    var constructKeyword
+    var constructKeyword;
     if (match(TokenType.constructKeyword)) {
-      constructKeyword = _previous
+      constructKeyword = _previous;
     }
 
     // TODO: Error on invalid combinations of above keywords.
 
-    var name
-    var subscriptParameters
-    var setter
-    var parenthesisParameters
+    var name;
+    var subscriptParameters;
+    var setter;
+    var parenthesisParameters;
 
-    var allowParameters = false
-    var allowSetter = false
+    var allowParameters = false;
+    var allowSetter = false;
 
     if (match(TokenType.leftBracket)) {
       // Subscript operator.
-      subscriptParameters = parameterList(TokenType.leftBracket, "subscript parameters", TokenType.rightBracket).elements
-      allowParameters = false
-      allowSetter = true
+      subscriptParameters = parameterList(TokenType.leftBracket, "subscript parameters", TokenType.rightBracket).elements;
+      allowParameters = false;
+      allowSetter = true;
     } else if (matchAny(INFIX_OPERATORS)) {
-      allowParameters = true
-      allowSetter = false
+      allowParameters = true;
+      allowSetter = false;
     } else if (matchAny([TokenType.bang, TokenType.tilde])) {
-      allowParameters = false
-      allowSetter = false
+      allowParameters = false;
+      allowSetter = false;
     } else {
-      consume(TokenType.name, "Expect method name.")
-      allowParameters = true
-      allowSetter = true
+      consume(TokenType.name, "Expect method name.");
+      allowParameters = true;
+      allowSetter = true;
     }
-    name = _previous
+    name = _previous;
 
     if (setter = match(TokenType.equal)) {
       if (!allowSetter) {
-        error("Cannot be a setter method.")
+        error("Cannot be a setter method.");
       }
     }
 
@@ -503,22 +503,22 @@ class Parser {
       // and have fewer cascaded errors.
       if (!allowParameters &&
           !setter) {
-        error("A parameter list is not allowed for this method.")
+        error("A parameter list is not allowed for this method.");
       }
 
-      parenthesisParameters = parameterList(TokenType.leftParen, "parameters", TokenType.rightParen).elements
+      parenthesisParameters = parameterList(TokenType.leftParen, "parameters", TokenType.rightParen).elements;
 
       if (setter &&
           parenthesisParameters.count != 1) {
-        error("A setter method must have only one set value")
+        error("A setter method must have only one set value");
       }
     }
 
-    var parameters // FIXME? = subscriptParameters + parenthesisParameters
-    var body
+    var parameters; // FIXME? = subscriptParameters + parenthesisParameters
+    var body;
     if (foreignKeyword == null) {
-      consume(TokenType.leftBrace, "Expect '{' before method body.")
-      body = finishBody(parameters)
+      consume(TokenType.leftBrace, "Expect '{' before method body.");
+      body = finishBody(parameters);
     }
 
     return Method.new(attribute_specifiers, foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body);
@@ -528,101 +528,101 @@ class Parser {
     // Break statement.
     // TODO: Error if not inside a loop.
     if (match(TokenType.breakKeyword)) {
-      expectSemicolon("Expect ';' after 'break'.", right)
-      return BreakStmt.new(_previous)
+      expectSemicolon("Expect ';' after 'break'.", right);
+      return BreakStmt.new(_previous);
     }
 
     // Continue statement.
     // TODO: Error if not inside a loop.
     if (match(TokenType.continueKeyword)) {
-      expectSemicolon("Expect ';' after 'continue'.", right)
-      return ContinueStmt.new(_previous)
+      expectSemicolon("Expect ';' after 'continue'.", right);
+      return ContinueStmt.new(_previous);
     }
 
     // If statement.
     if (match(TokenType.ifKeyword)) {
-      consume(TokenType.leftParen, "Expect '(' after 'if'.")
-      ignoreLine()
-      var condition = expression()
-      consume(TokenType.rightParen, "Expect ')' after if condition.")
-      var thenBranch = statement(right)
-      var elseBranch
+      consume(TokenType.leftParen, "Expect '(' after 'if'.");
+      ignoreLine();
+      var condition = expression();
+      consume(TokenType.rightParen, "Expect ')' after if condition.");
+      var thenBranch = statement(right);
+      var elseBranch;
       if (match(TokenType.elseKeyword)) {
-        elseBranch = statement(right)
+        elseBranch = statement(right);
       }
-      return IfStmt.new(condition, thenBranch, elseBranch)
+      return IfStmt.new(condition, thenBranch, elseBranch);
     }
 
     // For statement.
     if (match(TokenType.forKeyword)) {
-      consume(TokenType.leftParen, "Expect '(' after 'for'.")
-      var variable = consume(TokenType.name, "Expect for loop variable name.")
-      consume(TokenType.inKeyword, "Expect 'in' after loop variable.")
-      ignoreLine()
-      var iterator = expression()
-      consume(TokenType.rightParen, "Expect ')' after loop expression.")
-      var body = statement(right)
-      return ForStmt.new(variable, iterator, body)
+      consume(TokenType.leftParen, "Expect '(' after 'for'.");
+      var variable = consume(TokenType.name, "Expect for loop variable name.");
+      consume(TokenType.inKeyword, "Expect 'in' after loop variable.");
+      ignoreLine();
+      var iterator = expression();
+      consume(TokenType.rightParen, "Expect ')' after loop expression.");
+      var body = statement(right);
+      return ForStmt.new(variable, iterator, body);
     }
 
     // While statement.
     if (match(TokenType.whileKeyword)) {
-      consume(TokenType.leftParen, "Expect '(' after 'while'.")
-      ignoreLine()
-      var condition = expression()
-      consume(TokenType.rightParen, "Expect ')' after while condition.")
-      var body = statement(right)
-      return WhileStmt.new(condition, body)
+      consume(TokenType.leftParen, "Expect '(' after 'while'.");
+      ignoreLine();
+      var condition = expression();
+      consume(TokenType.rightParen, "Expect ')' after while condition.");
+      var body = statement(right);
+      return WhileStmt.new(condition, body);
     }
 
     // Return statement.
     if (match(TokenType.returnKeyword)) {
-      var keyword = _previous
-      var value
+      var keyword = _previous;
+      var value;
       // FIXME: ignoreLine();
       var next_token = .peek();
       if (next_token != TokenType.line &&
           next_token != TokenType.semicolon &&
           next_token != right) {
-        value = expression()
+        value = expression();
       }
-      expectSemicolon("Expect ';' after 'return' statement.", right)
+      expectSemicolon("Expect ';' after 'return' statement.", right);
 
-      return ReturnStmt.new(keyword, value)
+      return ReturnStmt.new(keyword, value);
     }
 
     // Block statement.
     if (match(TokenType.leftBrace)) {
-      var statements = definitions(TokenType.rightBrace, "Expect '}' after block.")
-      return BlockStmt.new(statements)
+      var statements = definitions(TokenType.rightBrace, "Expect '}' after block.");
+      return BlockStmt.new(statements);
     }
 
     // Expression statement.
-    var expr = expression()
-    expectSemicolon("Expect ';' after expression statement.", right)
-    return expr
+    var expr = expression();
+    expectSemicolon("Expect ';' after expression statement.", right);
+    return expr;
   }
 
   // Parses the rest of a method or block argument body.
   finishBody(parameters) {
     // An empty block.
-    if (match(TokenType.rightBrace)) return Body.new(parameters, [])
+    if (match(TokenType.rightBrace)) return Body.new(parameters, []);
 
     // If there's no line after the "{", it's a single-expression body.
     if (!matchLine() && peek() != TokenType.returnKeyword) {
       // TODO: Make it a compatibility warning when the new syntax is available
       .report(compilation_context, _compiler.generic_notice, "Single-expression body");
-      var expr = expression()
-      ignoreLine()
-      consume(TokenType.rightBrace, "Expect '}' at end of block.")
-      return Body.new(parameters, [ ReturnStmt.new(null, expr) ])
+      var expr = expression();
+      ignoreLine();
+      consume(TokenType.rightBrace, "Expect '}' at end of block.");
+      return Body.new(parameters, [ ReturnStmt.new(null, expr) ]);
     }
 
     // Empty blocks (with just a newline inside) do nothing.
-    if (match(TokenType.rightBrace)) return Body.new(parameters, [])
+    if (match(TokenType.rightBrace)) return Body.new(parameters, []);
 
-    var statements = definitions(TokenType.rightBrace, "Expect '}' after block.")
-    return Body.new(parameters, statements)
+    var statements = definitions(TokenType.rightBrace, "Expect '}' after block.");
+    return Body.new(parameters, statements);
   }
 
   // Parses the argument list for a method call and creates a call expression
@@ -635,71 +635,71 @@ class Parser {
   //   | "\n" ( definition "\n" )*
   //   | expression
   methodCall(receiver, name) {
-    var arguments = finishCall()
-    return CallExpr.new(receiver, name, arguments[0], arguments[1])
+    var arguments = finishCall();
+    return CallExpr.new(receiver, name, arguments[0], arguments[1]);
   }
 
   // Parses the argument list for a method call. Returns a list containing the
   // argument list (if any) and block argument (if any). If either is missing,
   // the list element at that position is `null`.
   finishCall() {
-    var arguments
+    var arguments;
     if (match(TokenType.leftParen)) {
-      arguments = argumentList(TokenType.leftParen, "arguments", TokenType.rightParen).elements
+      arguments = argumentList(TokenType.leftParen, "arguments", TokenType.rightParen).elements;
     }
 
-    var blockArgument
+    var blockArgument;
     if (match(TokenType.leftBrace)) {
-      var parameters
+      var parameters;
       if (match(TokenType.pipe)) {
-        parameters = parameterList(TokenType.pipe, "block parameters", TokenType.pipe).elements
+        parameters = parameterList(TokenType.pipe, "block parameters", TokenType.pipe).elements;
       }
 
-      blockArgument = finishBody(parameters)
+      blockArgument = finishBody(parameters);
     }
 
-    return [arguments, blockArgument]
+    return [arguments, blockArgument];
   }
 
   tokenTypeToString_(tokenType) {
-    var string = __tokenTypeToString[tokenType]
-    if (string) return string
+    var string = __tokenTypeToString[tokenType];
+    if (string) return string;
 
-    error("Unkonwn token type: %(tokenType)")
-    return tokenType
+    error("Unkonwn token type: %(tokenType)");
+    return tokenType;
   }
 
   // list: left (matchElement ( "," matchElement )* ","? )? right
   list(beforeName, left, elementsName, right, matchElementFn) {
-    return list(ListResult, beforeName, left, elementsName, right, matchElementFn)
+    return list(ListResult, beforeName, left, elementsName, right, matchElementFn);
   }
   list(exprType, beforeName, left, elementsName, right, matchElementFn) {
-    var elements = []
+    var elements = [];
 
     var leftToken = beforeName ?
       consume(left, "Expect '%(tokenTypeToString_(left))' after %(beforeName)."):
-      _previous
+      _previous;
 
-    ignoreLine()
+    ignoreLine();
     while (peek() != right) {
-      elements.add(matchElementFn.call())
-      ignoreLine()
-      if (!match(TokenType.comma)) break
+      elements.add(matchElementFn.call());
+      ignoreLine();
+      if (!match(TokenType.comma)) break;
       if (peek() == right) {
         .report(compilation_context, _pedantic, "comma at end of %(elementsName)");
       }
-      ignoreLine()
+      ignoreLine();
     }
 
-    var rightToken = consume(right, "Expect '%(tokenTypeToString_(right))' after %(elementsName).")
-    return exprType.new(leftToken, elements, rightToken)
+    var rightToken = consume(right, "Expect '%(tokenTypeToString_(right))' after %(elementsName).");
+    return exprType.new(leftToken, elements, rightToken);
   }
 
   optionalList(exprType, left, elementsName, right, matchElementFn) {
     if (match(left)) {
-      return list(exprType, null, left, elementsName, right, matchElementFn)
+      return list(exprType, null, left, elementsName, right, matchElementFn);
     }
-    return null
+    return null;
   }
 
   // argumentList: left (expression ( "," expression )* ","? )? right
@@ -712,10 +712,10 @@ class Parser {
   //
   // grouping: "(" expressions ")"
   grouping() {
-    var leftParen = _previous
-    var expr = expression()
-    var rightParen = consume(TokenType.rightParen, "Expect ')' after expression.")
-    return GroupingExpr.new(leftParen, expr, rightParen)
+    var leftParen = _previous;
+    var expr = expression();
+    var rightParen = consume(TokenType.rightParen, "Expect ')' after expression.");
+    return GroupingExpr.new(leftParen, expr, rightParen);
   }
 
   // Finishes parsing a list literal.
@@ -728,44 +728,44 @@ class Parser {
   // mapLiteral: "{" ( mapEntry ("," mapEntry)* ","? )? "}"
   // mapEntry:   expression ":" expression
   mapLiteral() { list(MapExpr, null, null, "map entries", TokenType.rightBrace ) {
-      var key = expression()
-      consume(TokenType.colon, "Expect ':' after map key.")
-      ignoreLine()
+      var key = expression();
+      consume(TokenType.colon, "Expect ':' after map key.");
+      ignoreLine();
 
-      var value = expression()
-      return MapEntryNode.new(key, value)
+      var value = expression();
+      return MapEntryNode.new(key, value);
     }
   }
 
   superCall() {
-    var name
+    var name;
     if (match(TokenType.dot)) {
       // It's a named super call.
-      name = consume(TokenType.name, "Expect method name after 'super.'.")
+      name = consume(TokenType.name, "Expect method name after 'super.'.");
     }
 
-    var arguments = finishCall()
-    return SuperExpr.new(name, arguments[0], arguments[1])
+    var arguments = finishCall();
+    return SuperExpr.new(name, arguments[0], arguments[1]);
   }
 
   // stringInterpolation: (interpolation expression )? string
   stringInterpolation() {
-    var strings = []
-    var expressions = []
+    var strings = [];
+    var expressions = [];
 
     while (true) {
-      strings.add(_previous)
-      ignoreLine()
-      expressions.add(expression())
-      ignoreLine()
-      if (!match(TokenType.interpolation)) break
+      strings.add(_previous);
+      ignoreLine();
+      expressions.add(expression());
+      ignoreLine();
+      if (!match(TokenType.interpolation)) break;
     }
 
     // This error should never be reported. It's the lexer's job to ensure we
     // generate the right token sequence.
-    strings.add(consume(TokenType.string, "Expect end of string interpolation."))
+    strings.add(consume(TokenType.string, "Expect end of string interpolation."));
 
-    return InterpolationExpr.new(strings, expressions)
+    return InterpolationExpr.new(strings, expressions);
   }
 
   // Utility methods.
@@ -774,43 +774,43 @@ class Parser {
   // of [tokenTypes] as operators and calling [parseOperand] to parse the left
   // and right operands.
   parseInfix(tokenTypes, parseOperand) {
-    var expr = parseOperand.call()
+    var expr = parseOperand.call();
     while (matchAny(tokenTypes)) {
-      var operator = _previous
-      ignoreLine()
-      var right = parseOperand.call()
-      expr = InfixExpr.new(expr, operator, right)
+      var operator = _previous;
+      ignoreLine();
+      var right = parseOperand.call();
+      expr = InfixExpr.new(expr, operator, right);
     }
 
-    return expr
+    return expr;
   }
 
   // If the next token has [type], consumes and returns it. Otherwise, returns
   // `null`.
   match(type) {
-    if (peek() != type) return null
-    return consume()
+    if (peek() != type) return null;
+    return consume();
   }
 
   // Consumes and returns the next token if its type is contained in the list
   // [types].
   matchAny(types) {
     for (type in types) {
-      var result = match(type)
-      if (result) return result
+      var result = match(type);
+      if (result) return result;
     }
 
-    return null
+    return null;
   }
 
   // Consumes zero or more newlines. Returns `true` if at least one was matched.
   matchLine() {
-    if (!match(TokenType.line)) return false
+    if (!match(TokenType.line)) return false;
     while (match(TokenType.line)) {
       // Do nothing.
     }
 
-    return true
+    return true;
   }
 
   // Same as [matchLine()], but makes it clear that the intent is to discard
@@ -818,53 +818,53 @@ class Parser {
   ignoreLine() { matchLine() }
 
   expectSemicolon(error, right) {
-    var next_token = peek()
-    ignoreLine()
+    var next_token = peek();
+    ignoreLine();
 
     if (peek() == right) {
       // Found the closing scope right token
       .report(compilation_context, _pedantic, error, [next_token]);
-      return
+      return;
     }
 
     if (peek() != TokenType.semicolon) {
       .report(compilation_context, _compatibility, error, [next_token]);
-      return
+      return;
     }
 
-    consume(TokenType.semicolon, error)
-    ignoreLine()
+    consume(TokenType.semicolon, error);
+    ignoreLine();
   }
 
   // Reads and consumes the next token.
   consume() {
-    peek()
-    _previous = _current
-    _current = null
-    return _previous
+    peek();
+    _previous = _current;
+    _current = null;
+    return _previous;
   }
 
   // Reads the next token if it is of [type]. Otherwise, discards it and
   // reports an error with [message]
   consume(type, message) {
-    var token = consume()
-    if (token != type) error(message)
+    var token = consume();
+    if (token != type) error(message);
 
-    return token
+    return token;
   }
 
   // Returns the type of the next token.
   peek() {
     while (_current == null) {
-      _current = _lexer.readToken()
+      _current = _lexer.readToken();
 
       // Token types to skip
       if (_current == TokenType.comment ||
           _current == TokenType.whitespace) {
-        _current = null
+        _current = null;
       }
     }
-    return _current
+    return _current;
   }
 
   // Reports a warning on the most recent token.
@@ -882,14 +882,14 @@ class Parser {
 
   // The main entrypoint for the top-down operator precedence parser.
   parsePrecedence(precedence) {
-    consume()
-    var prefix = Parser.grammar_rule_for_token_type_(_previous.type).prefix
+    consume();
+    var prefix = Parser.grammar_rule_for_token_type_(_previous.type).prefix;
 
     if (prefix == null) {
-      error("Expect expression.")
+      error("Expect expression.");
       // Make a fake node so that we don't have to worry about null later.
       // TODO: Should this be an error node?
-      return NullExpr.new(_previous)
+      return NullExpr.new(_previous);
     }
 
     // Track if the precendence of the surrounding expression is low enough to
@@ -899,8 +899,8 @@ class Parser {
     // expressions that are valid lvalues -- names, subscripts, fields, etc. --
     // we pass in whether or not it appears in a context loose enough to allow
     // "=". If so, it will parse the "=" itself and handle it appropriately.
-    var canAssign = precedence <= Precedence.CONDITIONAL
-    var node = prefix.call(_previous, this, canAssign)
+    var canAssign = precedence <= Precedence.CONDITIONAL;
+    var node = prefix.call(_previous, this, canAssign);
 
     while (precedence <= Parser.grammar_rule_for_token_type_(peek().type).precedence) {
       consume();

@@ -1,62 +1,62 @@
 
-import "veery/abort" for Abort
+import "veery/abort" for Abort;
 
 class Circular_buffer_reader {
   static new(reader) { new(reader, 8) }
   construct new(reader, capacity) {
-    _reader = reader
-    _circular_buffer = List.filled(capacity, null)
+    _reader = reader;
+    _circular_buffer = List.filled(capacity, null);
 
-    _start = 0
-    _read = 0
+    _start = 0;
+    _read = 0;
   }
 
   capacity { _circular_buffer.count }
   capacity=(capacity) {
-    Abort.todo("Resize circular buffer if possible")
+    Abort.todo("Resize circular buffer if possible");
   }
 
   reader { _reader }
 
   advance() {
-    if (_read <= 0) Abort.error("Circular buffer underflow")
-    _start = normalize_index_(_start + 1)
-    _read = _read - 1
+    if (_read <= 0) Abort.error("Circular buffer underflow");
+    _start = normalize_index_(_start + 1);
+    _read = _read - 1;
   }
 
   can_peek() { can_peek(0) }
   can_peek(n) {
     while (_read <= n) {
-      if (_read >= capacity) Abort.error("Circular buffer overflow")
-      _circular_buffer[normalize_index_(_start + _read)] = _reader.read()
-      _read = _read + 1
+      if (_read >= capacity) Abort.error("Circular buffer overflow");
+      _circular_buffer[normalize_index_(_start + _read)] = _reader.read();
+      _read = _read + 1;
     }
-    return true
+    return true;
   }
 
   peek() { peek(0) }
   peek(n) {
     if (!can_peek(n)) {
-      Abort.error("Cannot to peek up to %(n)")
+      Abort.error("Cannot to peek up to %(n)");
     }
 
-    return _circular_buffer[normalize_index_(_start + n)]
+    return _circular_buffer[normalize_index_(_start + n)];
   }
 
   match(value_or_predicate) {
-    var e = peek()
+    var e = peek();
     if ((value_or_predicate == e) ||
         (value_or_predicate is Fn && value_or_predicate.call(e))) {
-      advance()
-      return true
+      advance();
+      return true;
     }
-    return false
+    return false;
   }
 
   read() {
-    var e = peek()
-    advance()
-    return e
+    var e = peek();
+    advance();
+    return e;
   }
 
   normalize_index_(i) { i % _circular_buffer.count }

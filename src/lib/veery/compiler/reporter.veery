@@ -1,11 +1,11 @@
-import "veery/compiler/abstract_lang/token" for Token, TokenType
+import "veery/compiler/abstract_lang/token" for Token, TokenType;
 
 // ANSI color escapes.
-var RED = "\x1b[31m"
+var RED = "\x1b[31m";
 var YELLOW = "\x1b[33m";
-var CYAN = "\x1b[36m"
-var GRAY = "\x1b[30;1m"
-var NORMAL = "\x1b[0m"
+var CYAN = "\x1b[36m";
+var GRAY = "\x1b[30;1m";
+var NORMAL = "\x1b[0m";
 
 enum Severity {
   None,
@@ -23,7 +23,7 @@ class JsonReporter {
   // token that led to the error. The others are informative and related to it.
   call(warning, message, tokens) {
     var severity = warning.severity;
-    var source = tokens[-1].source
+    var source = tokens[-1].source;
 
     var tokensJson = tokens.map {|token|
       return {
@@ -33,8 +33,8 @@ class JsonReporter {
         "lineEnd": token.lineEnd,
         "columnStart": token.columnStart,
         "columnEnd": token.columnEnd
-      }
-    }.toList
+      };
+    }.toList;
 
     var json = {
       // TODO: Other severities.
@@ -42,40 +42,40 @@ class JsonReporter {
       "path": source.path,
       "message": message,
       "tokens": tokensJson
-    }
+    };
 
-    var parts = []
-    jsonToBuffer(json, parts)
-    System.print(parts.join())
+    var parts = [];
+    jsonToBuffer(json, parts);
+    System.print(parts.join());
   }
 
   jsonToBuffer(json, parts) {
     if (json is List) {
-      parts.add("[")
-      var first = true
+      parts.add("[");
+      var first = true;
       for (element in json) {
-        if (!first) parts.add(",")
-        first = false
-        jsonToBuffer(element, parts)
+        if (!first) parts.add(",");
+        first = false;
+        jsonToBuffer(element, parts);
       }
-      parts.add("]")
+      parts.add("]");
     } else if (json is Map) {
-      parts.add("{")
-      var first = true
+      parts.add("{");
+      var first = true;
       for (key in json.keys) {
-        if (!first) parts.add(",")
-        first = false
-        jsonToBuffer(key, parts)
-        parts.add(":")
-        jsonToBuffer(json[key], parts)
+        if (!first) parts.add(",");
+        first = false;
+        jsonToBuffer(key, parts);
+        parts.add(":");
+        jsonToBuffer(json[key], parts);
       }
-      parts.add("}")
+      parts.add("}");
     } else if (json is String) {
       // TODO: Escape quotes and other special characters.
-      parts.add("\"%(json)\"")
+      parts.add("\"%(json)\"");
     } else {
       // Num, Bool, Null.
-      parts.add(json)
+      parts.add(json);
     }
   }
 }
@@ -87,7 +87,7 @@ class PrettyReporter {
       Severity.Error:   RED,
       Severity.Notice:  CYAN,
       Severity.Warning: YELLOW,
-    }
+    };
   }
 
   construct new() {}
@@ -98,54 +98,54 @@ class PrettyReporter {
   call(warning, message, tokens) {
     var severity = warning.severity;
     // The main erroneous token is always the last.
-    var mainToken = tokens[-1]
+    var mainToken = tokens[-1];
 
-    var source = mainToken.source
+    var source = mainToken.source;
     var severity_color = __severity_color[severity];
     System.print(
         "[%(source.path) %(mainToken.lineStart):%(mainToken.columnStart)] " +
         "%(severity_color)%(severity):%(NORMAL) %(message)");
 
-    var lineWidth = 0
+    var lineWidth = 0;
     for (token in tokens) {
-      var width = token.lineEnd.toString.count
-      if (width > lineWidth) lineWidth = width
+      var width = token.lineEnd.toString.count;
+      if (width > lineWidth) lineWidth = width;
     }
 
     // TODO: Collapse output if multiple tokens are on the same line.
     for (token in tokens) {
       var color = token == mainToken ? severity_color : CYAN;
-      var end = token == mainToken ? "^" : "."
-      var mid = token == mainToken ? "-" : "."
+      var end = token == mainToken ? "^" : ".";
+      var mid = token == mainToken ? "-" : ".";
 
-      var line = source.getLine(token.lineStart)
-      var lineNum = "%(GRAY)%(padLeft_(token.lineStart, lineWidth)):%(NORMAL) "
-      var indent = padLeft_(" ", lineWidth + 2)
+      var line = source.getLine(token.lineStart);
+      var lineNum = "%(GRAY)%(padLeft_(token.lineStart, lineWidth)):%(NORMAL) ";
+      var indent = padLeft_(" ", lineWidth + 2);
 
       if (token == TokenType.line) {
         // The newline is the error, so make it visible.
-        System.print("%(lineNum)%(line)%(GRAY)\\n%(NORMAL)")
+        System.print("%(lineNum)%(line)%(GRAY)\\n%(NORMAL)");
         System.print("%(indent)%(" " * line.count)" +
-            "%(color)%(end)%(end)%(NORMAL)")
+            "%(color)%(end)%(end)%(NORMAL)");
       } else {
-        System.print("%(lineNum)%(line)")
+        System.print("%(lineNum)%(line)");
 
-        var space = " " * (token.columnStart - 1)
-        var highlight = end
-        var length = token.columnEnd - token.columnStart
+        var space = " " * (token.columnStart - 1);
+        var highlight = end;
+        var length = token.columnEnd - token.columnStart;
         if (length > 1) {
-          highlight = end + mid * (length - 2) + end
+          highlight = end + mid * (length - 2) + end;
         }
-        System.print("%(indent)%(space)%(color)%(highlight)%(NORMAL)")
+        System.print("%(indent)%(space)%(color)%(highlight)%(NORMAL)");
       }
     }
   }
 
   // TODO: Add padBefore() and padAfter() to String?
   padLeft_(value, width) {
-    var result = value.toString
-    while (result.count < width) result = " " + result
-    return result
+    var result = value.toString;
+    while (result.count < width) result = " " + result;
+    return result;
   }
 }
 PrettyReporter.init_();

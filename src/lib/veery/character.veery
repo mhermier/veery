@@ -1,14 +1,14 @@
 
-import "veery/abort" for Abort
-import "veery/assert" for Assert
-import "veery/magnitude" for Magnitude
+import "veery/abort" for Abort;
+import "veery/assert" for Assert;
+import "veery/magnitude" for Magnitude;
 
 class Character is Magnitude {
   static init_() {
-    if (__enum != null) return
-    __enum = {}
+    if (__enum != null) return;
+    __enum = {};
 
-    (0..256).each {|codePoint| new_(codePoint) }
+    (0..256).each {|codePoint| new_(codePoint) };
   }
 
   static new_(codePoint) { new_(codePoint,  String.fromCodePoint(codePoint)) }
@@ -16,93 +16,93 @@ class Character is Magnitude {
   construct new_(codePoint, toString) {
     // TODO validation
 
-    _codePoint = codePoint
-    _toString  = toString
+    _codePoint = codePoint;
+    _toString  = toString;
 
-    __enum[_codePoint] = this
-    __enum[_toString]  = this
+    __enum[_codePoint] = this;
+    __enum[_toString]  = this;
   }
 
   static fromCodePoint(codePoint) {
-    var c = __enum[codePoint]
-    if (c != null) return c
+    var c = __enum[codePoint];
+    if (c != null) return c;
 
-    return new_(codePoint)
+    return new_(codePoint);
   }
 
   static fromEscapedString(escapedString) {
-    return fromString(unescapeString_(escapedString))
+    return fromString(unescapeString_(escapedString));
   }
 
   static fromString(string) {
-    var c = __enum[string]
-    if (c != null) return c
+    var c = __enum[string];
+    if (c != null) return c;
 
-    var codePoints = string.codePoints
-    Assert.call(codePoints.count == 1, "invalid argument")
-    var codePoint = codePoints[0]
-    return new_(codePoint, string)
+    var codePoints = string.codePoints;
+    Assert.call(codePoints.count == 1, "invalid argument");
+    var codePoint = codePoints[0];
+    return new_(codePoint, string);
   }
 
   // Fixme should be part of String
   static unescapeString_(escapedString) {
-    var string = ""
+    var string = "";
 
-    var it
-    var escapedStringCodePoints = escapedString.codePoints
+    var it;
+    var escapedStringCodePoints = escapedString.codePoints;
     while (it = escapedStringCodePoints.iterate(it)) {
-      var c = Character.fromCodePoint(escapedStringCodePoints.iteratorValue(it))
+      var c = Character.fromCodePoint(escapedStringCodePoints.iteratorValue(it));
 
       if (c == '\\') {
-        it = escapedStringCodePoints.iterate(it)
-        c = Character.fromCodePoint(escapedStringCodePoints.iteratorValue(it))
+        it = escapedStringCodePoints.iterate(it);
+        c = Character.fromCodePoint(escapedStringCodePoints.iteratorValue(it));
 
         // TODO: make an static map for wellknown values
         if (c == '\\') {
-          c = '\\'
+          c = '\\';
         } else if (c == '"') {
-          c = '"'
+          c = '"';
         } else if (c == '%') {
-          c = '%'
+          c = '%';
         } else if (c == '\'') {
-          c = '\''
+          c = '\'';
         } else if (c == '0') {
-          c = '\0'
+          c = '\0';
         } else if (c == 'a') {
-          c = '\a'
+          c = '\a';
         } else if (c == 'b') {
-          c = '\b'
+          c = '\b';
         } else if (c == 'e') {
-          c = '\e'
+          c = '\e';
         } else if (c == 'f') {
-          c = '\f'
+          c = '\f';
         } else if (c == 'n') {
-          c = '\n'
+          c = '\n';
         } else if (c == 'r') {
-          c = '\r'
+          c = '\r';
         } else if (c == 't') {
-          c = '\t'
+          c = '\t';
 /*
         } else if (c == 'u') {
-          c = readUnicodeEscape(4)
+          c = readUnicodeEscape(4);
         } else if (c == 'U') {
-          c = readUnicodeEscape(8)
+          c = readUnicodeEscape(8);
  */
         } else if (c == 'v') {
-          c = '\v'
+          c = '\v';
 /*
         } else if (c == 'x') {
-          c = (uint8_t)readHexEscape(parser, 2, "byte")
+          c = (uint8_t)readHexEscape(parser, 2, "byte");
  */
         } else {
-          Fiber.abort("Invalid escape character '%(c)'.")
+          Fiber.abort("Invalid escape character '%(c)'.");
         }
       }
 
-      string = string + c.toString
+      string = string + c.toString;
     }
 
-    return string
+    return string;
   }
 
   hash { Abort.todo() }
@@ -116,7 +116,7 @@ class Character is Magnitude {
   isAlpha {
     return isLower ||
            isUpper ||
-           this == '_'
+           this == '_';
   }
 
   isDigit { this >= '0' && this <= '9' }
@@ -126,7 +126,7 @@ class Character is Magnitude {
   isHexDigit {
     return isDigit ||
            this >= 'a' && this <= 'f' ||
-           this >= 'A' && this <= 'F'
+           this >= 'A' && this <= 'F';
   }
 
   isLower { this >= 'a' && this <= 'z' }
@@ -137,4 +137,4 @@ class Character is Magnitude {
   < (other) { other is Character && _codePoint < other.codePoint }
 }
 
-Character.init_()
+Character.init_();

@@ -1,20 +1,20 @@
 
-import "veery/compiler/abstract_lang/token_type" for TokenType
+import "veery/compiler/abstract_lang/token_type" for TokenType;
 
 class Token {
   construct new(source, type, start, length) {
-    _source = source
-    _type = type
-    _start = start
-    _length = length
+    _source = source;
+    _type = type;
+    _start = start;
+    _length = length;
   }
 
   == (other) {
     if (other is String) { // FIXME TokenType
-      return _type == other
+      return _type == other;
     }
 
-    return this === other
+    return this === other;
   }
   != (other) { return !(this == other) }
 
