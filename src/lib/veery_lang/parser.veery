@@ -843,11 +843,6 @@ class Parser {
       return;
     }
 
-    if (peek() != TokenType.semicolon) {
-      .report(compilation_context, _compatibility, error, [next_token]);
-      return;
-    }
-
     consume(TokenType.semicolon, error);
     ignoreLine();
   }
