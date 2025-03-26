@@ -1,26 +1,34 @@
 // DO NOT EDIT: This file is automagically generated
 
+import "veery/character" for Character
 import "veery/event/key" for Key
 class Action {
-  construct new(text) {
-    _text = text
+  construct new_(actions, setup_fn) {
+    _actions = actions
+    _key_chords = []
+    setup_fn.call(this)
   }
-  setKeyChord(keyChord) {
-    _keyChord = keyChord
-    if (keyChord is String) _keyChord = Key.fromString(keyChord)
-    return this
+  description{
+    return _description
   }
-  keyChord{
-    return _keyChord
+  description=(description) {
+    return _description = description
   }
-  setOnTriggered(onTriggered) {
-    _onTriggered = onTriggered
-    return this
+  key_chords{
+    return _key_chords
   }
-  onTriggered{
-    return _onTriggered
+  add_key_chord(key_chord) {
+    if (key_chord is Character) key_chord = Key.fromCharacter(key_chord)
+    if (key_chord is String) key_chord = Key.fromString(key_chord)
+    _key_chords.add(key_chord)
   }
-  text{
-    return _text
+  on_triggered{
+    return _on_triggered_fn
+  }
+  on_triggered(on_triggered_fn) {
+    return _on_triggered_fn = on_triggered_fn
+  }
+  trigger() {
+    return _on_triggered_fn.call()
   }
 }

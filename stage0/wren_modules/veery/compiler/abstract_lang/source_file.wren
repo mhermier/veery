@@ -47,6 +47,7 @@ class SourceFile {
     for (i in 0 ... _string.count) {
       if (_string[i] == Character.fromCodePoint(10)) _lines.add(i + 1)
     }
+    _lines.add(_string.count + 1)
     return _lines
   }
 }

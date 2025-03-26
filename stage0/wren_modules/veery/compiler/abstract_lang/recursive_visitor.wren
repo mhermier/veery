@@ -6,24 +6,30 @@ class RecursiveVisitor is AbstractVisitor {
     for (statement in node.statements) {
       statement.accept(this, visitor_data)
     }
+    return node
   }
   visitMapEntry(node, visitor_data) {
     node.key.accept(this, visitor_data)
     node.value.accept(this, visitor_data)
+    return node
   }
   visitMethod(node, visitor_data) {
     if (node.body != null) node.body.accept(this, visitor_data)
+    return node
   }
   visitModule(node, visitor_data) {
     for (statement in node.statements) {
       statement.accept(this, visitor_data)
     }
+    return node
   }
   visitAssignmentExpr(node, visitor_data) {
     node.target.accept(this, visitor_data)
     node.value.accept(this, visitor_data)
+    return node
   }
   visitBoolExpr(node, visitor_data) {
+    return node
   }
   visitCallExpr(node, visitor_data) {
     if (node.receiver != null) node.receiver.accept(this, visitor_data)
@@ -33,6 +39,7 @@ class RecursiveVisitor is AbstractVisitor {
       }
     }
     if (node.blockArgument != null) node.blockArgument.accept(this, visitor_data)
+    return node
   }
   visitCharacterExpr(node, visitor_data) {
   }
@@ -40,47 +47,60 @@ class RecursiveVisitor is AbstractVisitor {
     node.condition.accept(this, visitor_data)
     node.thenBranch.accept(this, visitor_data)
     node.elseBranch.accept(this, visitor_data)
+    return node
   }
   visitFieldExpr(node, visitor_data) {
+    return node
   }
   visitGroupingExpr(node, visitor_data) {
     node.expression.accept(this, visitor_data)
+    return node
   }
   visitInfixExpr(node, visitor_data) {
     node.left.accept(this, visitor_data)
     node.right.accept(this, visitor_data)
+    return node
   }
   visitInterpolationExpr(node, visitor_data) {
     for (expression in node.expressions) {
       expression.accept(this, visitor_data)
     }
+    return node
   }
   visitListExpr(node, visitor_data) {
     for (element in node.elements) {
       element.accept(this, visitor_data)
     }
+    return node
   }
   visitMapExpr(node, visitor_data) {
     for (entry in node.entries) {
       entry.accept(this, visitor_data)
     }
+    return node
   }
   visitNullExpr(node, visitor_data) {
+    return node
   }
   visitNumExpr(node, visitor_data) {
+    return node
   }
   visitPrefixExpr(node, visitor_data) {
     node.right.accept(this, visitor_data)
+    return node
   }
   visitStaticFieldExpr(node, visitor_data) {
+    return node
   }
   visitStringExpr(node, visitor_data) {
+    return node
   }
   visitSubscriptExpr(node, visitor_data) {
     node.receiver.accept(this, visitor_data)
     for (argument in node.arguments) {
       argument.accept(this, visitor_data)
     }
+    return node
   }
   visitSuperExpr(node, visitor_data) {
     if (node.arguments != null) {
@@ -89,44 +109,57 @@ class RecursiveVisitor is AbstractVisitor {
       }
     }
     if (node.blockArgument != null) node.blockArgument.accept(this, visitor_data)
+    return node
   }
   visitThisExpr(node, visitor_data) {
+    return node
   }
   visitThisModuleExpr(node, visitor_data) {
+    return node
   }
   visitBlockStmt(node, visitor_data) {
     for (statement in node.statements) {
       statement.accept(this, visitor_data)
     }
+    return node
   }
   visitBreakStmt(node, visitor_data) {
+    return node
   }
   visitClassStmt(node, visitor_data) {
     for (method in node.methods) {
       method.accept(this, visitor_data)
     }
+    return node
   }
   visitContinueStmt(node, visitor_data) {
+    return node
   }
   visitForStmt(node, visitor_data) {
     node.iterator.accept(this, visitor_data)
     node.body.accept(this, visitor_data)
+    return node
   }
   visitIfStmt(node, visitor_data) {
     node.condition.accept(this, visitor_data)
     node.thenBranch.accept(this, visitor_data)
     if (node.elseBranch != null) node.elseBranch.accept(this, visitor_data)
+    return node
   }
   visitImportStmt(node, visitor_data) {
+    return node
   }
   visitReturnStmt(node, visitor_data) {
     if (node.value != null) node.value.accept(this, visitor_data)
+    return node
   }
   visitVarStmt(node, visitor_data) {
     if (node.initializer != null) node.initializer.accept(this, visitor_data)
+    return node
   }
   visitWhileStmt(node, visitor_data) {
     node.condition.accept(this, visitor_data)
     node.body.accept(this, visitor_data)
+    return node
   }
 }

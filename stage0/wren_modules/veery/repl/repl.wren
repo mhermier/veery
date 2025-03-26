@@ -6,8 +6,8 @@ import "os" for Platform
 import "ansi/color" for Color
 import "veery/compiler/abstract_lang/source_file" for SourceFile
 import "veery/compiler/abstract_lang/token" for Token, TokenType
+import "veery/character" for Character
 import "veery/character_string" for CharacterString
-import "veery/chars" for Chars
 import "veery/event/input" for Input
 import "veery/event/key" for Key
 import "veery/event/loop" for Loop
@@ -23,47 +23,142 @@ class Repl {
     _line = CharacterString.fromString("")
     _history = []
     _historyIndex = 0
-    _actions = Actions.new([Action.new("Quit").setKeyChord("Ctrl+C").setOnTriggered{
-      System.print()
-      _event_loop.stop()
-    }, Action.new("Delete right or exit").setKeyChord("Ctrl+D").setOnTriggered{
-      if (_line.isEmpty) {
-        System.print()
-        _event_loop.stop()
+    _actions = Actions.new{|actions|
+      actions.add_action{|action|
+        action.description = "Quit"
+        action.on_triggered{
+          System.print()
+          _event_loop.stop()
+        }
+        action.add_key_chord("Ctrl+C")
       }
-      deleteRight()
-    }, Action.new("Automatic completion").setKeyChord(Chars.tab).setOnTriggered{
-      var completion = getCompletion()
-      if (completion != null) {
-        _line = _line + completion
-        _cursor = _line.count
+      actions.add_action{|action|
+        action.description = "Delete right or exit"
+        action.on_triggered{
+          if (_line.isEmpty) {
+            System.print()
+            _event_loop.stop()
+          }
+          deleteRight()
+        }
+        action.add_key_chord("Ctrl+D")
       }
-    }, Action.new("Execute input").setKeyChord(Chars.carriageReturn).setOnTriggered{
-      executeInput()
-    }, Action.new("Clear line").setKeyChord("Ctrl+U").setOnTriggered{
-      _line = ""
-      cursorBegin()
-    }, Action.new("History next").setKeyChord("Ctrl+N").setOnTriggered{
-      nextHistory()
-    }, Action.new("History previous").setKeyChord("Ctrl+P").setOnTriggered{
-      previousHistory()
-    }, Action.new("Delete left").setKeyChord(Chars.delete).setOnTriggered{
-      deleteLeft()
-    }, Action.new("Move cursor left").setKeyChord(Key.left).setOnTriggered{
-      cursorLeft()
-    }, Action.new("Move cursor right").setKeyChord(Key.right).setOnTriggered{
-      cursorRight()
-    }, Action.new("History next").setKeyChord(Key.down).setOnTriggered{
-      nextHistory()
-    }, Action.new("History previous").setKeyChord(Key.up).setOnTriggered{
-      previousHistory()
-    }, Action.new("Delete right").setKeyChord(Key.delete).setOnTriggered{
-      deleteRight()
-    }, Action.new("Move cursor at the end of line").setKeyChord("End").setOnTriggered{
-      cursorEnd()
-    }, Action.new("Move cursor at the begin of line").setKeyChord("Home").setOnTriggered{
-      cursorBegin()
-    }])
+      actions.add_action{|action|
+        action.description = "Execute input"
+        action.on_triggered{
+          executeInput()
+        }
+        action.add_key_chord(Character.fromCodePoint(13))
+      }
+      actions.add_action{|action|
+        action.description = "Delete left"
+        action.on_triggered{
+          deleteLeft()
+        }
+        action.add_key_chord("Backspace")
+      }
+      actions.add_action{|action|
+        action.description = "Delete right"
+        action.on_triggered{
+          deleteRight()
+        }
+        action.add_key_chord(Key.delete)
+      }
+      actions.add_action{|action|
+        action.description = "Clear line"
+        action.on_triggered{
+          _line = ""
+          cursorBegin()
+        }
+        action.add_key_chord("Ctrl+U")
+      }
+      actions.add_action{|action|
+        action.description = "Clear line right"
+        action.on_triggered{
+          _line = _line[0 ... cursor]
+        }
+        action.add_key_chord("Ctrl+K")
+      }
+      actions.add_action{|action|
+        action.description = "Delete previous word"
+        action.on_triggered{
+          while (_cursor != 0 && _line[_cursor - 1] == Character.fromCodePoint(32)) {
+            deleteLeft()
+          }
+          while (_cursor != 0 && _line[_cursor - 1] != Character.fromCodePoint(32)) {
+            deleteLeft()
+          }
+        }
+        action.add_key_chord("Ctrl+W")
+      }
+      actions.add_action{|action|
+        action.description = "Move cursor left"
+        action.on_triggered{
+          cursorLeft()
+        }
+        action.add_key_chord("Ctrl+B")
+        action.add_key_chord(Key.left)
+      }
+      actions.add_action{|action|
+        action.description = "Move cursor right"
+        action.on_triggered{
+          cursorRight()
+        }
+        action.add_key_chord("Ctrl+F")
+        action.add_key_chord(Key.right)
+      }
+      actions.add_action{|action|
+        action.description = "Move cursor at the begin of line"
+        action.on_triggered{
+          cursorBegin()
+        }
+        action.add_key_chord("Ctrl+A")
+        action.add_key_chord("Home")
+      }
+      actions.add_action{|action|
+        action.description = "Move cursor at the end of line"
+        action.on_triggered{
+          cursorEnd()
+        }
+        action.add_key_chord("Ctrl+E")
+        action.add_key_chord("End")
+      }
+      actions.add_action{|action|
+        action.description = "History next"
+        action.on_triggered{
+          nextHistory()
+        }
+        action.add_key_chord("Ctrl+N")
+        action.add_key_chord(Key.down)
+      }
+      actions.add_action{|action|
+        action.description = "History previous"
+        action.on_triggered{
+          previousHistory()
+        }
+        action.add_key_chord("Ctrl+P")
+        action.add_key_chord(Key.up)
+      }
+      actions.add_action{|action|
+        action.description = "Automatic completion"
+        action.on_triggered{
+          var completion = getCompletion()
+          if (completion != null) {
+            _line = _line + completion
+            _cursor = _line.count
+          }
+        }
+        action.add_key_chord(Character.fromCodePoint(9))
+      }
+      actions.add_action{|action|
+        action.description = "Clear screen"
+        action.on_triggered{
+          System.write("\x1b[2J")
+          System.write("\x1b[H")
+        }
+        action.add_key_chord("Ctrl+L")
+      }
+    }
   }
   cursor{
     return _cursor
@@ -83,29 +178,16 @@ class Repl {
     _event_loop.run()
     while (true) {
       var key = _input.read()
-      var byte = key.toKeyCode
-      if (_actions.onKeyPressed(byte)) {
-      } else if (byte < 0) {
-        System.print("Unhandled action key-code [dec]: %(byte)")
+      var key_code = key.toKeyCode
+      var character = key_code >= 0? Character.new(key_code) : null
+      if (_actions.onKeyPressed(key_code)) {
+      } else if (character != null && character.isPrintable) {
+        insertChar(character)
       } else {
-        handleChar(byte)
+        System.print("Unhandled key-code [dec]: %(key_code)")
       }
       if (!_event_loop.isRuning) break
       refreshLine(true)
-    }
-  }
-  handleChar(byte) {
-    if (byte >= Chars.space) {
-      insertChar(byte)
-    } else if (byte == Chars.ctrlW) {
-      while (_cursor != 0 && _line[_cursor - 1] == " ") {
-        deleteLeft()
-      }
-      while (_cursor != 0 && _line[_cursor - 1] != " ") {
-        deleteLeft()
-      }
-    } else {
-      System.print("Unhandled key-code [dec]: %(byte)")
     }
   }
   cursorBegin() {
@@ -120,9 +202,8 @@ class Repl {
   cursorRight() {
     if (_cursor < line.count) _cursor = _cursor + 1
   }
-  insertChar(byte) {
-    var char = String.fromCodePoint(byte)
-    _line = _line[0 ... _cursor] + char + _line[_cursor .. -1]
+  insertChar(character) {
+    _line = _line[0 ... _cursor] + character + _line[_cursor .. -1]
     _cursor = _cursor + 1
   }
   deleteLeft() {
@@ -235,25 +316,6 @@ class SimpleRepl is Repl {
 class AnsiRepl is Repl {
   construct new() {
     super()
-  }
-  handleChar(byte) {
-    if (byte == Chars.ctrlA) {
-      cursorBegin()
-    } else if (byte == Chars.ctrlB) {
-      cursorLeft()
-    } else if (byte == Chars.ctrlE) {
-      cursorEnd()
-    } else if (byte == Chars.ctrlF) {
-      cursorRight()
-    } else if (byte == Chars.ctrlK) {
-      line = line[0 ... cursor]
-    } else if (byte == Chars.ctrlL) {
-      System.write("\x1b[2J")
-      System.write("\x1b[H")
-    } else {
-      return super.handleChar(byte)
-    }
-    return false
   }
   refreshLine(showCompletion) {
     System.write("\x1b[2K")

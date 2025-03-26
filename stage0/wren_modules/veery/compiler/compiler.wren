@@ -20,6 +20,7 @@ import "wren_lang/source_printer" for SourcePrinter
 import "wren_lang/transform/enum_transform" for EnumTransform
 import "wren_lang/transform/strict_equality_transform" for StrictEqualityTransform
 import "wren_lang/transform/this_module_transform" for ThisModuleTransform
+import "wren_lang/validator/rvalue_assignment_validator" for RValueAssignmentValidator
 import "veery/compiler/abstract_lang/validator/call_receiver_validator" for CallReceiverValidator
 class Compiler {
   construct new() {
@@ -114,10 +115,6 @@ class Compiler {
       if (output_file_path == null) {
         output_file_path = "a.out"
       }
-    } else if (arguments.count == 2 && output_file_path == null) {
-      System.print("Warning: output file path moved to the -o option")
-      System.print("         compatibility support will be remove in the next release")
-      output_file_path = arguments[1]
     } else {
       argument_parser.show_usage()
       return 1
@@ -130,6 +127,7 @@ class Compiler {
     pipeline = pipeline | ThisModuleTransform.new()
     pipeline = pipeline | ConstantFoldingTransform.new()
     if (false) pipeline = pipeline | CallReceiverValidator.new()
+    pipeline = pipeline | RValueAssignmentValidator.new()
     var has_warning_modifiers_errors = false
     for (warning_modifier in warning_modifiers) {
       var enable = true

@@ -194,7 +194,7 @@ class Parser {
       return BoolExpr.new(token, token == TokenType.trueKeyword)
     }
     var character = Fn.new{|token, parser, canAssign|
-      return CharacterExpr.new(token, Character.fromEscapedString(token.toString[1 .. -2]))
+      return CharacterExpr.new(token, Character.new(token.text[1 .. -2].unescape))
     }
     var list = Fn.new{|token, parser, canAssign|
       return parser.listLiteral()
@@ -401,8 +401,9 @@ class Parser {
     var parameters
     var body
     if (foreignKeyword == null) {
-      consume(TokenType.leftBrace, "Expect '{' before method body.")
-      body = finishBody(parameters)
+      body = this.body(true)
+    } else {
+      this.expectSemicolon("Expect ';' after 'foreign' method declaration.", TokenType.rightBrace)
     }
     return Method.new(attribute_specifiers, foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body)
   }
@@ -463,10 +464,32 @@ class Parser {
     expectSemicolon("Expect ';' after expression statement.", right)
     return expr
   }
-  finishBody(parameters) {
+  body(is_method_body) {
+    var parameters
+    this.ignoreLine()
+    var keyword
+    if (keyword = match(TokenType.returnKeyword)) {
+      var expression = this.expression()
+      if (is_method_body) {
+        this.expectSemicolon("Expect ';' after single expression method.", TokenType.rightBrace)
+      }
+      return Body.new(parameters, [ReturnStmt.new(keyword, expression)])
+    }
+    if (!match(TokenType.leftBrace)) {
+      if (is_method_body) {
+        this.report(compilation_context, _compiler.generic_error, "Expect method body.")
+      }
+      return null
+    }
+    if (match(TokenType.pipe)) {
+      if (is_method_body) {
+        this.report(compilation_context, _compiler.generic_error, "Parameters are not allowed in a method body.")
+      }
+      parameters = parameterList(TokenType.pipe, "block parameters", TokenType.pipe).elements
+    }
     if (match(TokenType.rightBrace)) return Body.new(parameters, [])
     if (!matchLine() && peek() != TokenType.returnKeyword) {
-      this.report(compilation_context, _compiler.generic_notice, "Single-expression body")
+      this.report(compilation_context, _compatibility, "Expected `return` keyword before single-expression body")
       var expr = expression()
       ignoreLine()
       consume(TokenType.rightBrace, "Expect '}' at end of block.")
@@ -485,14 +508,7 @@ class Parser {
     if (match(TokenType.leftParen)) {
       arguments = argumentList(TokenType.leftParen, "arguments", TokenType.rightParen).elements
     }
-    var blockArgument
-    if (match(TokenType.leftBrace)) {
-      var parameters
-      if (match(TokenType.pipe)) {
-        parameters = parameterList(TokenType.pipe, "block parameters", TokenType.pipe).elements
-      }
-      blockArgument = finishBody(parameters)
-    }
+    var blockArgument = this.body(false)
     return [arguments, blockArgument]
   }
   tokenTypeToString_(tokenType) {
@@ -612,10 +628,6 @@ class Parser {
     ignoreLine()
     if (peek() == right) {
       this.report(compilation_context, _pedantic, error, [next_token])
-      return
-    }
-    if (peek() != TokenType.semicolon) {
-      this.report(compilation_context, _compatibility, error, [next_token])
       return
     }
     consume(TokenType.semicolon, error)

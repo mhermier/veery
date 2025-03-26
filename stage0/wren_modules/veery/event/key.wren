@@ -8,6 +8,7 @@ class Key {
     __automatic_key_code = 0
     for (i in 1 .. 26) Key.new_("Ctrl+%(Character.fromCodePoint(Character.fromCodePoint(64).codePoint + i))", i)
     for (i in 0 .. 20) Key.new_("F%(i)")
+    Key.new_("Backspace")
     __delete = Key.new_("Delete")
     __down = Key.new_("Down")
     __end = Key.new_("End")

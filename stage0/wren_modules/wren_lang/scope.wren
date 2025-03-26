@@ -1,6 +1,5 @@
 // DO NOT EDIT: This file is automagically generated
 
-import "veery/chars" for Chars
 import "veery/compiler/reporter" for Severity
 class Scope {
   construct new(reporter) {
@@ -34,7 +33,7 @@ class Scope {
       }
     }
     if (reachedClass) {
-      if (Chars.isLowerAlpha(name.text[0].codePoint)) {
+      if (name.text[0].isLower) {
         return null
       } else {
         if (_scopes[0].containsKey(name.toString)) {
