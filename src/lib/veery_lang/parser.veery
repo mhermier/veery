@@ -605,16 +605,25 @@ class Parser {
   }
 
   body(is_method_body) {
+    var parameters;
     .ignoreLine();
+
+    var keyword;
+    if (keyword = match(TokenType.returnKeyword)) {
+      var expression = .expression();
+      if (is_method_body) {
+        .expectSemicolon("Expect ';' after single expression method.", TokenType.rightBrace);
+      }
+      return Body.new(parameters, [ReturnStmt.new(keyword, expression)]);
+    }
 
     if (!match(TokenType.leftBrace)) {
       if (is_method_body) {
-        .report(compilation_context, _compiler.generic_error, "Expect '{' before method body.");
+        .report(compilation_context, _compiler.generic_error, "Expect method body.");
       }
       return null;
     }
 
-    var parameters;
     if (match(TokenType.pipe)) {
       if (is_method_body) {
         .report(compilation_context, _compiler.generic_error, "Parameters are not allowed in a method body.");
