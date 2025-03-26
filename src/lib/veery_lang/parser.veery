@@ -517,8 +517,7 @@ class Parser {
     var parameters; // FIXME? = subscriptParameters + parenthesisParameters
     var body;
     if (foreignKeyword == null) {
-      consume(TokenType.leftBrace, "Expect '{' before method body.");
-      body = finishBody(parameters);
+      body = .body(true);
     } else {
       .expectSemicolon("Expect ';' after 'foreign' method declaration.", TokenType.rightBrace);
     }
@@ -605,8 +604,22 @@ class Parser {
     return expr;
   }
 
-  // Parses the rest of a method or block argument body.
-  finishBody(parameters) {
+  body(is_method_body) {
+    if (!match(TokenType.leftBrace)) {
+      if (is_method_body) {
+        .report(compilation_context, _compiler.generic_error, "Expect '{' before method body.");
+      }
+      return null;
+    }
+
+    var parameters;
+    if (match(TokenType.pipe)) {
+      if (is_method_body) {
+        .report(compilation_context, _compiler.generic_error, "Parameters are not allowed in a method body.");
+      }
+      parameters = parameterList(TokenType.pipe, "block parameters", TokenType.pipe).elements;
+    }
+
     // An empty block.
     if (match(TokenType.rightBrace)) return Body.new(parameters, []);
 
@@ -649,16 +662,7 @@ class Parser {
       arguments = argumentList(TokenType.leftParen, "arguments", TokenType.rightParen).elements;
     }
 
-    var blockArgument;
-    if (match(TokenType.leftBrace)) {
-      var parameters;
-      if (match(TokenType.pipe)) {
-        parameters = parameterList(TokenType.pipe, "block parameters", TokenType.pipe).elements;
-      }
-
-      blockArgument = finishBody(parameters);
-    }
-
+    var blockArgument = .body(false);
     return [arguments, blockArgument];
   }
 
