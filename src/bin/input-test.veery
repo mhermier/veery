@@ -1,7 +1,6 @@
 
 import "io" for Stdin;
 
-import "veery/chars" for Chars;
 import "veery/event/input" for Input;
 import "veery/event/key" for Key;
 import "veery/event/loop" for Loop;
@@ -18,8 +17,7 @@ while (true) {
   var key = input.read();
   System.print(key);
 
-  var byte = key.toKeyCode;
-  if (byte == Chars.ctrlC) {
+  if (key == Key.fromString("Ctrl+C")) {
     event_loop.stop();
     break;
   }
