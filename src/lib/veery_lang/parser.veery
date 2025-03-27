@@ -519,6 +519,8 @@ class Parser {
     if (foreignKeyword == null) {
       consume(TokenType.leftBrace, "Expect '{' before method body.");
       body = finishBody(parameters);
+    } else {
+      .expectSemicolon("Expect ';' after 'foreign' method declaration.", TokenType.rightBrace);
     }
 
     return Method.new(attribute_specifiers, foreignKeyword, staticKeyword, constructKeyword, name, subscriptParameters, setter, parenthesisParameters, body);

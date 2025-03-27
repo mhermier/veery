@@ -57,7 +57,9 @@ class SourcePrinter is AbstractVisitor {
       write_(node.parenthesisParameters.join(", "));
       write_(") ");
     }
-    node.body.accept(this, visitor_data);
+    if (node.body) {
+      node.body.accept(this, visitor_data);
+    }
   }
 
   visitModule(node, visitor_data) {
