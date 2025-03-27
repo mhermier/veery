@@ -47,6 +47,10 @@ stage3: stage2
 build: stage3
 	make -f Makefile.stage BUILDDIR="$(BUILDDIR)" VEERY="$(WREN) stage3/bin/veery" all
 
+.PHONY: run-input-test
+run-input-test: build
+	$(WREN) $(BUILDDIR)/bin/input-test
+
 .PHONY: run-shell
 run-shell: build
 	$(VEERY) shell
