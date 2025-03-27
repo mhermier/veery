@@ -605,6 +605,8 @@ class Parser {
   }
 
   body(is_method_body) {
+    .ignoreLine();
+
     if (!match(TokenType.leftBrace)) {
       if (is_method_body) {
         .report(compilation_context, _compiler.generic_error, "Expect '{' before method body.");
