@@ -66,6 +66,8 @@ class SourceFile {
     for (i in 0..._string.count) {
       if (_string[i] == '\n') _lines.add(i + 1);
     }
+    // Add last line to EOF
+    _lines.add(_string.count + 1);
     return _lines;
   }
 }
