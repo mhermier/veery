@@ -195,7 +195,7 @@ class Parser {
 
     var boolean             = Fn.new {|token, parser, canAssign| BoolExpr.new(token, token == TokenType.trueKeyword) };
     var character           = Fn.new {|token, parser, canAssign|
-      return CharacterExpr.new(token, Character.fromEscapedString(token.toString[1..-2])); // Strip enclosing single quotes
+      return CharacterExpr.new(token, Character.new(token.text[1..-2].unescape)); // Strip enclosing single quotes
     };
     var list                = Fn.new {|token, parser, canAssign| parser.listLiteral() };
     var map                 = Fn.new {|token, parser, canAssign| parser.mapLiteral() };
