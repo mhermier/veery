@@ -23,6 +23,24 @@ class Character is Magnitude {
     __enum[_toString]  = this;
   }
 
+  static new(value) {
+    if (value is Character) {
+      return this;
+    }
+    if (value is CharacterString) {
+      Assert.call(value.count == 1, "invalid argument");
+      return value[0];
+    }
+    if (value is Num) {
+      return .fromCodePoint(value);
+    }
+    if (value is String) {
+      return .fromString(value);
+    }
+
+    Fiber.abort("Value must be a Character, a CharacterString, a String or a Num");
+  }
+
   static fromCodePoint(codePoint) {
     var c = __enum[codePoint];
     if (c != null) return c;
