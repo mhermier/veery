@@ -8,10 +8,10 @@ class Character is Magnitude {
     if (__enum != null) return;
     __enum = {};
 
-    (0..256).each {|codePoint| new_(codePoint) };
+    (0..256).each {|codePoint|
+      .fromCodePoint(codePoint);
+    };
   }
-
-  static new_(codePoint) { new_(codePoint,  String.fromCodePoint(codePoint)) }
 
   construct new_(codePoint, toString) {
     // TODO validation
@@ -27,7 +27,7 @@ class Character is Magnitude {
     var c = __enum[codePoint];
     if (c != null) return c;
 
-    return new_(codePoint);
+    return new_(codePoint, String.fromCodePoint(codePoint));
   }
 
   static fromEscapedString(escapedString) {
