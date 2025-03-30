@@ -48,10 +48,6 @@ class Character is Magnitude {
     return new_(codePoint, String.fromCodePoint(codePoint));
   }
 
-  static fromEscapedString(escapedString) {
-    return fromString(unescapeString_(escapedString));
-  }
-
   static fromString(string) {
     var c = __enum[string];
     if (c != null) return c;
@@ -59,67 +55,6 @@ class Character is Magnitude {
     var codePoints = string.codePoints;
     Assert.call(codePoints.count == 1, "invalid argument");
     return new_(codePoints[0], string);
-  }
-
-  // Fixme should be part of String
-  static unescapeString_(escapedString) {
-    var string = "";
-
-    var it;
-    var escapedStringCodePoints = escapedString.codePoints;
-    while (it = escapedStringCodePoints.iterate(it)) {
-      var c = Character.fromCodePoint(escapedStringCodePoints.iteratorValue(it));
-
-      if (c == '\\') {
-        it = escapedStringCodePoints.iterate(it);
-        c = Character.fromCodePoint(escapedStringCodePoints.iteratorValue(it));
-
-        // TODO: make an static map for wellknown values
-        if (c == '\\') {
-          c = '\\';
-        } else if (c == '"') {
-          c = '"';
-        } else if (c == '%') {
-          c = '%';
-        } else if (c == '\'') {
-          c = '\'';
-        } else if (c == '0') {
-          c = '\0';
-        } else if (c == 'a') {
-          c = '\a';
-        } else if (c == 'b') {
-          c = '\b';
-        } else if (c == 'e') {
-          c = '\e';
-        } else if (c == 'f') {
-          c = '\f';
-        } else if (c == 'n') {
-          c = '\n';
-        } else if (c == 'r') {
-          c = '\r';
-        } else if (c == 't') {
-          c = '\t';
-/*
-        } else if (c == 'u') {
-          c = readUnicodeEscape(4);
-        } else if (c == 'U') {
-          c = readUnicodeEscape(8);
- */
-        } else if (c == 'v') {
-          c = '\v';
-/*
-        } else if (c == 'x') {
-          c = (uint8_t)readHexEscape(parser, 2, "byte");
- */
-        } else {
-          Fiber.abort("Invalid escape character '%(c)'.");
-        }
-      }
-
-      string = string + c.toString;
-    }
-
-    return string;
   }
 
 //  <=>(other) { _codePoint <=> other.codePoint }
