@@ -191,6 +191,17 @@ class CharacterString {
     return .fromCharacters(List.filled(size, character));
   }
 
+  static new(value) {
+    if (value is CharacterString) {
+      return this;
+    }
+    if (value is String) {
+      return .fromString(value);
+    }
+
+    Fiber.abort("Value must be a a CharacterString or a String");
+  }
+
   static fromCharacters(characters) {
     return new_(characters.toList, // TODO ToList<Character>(characters)
                 characters.join());
