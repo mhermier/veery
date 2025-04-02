@@ -163,6 +163,20 @@ class Repl {
         };
         action.add_key_chord("Ctrl+K");
       };
+      actions.add_action {|action|
+        action.description = "Delete previous word";
+        action.on_triggered {
+          // Delete trailing spaces
+          while (_cursor != 0 && _line[_cursor - 1] == ' ') {
+            deleteLeft();
+          }
+          // Delete until the next space
+          while (_cursor != 0 && _line[_cursor - 1] != ' ') {
+            deleteLeft();
+          }
+        };
+        action.add_key_chord("Ctrl+W");
+      };
 
       // Cursor control
       actions.add_action {|action|
@@ -242,7 +256,6 @@ class Repl {
       // TODO: Ctrl-T to swap chars.
       // TODO: ESC H and F to move to beginning and end of line. (Both ESC
       // [ and ESC 0 sequences?)
-      // TODO: Ctrl-W delete previous word.
     };
   }
 
@@ -276,15 +289,6 @@ class Repl {
   handleChar(byte) {
     if (byte >= Chars.space) {
       insertChar(byte);
-    } else if (byte == Chars.ctrlW) { // Handle Ctrl+w
-      // Delete trailing spaces
-      while (_cursor != 0 && _line[_cursor - 1] == " ") {
-        deleteLeft();
-      }
-      // Delete until the next space
-      while (_cursor != 0 && _line[_cursor - 1] != " ") {
-        deleteLeft();
-      }
     } else {
       // TODO: Other shortcuts?
       System.print("Unhandled key-code [dec]: %(byte)");
