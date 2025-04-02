@@ -6,6 +6,7 @@ import "os" for Platform;
 import "ansi/color" for Color;
 import "veery/compiler/abstract_lang/source_file" for SourceFile;
 import "veery/compiler/abstract_lang/token" for Token, TokenType;
+import "veery/character" for Character;
 import "veery/character_string" for CharacterString;
 import "veery/chars" for Chars;
 import "veery/event/input" for Input;
@@ -101,16 +102,19 @@ class Repl {
     _history = [];
     _historyIndex = 0;
 
-    _actions = Actions.new([
-      Action.new("Quit").
-        setKeyChord("Ctrl+C").
-        setOnTriggered {
+    _actions = Actions.new {|actions|
+      // Basic repl control
+      actions.add_action {|action|
+        action.description = "Quit";
+        action.on_triggered {
           System.print();
           _event_loop.stop();
-        },
-      Action.new("Delete right or exit").
-        setKeyChord("Ctrl+D").
-        setOnTriggered {
+        };
+        action.add_key_chord("Ctrl+C");
+      };
+      actions.add_action {|action|
+        action.description = "Delete right or exit";
+        action.on_triggered {
           // If the line is empty, Ctrl_D exits.
           if (_line.isEmpty) {
             System.print();
@@ -118,79 +122,102 @@ class Repl {
           }
           // Otherwise, it deletes the character after the cursor.
           deleteRight();
-        },
-      Action.new("Automatic completion").
-        setKeyChord(Chars.tab).
-        setOnTriggered {
+        };
+        action.add_key_chord("Ctrl+D");
+      };
+      actions.add_action {|action|
+        action.description = "Execute input";
+        action.on_triggered {
+          executeInput();
+        };
+        action.add_key_chord('\r');
+      };
+
+      // Line edition
+      actions.add_action {|action|
+        action.description = "Delete left";
+        action.on_triggered {
+          deleteLeft();
+        };
+        action.add_key_chord("Backspace");
+      };
+      actions.add_action {|action|
+        action.description = "Delete right";
+        action.on_triggered {
+          deleteRight();
+        };
+        action.add_key_chord(Key.delete);
+      };
+      actions.add_action {|action|
+        action.description = "Clear line";
+        action.on_triggered {
+          _line = "";
+          cursorBegin();
+        };
+        action.add_key_chord("Ctrl+U");
+      };
+
+      // Cursor control
+      actions.add_action {|action|
+        action.description = "Move cursor left";
+        action.on_triggered {
+          cursorLeft();
+        };
+        action.add_key_chord(Key.left);
+      };
+      actions.add_action {|action|
+        action.description = "Move cursor right";
+        action.on_triggered {
+          cursorRight();
+        };
+        action.add_key_chord(Key.right);
+      };
+      actions.add_action {|action|
+        action.description = "Move cursor at the begin of line";
+        action.on_triggered {
+          cursorBegin();
+        };
+        action.add_key_chord("Home");
+      };
+      actions.add_action {|action|
+        action.description = "Move cursor at the end of line";
+        action.on_triggered {
+          cursorEnd();
+        };
+        action.add_key_chord("End");
+      };
+
+      // History control
+      actions.add_action {|action|
+        action.description = "History next";
+        action.on_triggered {
+          nextHistory();
+        };
+        action.add_key_chord("Ctrl+N");
+        action.add_key_chord(Key.down);
+      };
+      actions.add_action {|action|
+        action.description = "History previous";
+        action.on_triggered {
+          previousHistory();
+        };
+        action.add_key_chord("Ctrl+P");
+        action.add_key_chord(Key.up);
+      };
+
+      // Utilities
+      actions.add_action {|action|
+        action.description = "Automatic completion";
+        action.on_triggered {
           var completion = getCompletion();
           if (completion != null) {
             _line = _line + completion;
             _cursor = _line.count;
           }
-        },
-      Action.new("Execute input").
-        setKeyChord(Chars.carriageReturn).
-        setOnTriggered {
-          executeInput();
-        },
-      Action.new("Clear line").
-        setKeyChord("Ctrl+U").
-        setOnTriggered {
-          _line = "";
-          cursorBegin();
-        },
-      Action.new("History next").
-        setKeyChord("Ctrl+N").
-        setOnTriggered {
-          nextHistory();
-        },
-      Action.new("History previous").
-        setKeyChord("Ctrl+P").
-        setOnTriggered {
-          previousHistory();
-        },
-      Action.new("Delete left").
-        setKeyChord("Backspace").
-        setOnTriggered {
-          deleteLeft();
-        },
-
-      Action.new("Move cursor left").
-        setKeyChord(Key.left).
-        setOnTriggered {
-          cursorLeft();
-        },
-      Action.new("Move cursor right").
-        setKeyChord(Key.right).
-        setOnTriggered {
-          cursorRight();
-        },
-      Action.new("History next").
-        setKeyChord(Key.down).
-        setOnTriggered {
-          nextHistory();
-        },
-      Action.new("History previous").
-        setKeyChord(Key.up).
-        setOnTriggered {
-          previousHistory();
-        },
-      Action.new("Delete right").
-        setKeyChord(Key.delete).
-        setOnTriggered {
-          deleteRight();
-        },
-      Action.new("Move cursor at the end of line").
-        setKeyChord("End").
-        setOnTriggered {
-          cursorEnd();
-        },
-      Action.new("Move cursor at the begin of line").
-        setKeyChord("Home").
-        setOnTriggered {
-          cursorBegin();
-        }
-    ])
+        };
+        action.add_key_chord('\t');
+      };
+    };
   }
 
   cursor { _cursor }
