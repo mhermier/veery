@@ -228,6 +228,16 @@ class Repl {
         };
         action.add_key_chord('\t');
       };
+      actions.add_action {|action|
+        action.description = "Clear screen";
+        action.on_triggered {
+          // Clear the screen.
+          System.write("\x1b[2J");
+          // Move cursor to top left.
+          System.write("\x1b[H");
+        };
+        action.add_key_chord("Ctrl+L");
+      };
     };
   }
 
@@ -489,20 +499,11 @@ class AnsiRepl is Repl {
   }
 
   handleChar(byte) {
-    if (byte == Chars.ctrlL) {
-      // Clear the screen.
-      System.write("\x1b[2J");
-      // Move cursor to top left.
-      System.write("\x1b[H");
-    } else {
       // TODO: Ctrl-T to swap chars.
       // TODO: ESC H and F to move to beginning and end of line. (Both ESC
       // [ and ESC 0 sequences?)
       // TODO: Ctrl-W delete previous word.
       return super.handleChar(byte);
-    }
-
-    return false;
   }
 
   refreshLine(showCompletion) {
