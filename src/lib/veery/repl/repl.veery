@@ -163,6 +163,7 @@ class Repl {
         action.on_triggered {
           cursorLeft();
         };
+        action.add_key_chord("Ctrl+B");
         action.add_key_chord(Key.left);
       };
       actions.add_action {|action|
@@ -170,6 +171,7 @@ class Repl {
         action.on_triggered {
           cursorRight();
         };
+        action.add_key_chord("Ctrl+F");
         action.add_key_chord(Key.right);
       };
       actions.add_action {|action|
@@ -177,6 +179,7 @@ class Repl {
         action.on_triggered {
           cursorBegin();
         };
+        action.add_key_chord("Ctrl+A");
         action.add_key_chord("Home");
       };
       actions.add_action {|action|
@@ -184,6 +187,7 @@ class Repl {
         action.on_triggered {
           cursorEnd();
         };
+        action.add_key_chord("Ctrl+E");
         action.add_key_chord("End");
       };
 
@@ -478,15 +482,7 @@ class AnsiRepl is Repl {
   }
 
   handleChar(byte) {
-    if (byte == Chars.ctrlA) {
-      cursorBegin();
-    } else if (byte == Chars.ctrlB) {
-      cursorLeft();
-    } else if (byte == Chars.ctrlE) {
-      cursorEnd();
-    } else if (byte == Chars.ctrlF) {
-      cursorRight();
-    } else if (byte == Chars.ctrlK) {
+    if (byte == Chars.ctrlK) {
       // Delete everything after the cursor.
       line = line[0...cursor];
     } else if (byte == Chars.ctrlL) {
