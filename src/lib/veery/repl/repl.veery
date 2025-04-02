@@ -156,6 +156,13 @@ class Repl {
         };
         action.add_key_chord("Ctrl+U");
       };
+      actions.add_action {|action|
+        action.description = "Clear line right";
+        action.on_triggered {
+          _line = _line[0...cursor];
+        };
+        action.add_key_chord("Ctrl+K");
+      };
 
       // Cursor control
       actions.add_action {|action|
@@ -482,10 +489,7 @@ class AnsiRepl is Repl {
   }
 
   handleChar(byte) {
-    if (byte == Chars.ctrlK) {
-      // Delete everything after the cursor.
-      line = line[0...cursor];
-    } else if (byte == Chars.ctrlL) {
+    if (byte == Chars.ctrlL) {
       // Clear the screen.
       System.write("\x1b[2J");
       // Move cursor to top left.
