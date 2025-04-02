@@ -238,6 +238,11 @@ class Repl {
         };
         action.add_key_chord("Ctrl+L");
       };
+
+      // TODO: Ctrl-T to swap chars.
+      // TODO: ESC H and F to move to beginning and end of line. (Both ESC
+      // [ and ESC 0 sequences?)
+      // TODO: Ctrl-W delete previous word.
     };
   }
 
@@ -496,14 +501,6 @@ class SimpleRepl is Repl {
 class AnsiRepl is Repl {
   construct new() {
     super();
-  }
-
-  handleChar(byte) {
-      // TODO: Ctrl-T to swap chars.
-      // TODO: ESC H and F to move to beginning and end of line. (Both ESC
-      // [ and ESC 0 sequences?)
-      // TODO: Ctrl-W delete previous word.
-      return super.handleChar(byte);
   }
 
   refreshLine(showCompletion) {
