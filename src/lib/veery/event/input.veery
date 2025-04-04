@@ -1,7 +1,6 @@
 
 import "veery/abort" for Abort;
 import "veery/character" for Character;
-import "veery/chars" for Chars;
 import "veery/event/key" for Key;
 import "veery/input_output/circular_buffer_reader" for Circular_buffer_reader;
 import "veery/input_output/system_console" for System_console;
@@ -115,7 +114,7 @@ class Input {
   read() {
     var c = read_();
 
-    if (c.codePoint == Chars.escape) {
+    if (c == '\e') {
       c = read_();
 
       /*
@@ -135,7 +134,7 @@ class Input {
       Meta          8
       */
 
-      if (c.codePoint == Chars.escape) {
+      if (c == '\e') {
         return Key.fromString("Escape");
       } else if (c == 'O') {
         return handle_map_(__escape_O_code_points, read_().codePoint);
