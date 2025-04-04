@@ -1,4 +1,4 @@
-import "veery/chars" for Chars;
+
 import "veery/compiler/reporter" for Severity;
 
 class Scope {
@@ -75,7 +75,7 @@ class Scope {
     }
 
     if (reachedClass) {
-      if (Chars.isLowerAlpha(name.text[0].codePoint)) {
+      if (name.text[0].isLower) {
         // A lowercase name inside a class is treated like a self-send so do
         // nothing.
         return null;
