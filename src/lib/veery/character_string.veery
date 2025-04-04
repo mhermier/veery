@@ -168,6 +168,8 @@ class Character is Magnitude {
 
   isLower { this >= 'a' && this <= 'z' }
   isUpper { this >= 'A' && this <= 'Z' }
+
+  isPrintable { this >= ' ' && this != Character.fromCodePoint(0x7f) }
 }
 
 class CharacterString {
