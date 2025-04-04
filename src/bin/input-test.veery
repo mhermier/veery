@@ -1,6 +1,7 @@
 
 import "io" for Stdin;
 
+import "veery/character_string" for CharacterString;
 import "veery/event/input" for Input;
 import "veery/event/key" for Key;
 import "veery/event/loop" for Loop;
@@ -15,7 +16,11 @@ event_loop.run();
 // FIXME: move to proper handler
 while (true) {
   var key = input.read();
-  System.print(key);
+  var string = CharacterString.new(key.toString);
+  if (string.count == 1) {
+    string = "'%(string.escape)'";
+  }
+  System.print(string);
 
   if (key == Key.fromString("Ctrl+C")) {
     event_loop.stop();
