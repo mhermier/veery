@@ -1,7 +1,6 @@
 
 import "veery/abort" for Abort;
 import "veery/character" for Character;
-import "veery/chars" for Chars;
 import "veery/compiler/abstract_lang/token" for Token, TokenType;
 
 var KEYWORDS = {
@@ -147,7 +146,7 @@ class Lexer {
     if (c == '"') return readString();
 
     if (c == '0' && peek() == 'x') return readHexNumber();
-    if (Chars.isWhitespace(d)) return readWhitespace();
+    if (c.isSpace) return readWhitespace();
     if (c.isDigit) return readNumber();
     if (c.isAlpha) return readName();
 
@@ -239,7 +238,7 @@ class Lexer {
   // Reads a series of whitespace characters.
   readWhitespace() {
     // Read the rest of the whitespace.
-    while (match {|c| Chars.isWhitespace(c.codePoint) }) {}
+    while (match {|c| c.isSpace }) {}
 
     return makeToken(TokenType.whitespace);
   }
