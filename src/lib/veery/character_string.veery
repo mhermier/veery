@@ -170,6 +170,15 @@ class Character is Magnitude {
   isUpper { this >= 'A' && this <= 'Z' }
 
   isPrintable { this >= ' ' && this != Character.fromCodePoint(0x7f) }
+
+  isSpace {
+    return this == '\t' ||
+           this == '\n' ||
+           this == '\v' ||
+           this == '\f' ||
+           this == '\r' ||
+           this == ' ';
+  }
 }
 
 class CharacterString {
