@@ -271,6 +271,35 @@ class CharacterString {
 
   iterate(iterator) { _characters.iterate(iterator) }
   iteratorValue(iterator) { _characters.iteratorValue(iterator) }
+
+  escape {
+    var string = CharacterString.new("");
+
+    for (c in this) {
+      var escape = __wellknown_character_to_escaped[c.codePoint];
+      if (escape != null) {
+        string = string + escape;
+        continue;
+      }
+      if (!c.isPrintable) {
+        var escape = Formatter.hex_auto_width(c.codePoint);
+        if (escape.count == 2) {
+          escape = 'x' + escape;
+        } else if (escape.count == 4) {
+          escape = 'u' + escape;
+        } else if (escape.count == 8) {
+          escape = 'U' + escape;
+        } else {
+          internal_error;
+        }
+        string = string + '\\' + escape;
+        continue;
+      }
+
+      string = string + c;
+    }
+    return string;
+  }
 }
 
 class Formatter {
