@@ -300,6 +300,45 @@ class CharacterString {
     }
     return string;
   }
+
+  unescape {
+    var string = "";
+
+    var it;
+    while (it = .iterate(it)) {
+      var c = .iteratorValue(it);
+
+      if (c == '\\') {
+        it = .iterate(it);
+        c = .iteratorValue(it);
+
+        var hex_count;
+        var e = __wellknown_character_from_escaped[c.codePoint];
+        if (e) {
+          c = e;
+        } else if (c == 'u') {
+          hex_count = 4;
+        } else if (c == 'U') {
+          hex_count = 8;
+        } else if (c == 'x') {
+          hex_count = 2;
+        } else {
+          Fiber.abort("Invalid escape character '%(c)'.");
+        }
+
+        if (hex_count) {
+          it = it + hex_count + 1;
+          // TODO: improve conversion
+          c = Character.fromCodePoint(
+            Num.fromString("0x" + this[(it - hex_count)...it].toString)
+          );
+        }
+      }
+
+      string = string + c.toString;
+    }
+    return CharacterString.fromString(string);
+  }
 }
 
 class Formatter {
