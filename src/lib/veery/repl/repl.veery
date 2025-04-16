@@ -277,7 +277,7 @@ class Repl {
       if (_actions.onKeyPressed(key_code)) {
         // Nothing to do
       } else if (character != null && character.isPrintable) {
-        insertChar(key_code);
+        insertChar(character);
       } else {
         System.print("Unhandled key-code [dec]: %(key_code)");
       }
@@ -309,9 +309,8 @@ class Repl {
   }
 
   // Inserts the character with [byte] value at the current cursor position.
-  insertChar(byte) {
-    var char = String.fromCodePoint(byte);
-    _line = _line[0..._cursor] + char + _line[_cursor..-1];
+  insertChar(character) {
+    _line = _line[0..._cursor] + character + _line[_cursor..-1];
     _cursor = _cursor + 1;
   }
 
