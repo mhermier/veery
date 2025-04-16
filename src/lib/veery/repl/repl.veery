@@ -271,14 +271,14 @@ class Repl {
     _event_loop.run();
     while (true) {
       var key = _input.read();
-      var byte = key.toKeyCode;
+      var key_code = key.toKeyCode;
 
-      if (_actions.onKeyPressed(byte)) {
+      if (_actions.onKeyPressed(key_code)) {
         // Nothing to do
-      } else if (byte >= Chars.space) {
-        insertChar(byte);
+      } else if (key_code >= Chars.space) {
+        insertChar(key_code);
       } else {
-        System.print("Unhandled key-code [dec]: %(byte)");
+        System.print("Unhandled key-code [dec]: %(key_code)");
       }
 
       if (!_event_loop.isRuning) break;
