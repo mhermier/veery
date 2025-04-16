@@ -8,7 +8,6 @@ import "veery/compiler/abstract_lang/source_file" for SourceFile;
 import "veery/compiler/abstract_lang/token" for Token, TokenType;
 import "veery/character" for Character;
 import "veery/character_string" for CharacterString;
-import "veery/chars" for Chars;
 import "veery/event/input" for Input;
 import "veery/event/key" for Key;
 import "veery/event/loop" for Loop;
