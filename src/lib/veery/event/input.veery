@@ -71,8 +71,6 @@ class Input {
     __escape_left_braket_key_codes = {
 //       1: Key.fromString("Home"    ),
 //       2: Key.fromString("Insert"  ),
-//       1: Key.fromString("Home"    ),
-//       2: Key.fromString("Insert"  ),
 //       3: Key.fromString("Delete"  ),
 //       4: Key.fromString("End"     ),
 //       5: Key.fromString("PageUp"  ),
