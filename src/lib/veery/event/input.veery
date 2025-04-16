@@ -204,6 +204,11 @@ class Input {
     return key;
   }
 
+  match_(c) {
+    if (peek_() != c) return null;
+    return read_();
+  }
+
   read_() { _reader.read() }
   peek_() { _reader.peek() }
   peek_(n) { _reader.peek(n) }
