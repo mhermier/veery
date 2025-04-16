@@ -262,7 +262,7 @@ class CharacterString {
   >=(rhs) { Abort.TODO() }
 
   +(rhs) {
-    if (rhs is Character) Abort.TODO();
+    if (rhs is Character) return CharacterString.fromCharacters(_characters + [ rhs ]);
     if (rhs is CharacterString) return CharacterString.fromCharacters(_characters + rhs.characters);
     if (rhs is String) return this + CharacterString.fromString(rhs); // TODO: Remove compatibility ?
 
