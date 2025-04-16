@@ -169,20 +169,49 @@ class Input {
       } else if (c == 'O') {
         return handle_map_(__escape_O_code_points, read_().codePoint);
       } else if (c == '[') {
-        if (peek_().isDigit) {
-          var key_code = null;
-          var modifier = 1;
+        var key;
+        var modifier = 1;
 
+        if (peek_().isDigit) {
           var key_code_or_modifier = readNumber_();
-          if (peek_() == ';') {
-            Abort.todo("Handle keycode with modifier");
+
+          if (peek_() == ';' || peek_() == '~') {
+            // xterm sequence
+            key = __escape_left_braket_key_codes[key_code_or_modifier];
+            if (key == null) {
+              Abort.todo("Missing key code %(key_code_or_modifier)");
+            }
+
+            if (match_(';') && peek_().isDigit) {
+              modifier = readNumber_();
+            }
+            if (!peek_() == '~') {
+              Abort.todo("~ character expected to close keycode sequence");
+            }
+          } else {
+            // VT sequence
+            modifier = key_code_or_modifier;
           }
-          if (peek_() == '~') {
-          }
-          Abort.todo("Handle modifier or key code");
         }
 
-        return handle_map_(__escape_left_braket_code_points, read_().codePoint);
+        if (match_('~')) {
+          // xterm sequence
+          if (key == null) {
+            Abort.todo("Missing key code %(code)");
+          }
+        } else {
+          // VT sequence
+          var code = read_();
+          key = __escape_left_braket_code_points[code.codePoint];
+          if (key == null) {
+            Abort.todo("Missing key code %(code)");
+          }
+        }
+
+        if (modifier != 1) {
+          Abort.todo("Handle modifiers");
+        }
+        return key;
       } else {
         Abort.todo("Handle ESC %(c) sequences");
       }
