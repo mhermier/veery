@@ -272,10 +272,11 @@ class Repl {
     while (true) {
       var key = _input.read();
       var key_code = key.toKeyCode;
+      var character = key_code >= 0 ? Character.new(key_code) : null;
 
       if (_actions.onKeyPressed(key_code)) {
         // Nothing to do
-      } else if (key_code >= Chars.space) {
+      } else if (character != null && character.isPrintable) {
         insertChar(key_code);
       } else {
         System.print("Unhandled key-code [dec]: %(key_code)");
