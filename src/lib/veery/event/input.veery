@@ -214,7 +214,11 @@ class Input {
   peek_(n) { _reader.peek(n) }
 
   readNumber_() {
-    Abort.todo("read number");
+    var number_string = "";
+    while (peek_().isDigit) {
+      number_string = number_string + read_().toString;
+    }
+    return Num.fromString(number_string);
   }
 }
 Input.init_();
