@@ -35,6 +35,8 @@ class Input {
       0x18: Key.fromString("Ctrl+X"      ),
       0x19: Key.fromString("Ctrl+Y"      ),
       0x1a: Key.fromString("Ctrl+Z"      ),
+
+      0x7f: Key.fromString("Backspace"   ),
     };
 
     __escape_O_code_points = {

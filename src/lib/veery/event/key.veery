@@ -21,6 +21,7 @@ class Key {
     // Function keys: F1, F2, ...
     for (i in 0..20) Key.new_("F%(i)");
 
+               Key.new_("Backspace");
     __delete = Key.new_("Delete"  );
     __down   = Key.new_("Down"    );
     __end    = Key.new_("End"     );

@@ -150,7 +150,7 @@ class Repl {
           previousHistory();
         },
       Action.new("Delete left").
-        setKeyChord(Chars.delete).
+        setKeyChord("Backspace").
         setOnTriggered {
           deleteLeft();
         },
@@ -222,7 +222,6 @@ class Repl {
 
   handleChar(byte) {
     if (byte >= Chars.space) {
-      // TODO: handle DEL (0x7f)
       insertChar(byte);
     } else if (byte == Chars.ctrlW) { // Handle Ctrl+w
       // Delete trailing spaces
