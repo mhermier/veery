@@ -156,9 +156,9 @@ class Input {
       } else {
         Abort.todo("Handle ESC %(c) sequences");
       }
-    } else {
-      return Key.fromCharacter(c);
     }
+
+    return Key.fromCharacter(c);
   }
 
   handle_map_(map, code) {
