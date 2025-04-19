@@ -1,0 +1,32 @@
+
+import "veery/compiler/abstract_lang/recursive_visitor" for RecursiveVisitor;
+import "veery/compiler/abstract_lang/visitor" for AbstractVisitor;
+
+class IsRValue_ is AbstractVisitor {
+  construct new_() { }
+
+  call(node) { node.accept(this, null) }
+
+//  visit                        (node, visitor_data) { internal_error }
+
+  visitExpr                    (node, visitor_data) { true }
+  visitAssignmentExpr          (node, visitor_data) { .call(node.target) }
+  visitCallExpr                (node, visitor_data) { node.arguments != null || node.blockArgument != null }
+  visitFieldExpr               (node, visitor_data) { false }
+  visitStaticFieldExpr         (node, visitor_data) { false }
+  visitSubscriptExpr           (node, visitor_data) { false }
+}
+var IsRValue = IsRValue_.new_();
+
+class RValueAssignmentValidator is RecursiveVisitor {
+  construct new() {
+  }
+
+  visitAssignmentExpr(node, visitor_data) {
+    if (IsRValue.call(node)) {
+      visitor_data.report(visitor_data.compiler.generic_error,
+          "Cannot assign to an rvalue", [node.equal]);
+    }
+    return super(node, visitor_data);
+  }
+}

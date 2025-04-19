@@ -22,6 +22,7 @@ import "wren_lang/source_printer" for SourcePrinter;
 import "wren_lang/transform/enum_transform" for EnumTransform;
 import "wren_lang/transform/strict_equality_transform" for StrictEqualityTransform;
 import "wren_lang/transform/this_module_transform" for ThisModuleTransform;
+import "wren_lang/validator/rvalue_assignment_validator" for RValueAssignmentValidator;
 
 import "veery/compiler/abstract_lang/validator/call_receiver_validator" for CallReceiverValidator;
 
@@ -160,6 +161,7 @@ class Compiler {
 
     // Output AST validation
     if (false) pipeline = pipeline | CallReceiverValidator.new();
+    if (true)  pipeline = pipeline | RValueAssignmentValidator.new();
 
     // TODO: Use a reporter here ?
     var has_warning_modifiers_errors = false;

@@ -55,6 +55,7 @@ ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/source_printer.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/transform/enum_transform.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/transform/strict_equality_transform.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/transform/this_module_transform.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/wren_lang/validator/rvalue_assignment_validator.wren
 
 .PHONY: all
 all: $(ALL_OBJECTS)
