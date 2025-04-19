@@ -8,6 +8,34 @@ import "veery/input_output/system_console" for System_console;
 class Input {
   static init_() {
     // See https://en.wikipedia.org/wiki/ANSI_escape_code
+    __well_known_codes = {
+      0x01: Key.fromString("Ctrl+A"      ),
+      0x02: Key.fromString("Ctrl+B"      ),
+      0x03: Key.fromString("Ctrl+C"      ),
+      0x04: Key.fromString("Ctrl+D"      ),
+      0x05: Key.fromString("Ctrl+E"      ),
+      0x06: Key.fromString("Ctrl+F"      ),
+      0x07: Key.fromString("Ctrl+G"      ), /* TerminalBell */
+      0x08: Key.fromString("Ctrl+H"      ), /* Backspace */
+      0x09: Key.fromString("Ctrl+I"      ), /* HorizontalTabulation */
+      0x0a: Key.fromString("Ctrl+J"      ), /* Linefeed */
+      0x0b: Key.fromString("Ctrl+K"      ), /* VerticalTabulation */
+      0x0c: Key.fromString("Ctrl+L"      ), /* Formfeed*/
+      0x0d: Key.fromString("Ctrl+M"      ), /* CarriageReturn */
+      0x0e: Key.fromString("Ctrl+N"      ),
+      0x0f: Key.fromString("Ctrl+O"      ),
+      0x10: Key.fromString("Ctrl+P"      ),
+      0x11: Key.fromString("Ctrl+Q"      ),
+      0x12: Key.fromString("Ctrl+R"      ),
+      0x13: Key.fromString("Ctrl+S"      ),
+      0x14: Key.fromString("Ctrl+T"      ),
+      0x15: Key.fromString("Ctrl+U"      ),
+      0x16: Key.fromString("Ctrl+V"      ),
+      0x17: Key.fromString("Ctrl+W"      ),
+      0x18: Key.fromString("Ctrl+X"      ),
+      0x19: Key.fromString("Ctrl+Y"      ),
+      0x1a: Key.fromString("Ctrl+Z"      ),
+    };
 
     __escape_O_code_points = {
 //      'A'.codePoint: Key.fromString("Up"      ),
@@ -156,6 +184,11 @@ class Input {
       } else {
         Abort.todo("Handle ESC %(c) sequences");
       }
+    }
+
+    var key = __well_known_codes[c.codePoint];
+    if (key != null) {
+      return key;
     }
 
     return Key.fromCharacter(c);
