@@ -182,6 +182,29 @@ class Character is Magnitude {
 }
 
 class CharacterString {
+  static init_() {
+    __wellknown_character_from_escaped = {};
+    __wellknown_character_to_escaped = {};
+    var add = Fn.new {|code_point, escape_char|
+      __wellknown_character_from_escaped[escape_char.codePoint] = Character.new(code_point);
+      __wellknown_character_to_escaped  [code_point]            = '\\' + escape_char;
+    };
+
+    add.call(0x00, '0');
+    add.call(0x07, 'a');
+    add.call(0x08, 'b');
+    add.call(0x09, 't');
+    add.call(0x0a, 'n');
+    add.call(0x0b, 'v');
+    add.call(0x0c, 'f');
+    add.call(0x0d, 'r');
+    add.call(0x1b, 'e');
+    add.call(0x22, '"');
+    add.call(0x25, '%');
+    add.call(0x27, '\'');
+    add.call(0x5c, '\\');
+  }
+
   construct new_(characters, toString) {
     _characters = characters;
     _toString = toString;
@@ -257,3 +280,4 @@ class CharacterString {
 }
 
 Character.init_();
+CharacterString.init_();
