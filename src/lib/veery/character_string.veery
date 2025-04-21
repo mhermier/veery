@@ -126,6 +126,14 @@ class Character is Magnitude {
   ==(other) { other is Character && _codePoint == other.codePoint }
   < (other) { other is Character && _codePoint < other.codePoint }
 
+  +(rhs) {
+    if (rhs is Character) return CharacterString.fromCharacters([this, rhs]);
+    if (rhs is CharacterString) return CharacterString.fromCharacters([this] + rhs.characters);
+    if (rhs is String) return this + CharacterString.fromString(rhs); // TODO: Remove compatibility ?
+
+    Abort.runtime_error("Right hand side must be a character or a character string.");
+  }
+
   ..(other) { Abort.todo() }
   ...(other) { Abort.todo() }
 
