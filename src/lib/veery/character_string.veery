@@ -134,6 +134,8 @@ class Character is Magnitude {
     Abort.runtime_error("Right hand side must be a character or a character string.");
   }
 
+  *(count)   { CharacterString.filled(count, this) }
+
   ..(other) { Abort.todo() }
   ...(other) { Abort.todo() }
 
@@ -166,6 +168,10 @@ class CharacterString {
   construct new_(characters, toString) {
     _characters = characters;
     _toString = toString;
+  }
+
+  static filled(size, character) {
+    return .fromCharacters(List.filled(size, character));
   }
 
   static fromCharacters(characters) {
