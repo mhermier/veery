@@ -33,6 +33,7 @@ ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/compiler/warning.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/event/input.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/event/key.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/event/loop.wren
+ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/formatter.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/byte_to_utf8_reader.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/circular_buffer_reader.wren
 ALL_OBJECTS+=$(BUILDDIR)/wren_modules/veery/input_output/system_console.wren

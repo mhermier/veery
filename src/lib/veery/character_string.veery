@@ -273,5 +273,33 @@ class CharacterString {
   iteratorValue(iterator) { _characters.iteratorValue(iterator) }
 }
 
+class Formatter {
+  static init_() {
+    __hex = CharacterString.new("0123456789abcdef");
+  }
+
+  static hex(value) {
+    var formatted = CharacterString.new("");
+    while (true) {
+      formatted = formatted + __hex[value & 0x0f];
+      value = value >> 4;
+      if (value == 0) {
+        break;
+      }
+    }
+    return formatted;
+  }
+
+  static hex_auto_width(value) {
+    var hex = .hex(value);
+    var hex_width = 2;
+    if (hex.count > hex_width) {
+      hex_width = hex_width << 2;
+    }
+    return '0' * (hex_width - hex.count) + hex;
+  }
+}
+
 Character.init_();
 CharacterString.init_();
+Formatter.init_();
