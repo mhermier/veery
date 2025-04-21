@@ -136,8 +136,14 @@ class Character is Magnitude {
 
   *(count)   { CharacterString.filled(count, this) }
 
-  ..(other) { Abort.todo() }
-  ...(other) { Abort.todo() }
+  ..(rhs)    {    return CharacterString.fromCharacters(
+                      (this.codePoint..rhs.codePoint).map {|codePoint|
+                          return Character.fromCodePoint(codePoint)});
+             }
+  ...(rhs)   {    return CharacterString.fromCharacters(
+                      (this.codePoint...rhs.codePoint).map {|codePoint|
+                          return Character.fromCodePoint(codePoint)});
+             }
 
   hash { Abort.todo() }
 
