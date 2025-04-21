@@ -1,5 +1,0 @@
-
-class FormatAll {
-  static call(format, args) {
-  }
-}

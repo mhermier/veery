@@ -1,6 +1,0 @@
-
-import "veery/format/format_all" for FormatAll
-
-class WriteAll {
-  static call(format, args) { System.print(FormatAll.call(format, args)) }
-}
