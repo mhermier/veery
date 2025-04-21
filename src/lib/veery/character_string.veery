@@ -247,13 +247,7 @@ class CharacterString {
     Abort.runtime_error("Subscript must be a number or a range.");
   }
 
-  ==(rhs) {
-    if (rhs is Character) Abort.TODO();
-    if (rhs is CharacterString) return toString == rhs.toString;
-    if (rhs is String) return toString == rhs; // TODO: Remove compatibility ?
-
-    Abort.runtime_error("Right hand side must be a character or a character string.");
-  }
+  ==(rhs) { (rhs is Character || rhs is CharacterString || rhs is String) && toString == rhs.toString }
   !=(rhs) { !(this == rhs) }
 
   <(rhs) { Abort.TODO() }
