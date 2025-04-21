@@ -104,13 +104,17 @@ class Character is Magnitude {
     return string;
   }
 
+//  <=>(other) { _codePoint <=> other.codePoint }
+  ==(other) { other is Character && _codePoint == other.codePoint }
+  < (other) { other is Character && _codePoint < other.codePoint }
+
+  ..(other) { Abort.todo() }
+  ...(other) { Abort.todo() }
+
   hash { Abort.todo() }
 
   codePoint { _codePoint }
   toString    { _toString  }
-
-  ..(other) { Abort.todo() }
-  ...(other) { Abort.todo() }
 
   isAlpha {
     return isLower ||
@@ -130,10 +134,6 @@ class Character is Magnitude {
 
   isLower { this >= 'a' && this <= 'z' }
   isUpper { this >= 'A' && this <= 'Z' }
-
-//  <=>(other) { _codePoint <=> other.codePoint }
-  ==(other) { other is Character && _codePoint == other.codePoint }
-  < (other) { other is Character && _codePoint < other.codePoint }
 }
 
 class CharacterString {
