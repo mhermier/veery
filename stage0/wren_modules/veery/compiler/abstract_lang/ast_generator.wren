@@ -19,11 +19,11 @@ class Module is Node {
     _statements = statements;
   }
 
-  statements { _statements }
+  statements { return _statements }
 
-  accept(visitor) { visitor.visitModule(this) }
+  accept(visitor) { return visitor.visitModule(this) }
 
-  toString { \"Module(\%(_statements))\" }
+  toString { return \"Module(\%(_statements))\" }
 }
 
 class MapEntryNode {
@@ -32,12 +32,12 @@ class MapEntryNode {
     _value = value;
   }
 
-  key { _key }
-  value { _value }
+  key { return _key }
+  value { return _value }
 
-  accept(visitor) { visitor.visitMapEntry(this) }
+  accept(visitor) { return visitor.visitMapEntry(this) }
 
-  toString { \"\%(_key): \%(_value)\" }
+  toString { return \"\%(_key): \%(_value)\" }
 }
 
 class Method {
@@ -52,16 +52,16 @@ class Method {
     _body = body;
   }
 
-  foreignKeyword        { _foreignKeyword }
-  staticKeyword         { _staticKeyword }
-  constructKeyword      { _constructKeyword }
-  name                  { _name }
-  subscriptParameters   { _subscriptParameters }
-  setter                { _setter }
-  parenthesisParameters { _parenthesisParameters }
-  body                  { _body }
+  foreignKeyword        { return _foreignKeyword }
+  staticKeyword         { return _staticKeyword }
+  constructKeyword      { return _constructKeyword }
+  name                  { return _name }
+  subscriptParameters   { return _subscriptParameters }
+  setter                { return _setter }
+  parenthesisParameters { return _parenthesisParameters }
+  body                  { return _body }
 
-  accept(visitor) { visitor.visitMethod(this) }
+  accept(visitor) { return visitor.visitMethod(this) }
 
   toString {
     return \"Method(\%(_staticKeyword) \%(_constructKeyword) \%(_name) \%(_body))\";
@@ -75,10 +75,10 @@ class Body {
     _statements = statements;
   }
 
-  parameters { _parameters }
-  statements { _statements }
+  parameters { return _parameters }
+  statements { return _statements }
 
-  accept(visitor) { visitor.visitBody(this) }
+  accept(visitor) { return visitor.visitBody(this) }
 
   toString {
     return \"Body(\%(_parameters) \%(_statements))\";
@@ -101,10 +101,10 @@ class Body {
       writeLine("  }")
       writeLine()
       for (field in fields) {
-        writeLine("  %(field) { _%(field) }")
+        writeLine("  %(field) { return _%(field) }")
       }
       writeLine()
-      writeLine("  accept(visitor) { visitor.visit%(name)%(superclass)(this) }")
+      writeLine("  accept(visitor) { return visitor.visit%(name)%(superclass)(this) }")
       writeLine()
       writeLine("  toString {")
       var interpolation = fields.map{|field|
