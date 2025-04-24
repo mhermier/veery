@@ -40,12 +40,12 @@ class Compiler {
   }
 
   // TODO: Add generic_warning(severity) to transform any severity to a Generic context?
-  generic_notice  { _generic_notice }
-  generic_warning { _generic_warning }
-  generic_error   { _generic_error }
+  generic_notice  { return _generic_notice }
+  generic_warning { return _generic_warning }
+  generic_error   { return _generic_error }
 
-  warnings { _warnings }
-  warning(name) { _warnings[name] }
+  warnings { return _warnings }
+  warning(name) { return _warnings[name] }
 
   register_warning(name, desc, severity) {
     if (warning(name) != null) {

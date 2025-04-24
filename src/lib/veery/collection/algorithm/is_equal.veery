@@ -1,6 +1,6 @@
 
 class IsEqual {
-  static call(sequenceableLeft, sequenceableRight) { call(sequenceableLeft, sequenceableRight, ... ) }
+  static call(sequenceableLeft, sequenceableRight) { return call(sequenceableLeft, sequenceableRight, ... ) }
   static call(sequenceableLeft, sequenceableRight, binaryPredicate) {
     var iteratorLeft
     var iteratorRight

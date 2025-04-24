@@ -136,7 +136,7 @@ class Input {
     };
   }
 
-  static new() { new(System_console.input) }
+  static new() { return new(System_console.input) }
   construct new(reader) {
     _reader = Circular_buffer_reader.new(reader);
   }
@@ -238,9 +238,9 @@ class Input {
     return read_();
   }
 
-  read_() { _reader.read() }
-  peek_() { _reader.peek() }
-  peek_(n) { _reader.peek(n) }
+  read_() { return _reader.read() }
+  peek_() { return _reader.peek() }
+  peek_(n) { return _reader.peek(n) }
 
   readNumber_() {
     var number_string = "";

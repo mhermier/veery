@@ -26,7 +26,7 @@ class Resolver is RecursiveVisitor {
     _scope.checkForwardReferences();
   }
 
-//  visitMethod(node, visitor_data) { super(node, visitor_data) }
+//  visitMethod(node, visitor_data) { return super(node, visitor_data) }
 
   visitBody(node, visitor_data) {
     _scope.begin();
@@ -49,7 +49,7 @@ class Resolver is RecursiveVisitor {
       _reporter.call(Severity.Error, "Invalid left argument type: %(node.target.type)", [node.equal]);
   }
 
-//  visitBoolExpr(node, visitor_data) { super(node, visitor_data) }
+//  visitBoolExpr(node, visitor_data) { return super(node, visitor_data) }
 
   visitCallExpr(node, visitor_data) {
     // TODO: Resolve name if there is no receiver.
@@ -70,24 +70,24 @@ class Resolver is RecursiveVisitor {
     if (node.blockArgument != null) node.blockArgument.accept(this, visitor_data);
   }
 
-//  visitConditionalExpr(node, visitor_data) { super(node, visitor_data) }
+//  visitConditionalExpr(node, visitor_data) { return super(node, visitor_data) }
 
   // TODO: Make sure we're inside instance method.
-//  visitFieldExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitGroupingExpr(node, visitor_data) { super(node, visitor_data) }
+//  visitFieldExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitGroupingExpr(node, visitor_data) { return super(node, visitor_data) }
 
-//  visitInfixExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitInterpolationExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitListExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitMapExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitNullExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitNumExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitPrefixExpr(node, visitor_data) { super(node, visitor_data) }
+//  visitInfixExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitInterpolationExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitListExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitMapExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitNullExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitNumExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitPrefixExpr(node, visitor_data) { return super(node, visitor_data) }
   // TODO: Make sure we're inside class.
-//  visitStaticFieldExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitStringExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitSubscriptExpr(node, visitor_data) { super(node, visitor_data) }
-//  visitThisExpr(node, visitor_data) { super(node, visitor_data) }
+//  visitStaticFieldExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitStringExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitSubscriptExpr(node, visitor_data) { return super(node, visitor_data) }
+//  visitThisExpr(node, visitor_data) { return super(node, visitor_data) }
 
   // Statements.
 
@@ -98,7 +98,7 @@ class Resolver is RecursiveVisitor {
   }
 
   // TODO: Warn on dead code.
-//  visitBreakStmt(node, visitor_data) { super(node, visitor_data) }
+//  visitBreakStmt(node, visitor_data) { return super(node, visitor_data) }
 
   visitClassStmt(node, visitor_data) {
     _scope.declare(node.name);
@@ -116,7 +116,7 @@ class Resolver is RecursiveVisitor {
     _scope.end();
   }
 
-//  visitIfStmt(node, visitor_data) { super(node, visitor_data) }
+//  visitIfStmt(node, visitor_data) { return super(node, visitor_data) }
 
   visitImportStmt(node, visitor_data) {
     declareVariables(node.variables);
@@ -124,14 +124,14 @@ class Resolver is RecursiveVisitor {
   }
 
   // TODO: Warn on dead code.
-//  visitReturnStmt(node, visitor_data) { super(node, visitor_data) }
+//  visitReturnStmt(node, visitor_data) { return super(node, visitor_data) }
 
   visitVarStmt(node, visitor_data) {
     _scope.declare(node.name);
     super(node, visitor_data);
   }
 
-//  visitWhileStmt(node, visitor_data) { super(node, visitor_data) }
+//  visitWhileStmt(node, visitor_data) { return super(node, visitor_data) }
 
   // Declare [variables] in the current scope from the given list of name
   // tokens.

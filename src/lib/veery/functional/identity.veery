@@ -1,4 +1,4 @@
 
 class Identity {
-  static call(arg) { arg }
+  static call(arg) { return arg }
 }

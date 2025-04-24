@@ -4,7 +4,7 @@ class Loop {
     _isRuning = false
   }
 
-  isRuning { _isRuning }
+  isRuning { return _isRuning }
 
   run() {
     _isRuning = true

@@ -55,7 +55,7 @@ class IsPrime {
 
       // Perform a segmented sieve
       var isPrime = List.filled(high - low + 1, true)
-      for (prime in __primes) { // FIXME: only need to test primes up to sqrt of high
+      for (prime in __primes) { return // FIXME: only need to test primes up to sqrt of high
         var composite = Maximum.call(prime * prime, ((low + prime - 1) / prime).floor * prime)
         while (composite <= high) {
           //System.print("composite %(composite - low)")
@@ -83,7 +83,7 @@ class IsPrime {
     return BinarySearch.call(__primes, n) != null
   }
 
-  static primes_ { __primes }
+  static primes_ { return __primes }
 }
 
 IsPrime.init_()

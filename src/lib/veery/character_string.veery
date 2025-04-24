@@ -57,9 +57,9 @@ class Character is Magnitude {
     return new_(codePoints[0], string);
   }
 
-//  <=>(other) { _codePoint <=> other.codePoint }
-  ==(other) { other is Character && _codePoint == other.codePoint }
-  < (other) { other is Character && _codePoint < other.codePoint }
+//  <=>(other) { return _codePoint <=> other.codePoint }
+  ==(other) { return other is Character && _codePoint == other.codePoint }
+  < (other) { return other is Character && _codePoint < other.codePoint }
 
   +(rhs) {
     if (rhs is Character) return CharacterString.fromCharacters([this, rhs]);
@@ -69,7 +69,7 @@ class Character is Magnitude {
     Abort.runtime_error("Right hand side must be a character or a character string.");
   }
 
-  *(count)   { CharacterString.filled(count, this) }
+  *(count)   { return CharacterString.filled(count, this) }
 
   ..(rhs)    {    return CharacterString.fromCharacters(
                       (this.codePoint..rhs.codePoint).map {|codePoint|
@@ -80,10 +80,10 @@ class Character is Magnitude {
                           return Character.fromCodePoint(codePoint)});
              }
 
-  hash { Abort.todo() }
+  hash { return Abort.todo() }
 
-  codePoint { _codePoint }
-  toString    { _toString  }
+  codePoint { return _codePoint }
+  toString    { return _toString  }
 
   isAlpha {
     return isLower ||
@@ -91,9 +91,9 @@ class Character is Magnitude {
            this == '_';
   }
 
-  isDigit { this >= '0' && this <= '9' }
+  isDigit { return this >= '0' && this <= '9' }
 
-  isAlphaNumeric { isAlpha || isDigit }
+  isAlphaNumeric { return isAlpha || isDigit }
 
   isHexDigit {
     return isDigit ||
@@ -101,10 +101,10 @@ class Character is Magnitude {
            this >= 'A' && this <= 'F';
   }
 
-  isLower { this >= 'a' && this <= 'z' }
-  isUpper { this >= 'A' && this <= 'Z' }
+  isLower { return this >= 'a' && this <= 'z' }
+  isUpper { return this >= 'A' && this <= 'Z' }
 
-  isPrintable { this >= ' ' && this != Character.fromCodePoint(0x7f) }
+  isPrintable { return this >= ' ' && this != Character.fromCodePoint(0x7f) }
 
   isSpace {
     return this == '\t' ||
@@ -182,13 +182,13 @@ class CharacterString {
     Abort.runtime_error("Subscript must be a number or a range.");
   }
 
-  ==(rhs) { (rhs is Character || rhs is CharacterString || rhs is String) && toString == rhs.toString }
-  !=(rhs) { !(this == rhs) }
+  ==(rhs) { return (rhs is Character || rhs is CharacterString || rhs is String) && toString == rhs.toString }
+  !=(rhs) { return !(this == rhs) }
 
-  <(rhs) { Abort.TODO() }
-  <=(rhs) { Abort.TODO() }
-  >(rhs) { Abort.TODO() }
-  >=(rhs) { Abort.TODO() }
+  <(rhs) { return Abort.TODO() }
+  <=(rhs) { return Abort.TODO() }
+  >(rhs) { return Abort.TODO() }
+  >=(rhs) { return Abort.TODO() }
 
   +(rhs) {
     if (rhs is Character) return CharacterString.fromCharacters(_characters + [ rhs ]);
@@ -198,14 +198,14 @@ class CharacterString {
     Abort.runtime_error("Right hand side must be a character or a character string.");
   }
 
-  count { _characters.count }
-  characters { _characters }
-  isEmpty { _characters.count == 0 }
+  count { return _characters.count }
+  characters { return _characters }
+  isEmpty { return _characters.count == 0 }
 
-  toString { _toString }
+  toString { return _toString }
 
-  iterate(iterator) { _characters.iterate(iterator) }
-  iteratorValue(iterator) { _characters.iteratorValue(iterator) }
+  iterate(iterator) { return _characters.iterate(iterator) }
+  iteratorValue(iterator) { return _characters.iteratorValue(iterator) }
 
   escape {
     var string = CharacterString.new("");

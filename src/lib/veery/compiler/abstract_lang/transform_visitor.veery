@@ -102,7 +102,7 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitBoolExpr(node, visitor_data) { node }
+  visitBoolExpr(node, visitor_data) { return node }
 
   visitCallExpr(node, visitor_data) {
     var newNode = CallExpr.new(
@@ -113,7 +113,7 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitCharacterExpr(node, visitor_data) { node }
+  visitCharacterExpr(node, visitor_data) { return node }
 
   visitConditionalExpr(node, visitor_data) {
     var newNode = ConditionalExpr.new(
@@ -125,7 +125,7 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitFieldExpr(node, visitor_data) { node }
+  visitFieldExpr(node, visitor_data) { return node }
 
   visitGroupingExpr(node, visitor_data) {
     var newNode = GroupingExpr.new(
@@ -166,8 +166,8 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitNullExpr(node, visitor_data) { node }
-  visitNumExpr(node, visitor_data) { node }
+  visitNullExpr(node, visitor_data) { return node }
+  visitNumExpr(node, visitor_data) { return node }
 
   visitPrefixExpr(node, visitor_data) {
     var newNode = PrefixExpr.new(
@@ -176,8 +176,8 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitStaticFieldExpr(node, visitor_data) { node }
-  visitStringExpr(node, visitor_data) { node }
+  visitStaticFieldExpr(node, visitor_data) { return node }
+  visitStringExpr(node, visitor_data) { return node }
 
   visitSubscriptExpr(node, visitor_data) {
     var newNode = SubscriptExpr.new(
@@ -196,10 +196,10 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitThisExpr(node, visitor_data) { node }
-  visitThisModuleExpr(node, visitor_data) { node }
+  visitThisExpr(node, visitor_data) { return node }
+  visitThisModuleExpr(node, visitor_data) { return node }
 
-  visitAttributeSpecifier(node, visitor_data) { node }
+  visitAttributeSpecifier(node, visitor_data) { return node }
 
   // Statements.
 
@@ -209,7 +209,7 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitBreakStmt(node, visitor_data) { node }
+  visitBreakStmt(node, visitor_data) { return node }
 
   visitClassStmt(node, visitor_data) {
     var newNode = ClassStmt.new(
@@ -221,9 +221,9 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitContinueStmt(node, visitor_data) { node }
+  visitContinueStmt(node, visitor_data) { return node }
 
-  visitEnumDefinition(node, visitor_data) { node }
+  visitEnumDefinition(node, visitor_data) { return node }
 
   visitForStmt(node, visitor_data) {
     var newNode = ForStmt.new(
@@ -241,7 +241,7 @@ class TransformVisitor is AbstractVisitor {
     return newNode;
   }
 
-  visitImportStmt(node, visitor_data) { node }
+  visitImportStmt(node, visitor_data) { return node }
 
   visitReturnStmt(node, visitor_data) {
     var newNode = ReturnStmt.new(

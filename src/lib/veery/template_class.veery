@@ -15,17 +15,17 @@ class TemplateClass is Type {
     _name        = "%(baseName)[%(Join.call(args, ", "))]"
   }
 
-  baseName { _baseName }
-  args     { _args }
+  baseName { return _baseName }
+  args     { return _args }
 
-  mangledName { _mangledName }
-  name { _name }
+  mangledName { return _mangledName }
+  name { return _name }
 
-  toString { _name }
+  toString { return _name }
 
-  supertype { implementMe }
+  supertype { return implementMe }
 
-  veery_codeGenObject() { veery_codeGenObject(__codeGenObjectOptionsDefault) }
+  veery_codeGenObject() { return veery_codeGenObject(__codeGenObjectOptionsDefault) }
   veery_codeGenObject(options) {
     var code = """
         static veery_lookup_(name) {
@@ -33,17 +33,17 @@ class TemplateClass is Type {
           return __type.veery_Meta.compile("return %(name)").call()
         }
 
-        static veery_type { __type }
+        static veery_type { return __type }
 
         static veery_type_=(type) {
           __type = type
           __type.veery_type_ = this
         }
 
-        type { __type }
+        type { return __type }
 
-        static name { __type.name }
-        static toString { name }
+        static name { return __type.name }
+        static toString { return name }
 
         is(clazz) {
           implementMe
@@ -53,7 +53,7 @@ class TemplateClass is Type {
     if (options["enable_toString"] != false) {
     code = code + """
 
-        toString { "instance of %(__type)" }
+        toString { return "instance of %(__type)" }
       """
     }
     return code

@@ -258,10 +258,10 @@ class Repl {
     };
   }
 
-  cursor { _cursor }
-  cursor=(value) { _cursor = value }
-  line { _line }
-  line=(value) { _line = value }
+  cursor { return _cursor }
+  cursor=(value) { return _cursor = value }
+  line { return _line }
+  line=(value) { return _line = value }
 
   run() {
     Stdin.isRaw = true;

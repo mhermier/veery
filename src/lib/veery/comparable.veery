@@ -3,8 +3,8 @@ import "veery/equalable" for Equalable
 
 trait Comparable implements Equalable {
   // <=>(other)
-  < (other) { Abort.subclass_responsibility() }
-  <=(other) { this < other || this == other }
-  > (other) { !(this <= other) }
-  >=(other) { !(this < other) }
+  < (other) { return Abort.subclass_responsibility() }
+  <=(other) { return this < other || this == other }
+  > (other) { return !(this <= other) }
+  >=(other) { return !(this < other) }
 }

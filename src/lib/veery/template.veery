@@ -10,7 +10,7 @@ class Template is Pack {
     }
   }
 
-  callAll(args) { _generator.call(args) }
+  callAll(args) { return _generator.call(args) }
 
-  static makeTemplateClass(name, args) { TemplateClass.veery_new_(name, args) }
+  static makeTemplateClass(name, args) { return TemplateClass.veery_new_(name, args) }
 }

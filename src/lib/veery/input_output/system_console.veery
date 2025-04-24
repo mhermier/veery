@@ -7,6 +7,6 @@ class System_console {
     __input = Byte_to_UTF8_reader.new(Wren_Stdin_reader_adapter.instance);
   }
 
-  static input { __input }
+  static input { return __input }
 }
 System_console.init_();

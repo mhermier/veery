@@ -2,7 +2,7 @@
 import "veery/less_than" for LessThan
 
 class IsSorted {
-  static call(sequenceable) { call(sequenceable, LessThan) }
+  static call(sequenceable) { return call(sequenceable, LessThan) }
   static call(sequenceable, compare) {
     implementMe
   }

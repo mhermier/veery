@@ -2,11 +2,11 @@
 import "veery/template" for Template
 
 class Result {
-  static []         { __class }
-  static [T]        { this[T, Object] }
-  static [T, Error] { __template[T, Error] }
+  static []         { return __class }
+  static [T]        { return this[T, Object] }
+  static [T, Error] { return __template[T, Error] }
 
-  static try(fn) { __class.try(fn) }
+  static try(fn) { return __class.try(fn) }
 
   static veery_init_() {
     if (__template != null) return
@@ -26,12 +26,12 @@ class Result {
             __Error = veery_type.args[1]
           }
 
-          static errorType { __Error }
-          static valueType { __T }
+          static errorType { return __Error }
+          static valueType { return __T }
 
           // FIXME: Validate types
-          static new(value)   { veery_new_(value, true) }
-          static error(error) { veery_new_(error, false) }
+          static new(value)   { return veery_new_(value, true) }
+          static error(error) { return veery_new_(error, false) }
 
           static try(fn) {
             var fiber = Fiber.new(fn)
@@ -48,7 +48,7 @@ class Result {
             _hasValue = hasValue
           }
 
-          hasValue { _hasValue }
+          hasValue { return _hasValue }
 
           error {
             if (_hasValue) Fiber.throw(\"Trying to access value\")

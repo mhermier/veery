@@ -3,10 +3,10 @@ import "veery/math/middle_point" for MiddlePoint
 
 class BinarySearch {
   static init_() {
-    __defaultIfNotFound = Fn.new { null }
+    __defaultIfNotFound = Fn.new { return null }
   }
 
-  static call(sortedSequence, value) { call(sortedSequence, value, __defaultIfNotFound) }
+  static call(sortedSequence, value) { return call(sortedSequence, value, __defaultIfNotFound) }
   static call(sortedSequence, value, ifNotFound) {
     var lowerIndex = 0
     var upperIndex = sortedSequence.count - 1

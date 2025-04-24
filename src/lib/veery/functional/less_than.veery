@@ -1,4 +1,4 @@
 
 class LessThan {
-  static call(lhs, rhs) { lhs < rhs }
+  static call(lhs, rhs) { return lhs < rhs }
 }

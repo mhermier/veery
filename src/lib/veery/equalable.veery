@@ -1,5 +1,5 @@
 
 trait Equalable {
   ==(other)
-  !=(other) { !(this == other) }
+  !=(other) { return !(this == other) }
 }

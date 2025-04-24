@@ -11,11 +11,11 @@ class Generated_collection_iterator_ is Magnitude {
     _next = null
   }
 
-  generator { _generator }
+  generator { return _generator }
 
-  index { _index }
+  index { return _index }
 
-  previous { _previous }
+  previous { return _previous }
 
   next {
     if (_next != null) {
@@ -31,7 +31,7 @@ class Generated_collection_iterator_ is Magnitude {
     return _next = new(_generator, _index + 1, this)
   }
 
-  value { _value }
+  value { return _value }
 }
 
 class Generated_collection_iterator is Magnitude {
@@ -39,7 +39,7 @@ class Generated_collection_iterator is Magnitude {
     _generator = generator
   }
 
-  clone() { Abort.todo() }
+  clone() { return Abort.todo() }
 
   ==(other) {
     Abort.todo()
@@ -48,19 +48,19 @@ class Generated_collection_iterator is Magnitude {
     Abort.todo()
   }
 
-  [n] { peek(n) }
+  [n] { return peek(n) }
 
-  decrement() { increment(1) }
+  decrement() { return increment(1) }
   decrement(n) {
     Abort.todo()
   }
 
-  increment() { increment(1) }
+  increment() { return increment(1) }
   increment(n) {
     Abort.todo()
   }
 
-  peek { peek(0) }
+  peek { return peek(0) }
   peek(n) {
     Abort.todo()
   }

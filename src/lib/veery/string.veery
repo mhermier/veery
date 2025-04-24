@@ -1,7 +1,7 @@
 
 class string is Sequence {
-  bytes { StringByteSequence.new(this) }
-  codePoints { StringCodePointSequence.new(this) }
+  bytes { return StringByteSequence.new(this) }
+  codePoints { return StringCodePointSequence.new(this) }
 
   split(delimiter) {
     if (!(delimiter is String) || delimiter.isEmpty) {
@@ -54,12 +54,12 @@ class string is Sequence {
     return result
   }
 
-  trim() { trim_("\t\r\n ", true, true) }
-  trim(chars) { trim_(chars, true, true) }
-  trimEnd() { trim_("\t\r\n ", false, true) }
-  trimEnd(chars) { trim_(chars, false, true) }
-  trimStart() { trim_("\t\r\n ", true, false) }
-  trimStart(chars) { trim_(chars, true, false) }
+  trim() { return trim_("\t\r\n ", true, true) }
+  trim(chars) { return trim_(chars, true, true) }
+  trimEnd() { return trim_("\t\r\n ", false, true) }
+  trimEnd(chars) { return trim_(chars, false, true) }
+  trimStart() { return trim_("\t\r\n ", true, false) }
+  trimStart(chars) { return trim_(chars, true, false) }
 
   trim_(chars, trimStart, trimEnd) {
     if (!(chars is String)) {

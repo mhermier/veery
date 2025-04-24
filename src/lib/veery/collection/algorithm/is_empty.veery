@@ -2,5 +2,5 @@
 import "veery/collections/algorithms/count" for Count
 
 class IsEmpty {
-  static call(sequenceable) { Count(sequenceable) == 0 }
+  static call(sequenceable) { return Count(sequenceable) == 0 }
 }

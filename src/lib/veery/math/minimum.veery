@@ -1,4 +1,4 @@
 
 class Minimum {
-  static call(a, b) { (a < b) ? a : b }
+  static call(a, b) { return (a < b) ? a : b }
 }

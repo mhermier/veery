@@ -7,10 +7,10 @@ class EnumDefinition is Stmt {
     _definitions = definitions;
   }
 
-  name { _name }
-  definitions { _definitions }
+  name { return _name }
+  definitions { return _definitions }
 
-  accept(visitor, visitor_data) { visitor.visitEnumDefinition(this, visitor_data) }
+  accept(visitor, visitor_data) { return visitor.visitEnumDefinition(this, visitor_data) }
 
   toString {
     return "EnumDefinition(%(_name) %(_definitions))";

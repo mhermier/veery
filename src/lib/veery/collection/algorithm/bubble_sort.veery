@@ -2,7 +2,7 @@
 import "veery/functional/less_than" for LessThan
 
 /*
-var bubbleSort = Fn.new { |a|
+var bubbleSort = Fn.new { return |a|
     var n = a.count
     while (true) {
         var n2 = 0
@@ -20,7 +20,7 @@ var bubbleSort = Fn.new { |a|
 
 class BubbleSort {
   // OPTIMIZEME ?
-  static call(arrayable) { call(arrayable, LessThan) }
+  static call(arrayable) { return call(arrayable, LessThan) }
   static call(arrayable, compare) {
     var n = arrayable.count
     while (n != 0) {

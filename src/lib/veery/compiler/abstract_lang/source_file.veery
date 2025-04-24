@@ -15,13 +15,13 @@ class SourceFile {
   }
 
   // Gets the byte at [index] in the source file.
-  [index] { _string[index] }
+  [index] { return _string[index] }
 
   // The number of bytes in the source file.
-  count { _string.count }
+  count { return _string.count }
 
   // The file path of the source file.
-  path { _path }
+  path { return _path }
 
   // Gets the 1-based line that the byte at offset lies on.
   columnAt(offset) {
@@ -55,7 +55,7 @@ class SourceFile {
 
   // Gets a substring of the source string starting at [start] with [length]
   // bytes.
-  substring(start, length) { _string[start...(start + length)] }
+  substring(start, length) { return _string[start...(start + length)] }
 
   // Finds the byte offset of the beginning of every line in the source file.
   // This lets us quickly map offsets to lines and vice versa.

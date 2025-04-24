@@ -1,30 +1,30 @@
 
 class Arrayed_collection_iterator {
-  static begin(arrayed_collection) { new_(arrayed_collection, 0, 1) }
-  static end(arrayed_collection)   { new_(arrayed_collection, arrayed_collection.count, 1) }
+  static begin(arrayed_collection) { return new_(arrayed_collection, 0, 1) }
+  static end(arrayed_collection)   { return new_(arrayed_collection, arrayed_collection.count, 1) }
 
-  static reverse_begin(arrayed_collection) { new_(arrayed_collection, -1 + arrayed_collection.count, -1) }
-  static reverse_end(arrayed_collection)   { new_(arrayed_collection, -1                          , -1) }
+  static reverse_begin(arrayed_collection) { return new_(arrayed_collection, -1 + arrayed_collection.count, -1) }
+  static reverse_end(arrayed_collection)   { return new_(arrayed_collection, -1                          , -1) }
 
-  arrayed_collection { _arrayed_collection }
-  currentIndex      { _currentIndex      }
-  step              { _step              }
+  arrayed_collection { return _arrayed_collection }
+  currentIndex      { return _currentIndex      }
+  step              { return _step              }
 
-  clone() { type.new_(_arrayed_collection, _currentIndex, _step) }
+  clone() { return type.new_(_arrayed_collection, _currentIndex, _step) }
 
-  decrement() { decrement(1) }
+  decrement() { return decrement(1) }
   decrement(offset) {
     _currentIndex = indexOf_(-offset)
     return this
   }
 
-  increment() { increment(1) }
+  increment() { return increment(1) }
   increment(offset) {
     _currentIndex = indexOf_(offset)
     return this
   }
 
-  peek() { peek(0) }
+  peek() { return peek(0) }
   peek(offset) {
     // FIXME: validate computed index
     return _arrayed_collection[indexOf_(offset)]

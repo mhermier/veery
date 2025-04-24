@@ -142,8 +142,8 @@ class Tuple {
             __Ts = veery_type.args
           }
 
-          static count { %(count) }
-          static valueTypes { __Ts }
+          static count { return %(count) }
+          static valueTypes { return __Ts }
 
           %(codeForArgs)
 
@@ -151,18 +151,18 @@ class Tuple {
             implementMe
           }
 
-          [subscript] { _data[subscript] }
+          [subscript] { return _data[subscript] }
 
           [subscript] = (value) {
             // FIXME: Validate value type
             return _data[subscript] = value
           }
 
-          count { %(count) }
+          count { return %(count) }
 
           // Satisfiy 'Sequenceable'
-          iterate(it) { _data.iterate(it) }
-          iteratorValue(it) { _data.iteratorValue(it) }
+          iterate(it) { return _data.iterate(it) }
+          iteratorValue(it) { return _data.iteratorValue(it) }
         }
 
         return %(mangledName)

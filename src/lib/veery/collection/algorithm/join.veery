@@ -1,6 +1,6 @@
 
 class Join {
-  static call(seq) { call(seq, "") }
+  static call(seq) { return call(seq, "") }
 
   static call(seq, sep) {
     var first = true

@@ -32,7 +32,7 @@ class Wren_Stdin_reader_adapter is Circular_buffer_reader {
     __instance = new(Stdin);
   }
 
-  static instance { __instance }
+  static instance { return __instance }
 
   // TODO: make private ?
   construct new(input) {

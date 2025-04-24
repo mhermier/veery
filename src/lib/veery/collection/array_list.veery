@@ -6,7 +6,7 @@ class List is Sequence {
     return other
   }
 
-  sort() { sort {|low, high| low < high } }
+  sort() { return sort {|low, high| low < high } }
 
   sort(comparer) {
     if (!(comparer is Fn)) {
@@ -28,7 +28,7 @@ class List is Sequence {
     var p = this[high]
     var i = low - 1
     for (j in low..(high-1)) {
-      if (comparer.call(this[j], p)) {  
+      if (comparer.call(this[j], p)) { return  
         i = i + 1
         var t = this[i]
         this[i] = this[j]
@@ -41,7 +41,7 @@ class List is Sequence {
     return i+1
   }
 
-  toString { "[%(join(", "))]" }
+  toString { return "[%(join(", "))]" }
 
   +(other) {
     var result = this[0..-1]

@@ -10,13 +10,13 @@ class Warning {
     _severity = severity;
   }
 
-  compiler { _compiler }
+  compiler { return _compiler }
 
-  name { _name }
+  name { return _name }
 
-  desc { _desc }
+  desc { return _desc }
 
-  severity { _severity }
+  severity { return _severity }
   severity = (severity) {
     // Only errors can't be altered
     if (_severity != Severity.Error) {

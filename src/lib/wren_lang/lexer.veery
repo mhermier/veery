@@ -193,7 +193,7 @@ class Lexer {
     if (match('_')) type = TokenType.staticField;
 
     // Read the rest of the name.
-    while (match {|c| c.isAlphaNumeric }) {}
+    while (match {|c| return c.isAlphaNumeric }) {}
 
     return makeToken(type);
   }
@@ -231,14 +231,14 @@ class Lexer {
     advance();
 
     // Read the rest of the number.
-    while (match {|c| c.isHexDigit }) {}
+    while (match {|c| return c.isHexDigit }) {}
     return makeToken(TokenType.number);
   }
 
   // Reads a series of whitespace characters.
   readWhitespace() {
     // Read the rest of the whitespace.
-    while (match {|c| c.isSpace }) {}
+    while (match {|c| return c.isSpace }) {}
 
     return makeToken(TokenType.whitespace);
   }
@@ -246,13 +246,13 @@ class Lexer {
   // Reads a number literal.
   readNumber() {
     // Read the rest of the number.
-    while (match {|c| c.isDigit }) {}
+    while (match {|c| return c.isDigit }) {}
 
     // Read floating point.
     if (peek(0) == '.' &&
         peek(1) != null && peek(1).isDigit) { // operator ?.
         match('.');
-        while (match {|c| c.isDigit }) {}
+        while (match {|c| return c.isDigit }) {}
     }
 
     // Handle scientific notation
@@ -260,7 +260,7 @@ class Lexer {
       if (peek(0) == '+' || peek(0) == '-') {
         advance();
       }
-      while (match {|c| c.isDigit }) {}
+      while (match {|c| return c.isDigit }) {}
     }
     return makeToken(TokenType.number);
   }
@@ -268,7 +268,7 @@ class Lexer {
   // Reads an identifier or keyword token.
   readName() {
     // Read the rest of the name.
-    while (match {|c| c.isAlphaNumeric }) {}
+    while (match {|c| return c.isAlphaNumeric }) {}
 
     var text = _source.substring(_start, _current - _start);
     var type = TokenType.name;
@@ -280,7 +280,7 @@ class Lexer {
   }
 
   // Returns `true` if we have scanned all characters.
-  isAtEnd { _current >= _source.count }
+  isAtEnd { return _current >= _source.count }
 
   // Advances past the current character.
   advance() {
@@ -292,7 +292,7 @@ class Lexer {
   }
 
   // Returns the byte value of the current character.
-  peek() { peek(0) }
+  peek() { return peek(0) }
 
   // Returns the byte value of the character [n] bytes past the current
   // character.
@@ -323,5 +323,5 @@ class Lexer {
   }
 
   // Creates a token of [type] from the current character range.
-  makeToken(type) { Token.new(_source, type, _start, _current - _start) }
+  makeToken(type) { return Token.new(_source, type, _start, _current - _start) }
 }

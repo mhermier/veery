@@ -5,16 +5,16 @@ import "veery/compiler/abstract_lang/visitor" for AbstractVisitor;
 class IsRValue_ is AbstractVisitor {
   construct new_() { }
 
-  call(node) { node.accept(this, null) }
+  call(node) { return node.accept(this, null) }
 
-//  visit                        (node, visitor_data) { internal_error }
+//  visit                        (node, visitor_data) { return internal_error }
 
-  visitExpr                    (node, visitor_data) { true }
-  visitAssignmentExpr          (node, visitor_data) { .call(node.target) }
-  visitCallExpr                (node, visitor_data) { node.arguments != null || node.blockArgument != null }
-  visitFieldExpr               (node, visitor_data) { false }
-  visitStaticFieldExpr         (node, visitor_data) { false }
-  visitSubscriptExpr           (node, visitor_data) { false }
+  visitExpr                    (node, visitor_data) { return true }
+  visitAssignmentExpr          (node, visitor_data) { return .call(node.target) }
+  visitCallExpr                (node, visitor_data) { return node.arguments != null || node.blockArgument != null }
+  visitFieldExpr               (node, visitor_data) { return false }
+  visitStaticFieldExpr         (node, visitor_data) { return false }
+  visitSubscriptExpr           (node, visitor_data) { return false }
 }
 var IsRValue = IsRValue_.new_();
 

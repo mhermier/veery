@@ -11,13 +11,13 @@ class Method {
     _parentArity = false
   }
 
-  mangled  { _mangled  }
-  toString { _toString }
+  mangled  { return _mangled  }
+  toString { return _toString }
 
-  isConstruct  { _isConstruct }
-  isStatic     { _isStatic }
-  name         { _name }
-  bracketArity { _bracketArity }
-  setter       { _setter }
-  parenArity   { _parenArity }
+  isConstruct  { return _isConstruct }
+  isStatic     { return _isStatic }
+  name         { return _name }
+  bracketArity { return _bracketArity }
+  setter       { return _setter }
+  parenArity   { return _parenArity }
 }

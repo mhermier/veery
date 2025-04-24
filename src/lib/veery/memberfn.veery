@@ -4,7 +4,7 @@ import "meta" for Meta
 import "veery/template" for Template
 
 class MemberFn {
-  static call(member) { __template.call(member) }
+  static call(member) { return __template.call(member) }
 
   static veery_init_() {
     if (__template != null) return

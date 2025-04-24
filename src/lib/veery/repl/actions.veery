@@ -3,7 +3,7 @@ import "veery/event/key" for Key;
 import "veery/repl/action" for Action;
 
 class Actions {
-  static new() { new {} }
+  static new() { return new {} }
   construct new(setup_fn) {
     _actions = [];
     setup_fn.call(this);

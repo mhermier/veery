@@ -9,13 +9,13 @@ class ArgumentParserResult {
     _arguments       = arguments;
   }
 
-  argument_parser { _argument_parser }
+  argument_parser { return _argument_parser }
 
-  program_name { _program_name }
-  program_name=(program_name) { _program_name = program_name }
+  program_name { return _program_name }
+  program_name=(program_name) { return _program_name = program_name }
 
-  arguments { _arguments }
-  arguments_shift() { _arguments.removeAt(0) }
+  arguments { return _arguments }
+  arguments_shift() { return _arguments.removeAt(0) }
 }
 
 class Option {
@@ -29,20 +29,20 @@ class Option {
     setupFn.call(this);
   }
 
-  short_name { _short_name }
-  short_name = (short_name) { _short_name = short_name }
+  short_name { return _short_name }
+  short_name = (short_name) { return _short_name = short_name }
 
-  long_name { _long_name }
-  long_name = (long_name) { _long_name = long_name }
+  long_name { return _long_name }
+  long_name = (long_name) { return _long_name = long_name }
 
-  arity { _arity }
-  arity = (arity) { _arity = arity }
+  arity { return _arity }
+  arity = (arity) { return _arity = arity }
 
-  help { _help }
-  help = (help) { _help = help }
+  help { return _help }
+  help = (help) { return _help = help }
 
-  callback { _callback }
-  callback = (callback) { _callback = callback }
+  callback { return _callback }
+  callback = (callback) { return _callback = callback }
 }
 
 class ArgumentParser {
@@ -76,11 +76,11 @@ class ArgumentParser {
     }
   }
 
-  program_name { _program_name }
-  program_name=(program_name) { _program_name = program_name }
+  program_name { return _program_name }
+  program_name=(program_name) { return _program_name = program_name }
 
-  program_version { _program_version }
-  program_version=(program_version) { _program_version = program_version }
+  program_version { return _program_version }
+  program_version=(program_version) { return _program_version = program_version }
 
   add_option(setupFn) {
     var option = Option.new(setupFn);

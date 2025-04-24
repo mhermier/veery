@@ -1,4 +1,4 @@
 
 class MiddlePoint {
-  static call(min, max) { min + ((max - min) / 2) }
+  static call(min, max) { return min + ((max - min) / 2) }
 }

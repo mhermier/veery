@@ -63,18 +63,18 @@ class Key {
     Abort.todo("Unknown \"%(s)\" key");
   }
 
-  static delete { __delete }
-  static down   { __down   }
-  static end    { __end    }
-  static home   { __home   }
-  static left   { __left   }
-  static right  { __right  }
-  static up     { __up     }
+  static delete { return __delete }
+  static down   { return __down   }
+  static end    { return __end    }
+  static home   { return __home   }
+  static left   { return __left   }
+  static right  { return __right  }
+  static up     { return __up     }
 
-  hash { Abort.todo() }
+  hash { return Abort.todo() }
 
-  toKeyCode { _toKeyCode }
-  toString  { _toString }
+  toKeyCode { return _toKeyCode }
+  toString  { return _toString }
 }
 
 Key.init_();

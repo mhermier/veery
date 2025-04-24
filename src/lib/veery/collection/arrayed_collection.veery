@@ -10,11 +10,11 @@ class Arrayed_collection {
     Abort.assertion_failed("Index must be a number or a range")
   }
 
-  count { Abort.subclass_responsibility() }
+  count { return Abort.subclass_responsibility() }
 
-  at(index) { Abort.subclass_responsibility() }
+  at(index) { return Abort.subclass_responsibility() }
 
-  middle(startIndex, size) { Abort.subclass_responsibility() }
+  middle(startIndex, size) { return Abort.subclass_responsibility() }
 
   // TODO: Add utility functions first, last, chop, chopped, truncate...
 }

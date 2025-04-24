@@ -5,7 +5,7 @@ import "meta" for Meta
 
 class Type {
 
-  veery_Meta { Meta }
+  veery_Meta { return Meta }
 
   veery_type_=(type) {
     _type = type
@@ -13,7 +13,7 @@ class Type {
     _interfaces = null
   }
 
-  attributes { _type.attributes }
+  attributes { return _type.attributes }
 
   interfaces {
     if (_interfaces != null) return _interfaces
@@ -32,9 +32,9 @@ class Type {
     return _interfaces
   }
 
-  name { _type.name }
+  name { return _type.name }
 
-  supertype { implementMe }
+  supertype { return implementMe }
 
-  toString { name }
+  toString { return name }
 }

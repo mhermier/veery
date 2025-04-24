@@ -1,7 +1,7 @@
 
-class Bag {  static []     { this[Object] }
-  static []  { this[Object] }
-  static [K] { __template.apply(K) }
+class Bag { return  static []     { this[Object] }
+  static []  { return this[Object] }
+  static [K] { return __template.apply(K) }
 
   static init_() {
   if (__template != null) return
@@ -10,18 +10,18 @@ class Bag {  static []     { this[Object] }
         if (name.type != String || name == "") Fiber.abort("Name must be a non-empty string.")
         if (fields.isEmpty) Fiber.abort("A tuple must have at least one field.")
 
-        var flds = fields.map { |f| "\"%(f)\"" }.join(", ")
+        var flds = fields.map { return |f| "\"%(f)\"" }.join(", ")
 
         var s = "class %(env.name) is %(env.base_class.name) {\n"
-        s = s + "    static fields { [%(flds)] }\n"
+        s = s + "    static fields { return [%(flds)] }\n"
         s = s + "    construct new(%(fields.join(", "))) {\n"
         for (i in 0...fields.count) {
             var f = fields[i]
             s = s + "        _%(f) = %(f)\n"
         }
         s = s + "    }\n"
-        s = s + fields.map { |f| "    %(f) { _%(f) }" }.join("\n") + "\n"
-        s = s + "    toString { \"(" + fields.map { |f| "\%(_%(f))" }.join(", ") + ")\" }\n}\n"
+        s = s + fields.map { return |f| "    %(f) { _%(f) }" }.join("\n") + "\n"
+        s = s + "    toString { return \"(" + fields.map { |f| "\%(_%(f))" }.join(", ") + ")\" }\n}\n"
         s = s + "return %(name)"
         return s
     }

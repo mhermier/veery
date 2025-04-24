@@ -7,6 +7,6 @@ class Generated_collection {
     _end = null // FIXME
   }
 
-  begin() { _begin.clone() }
-  end() { _end.clone() }
+  begin() { return _begin.clone() }
+  end() { return _end.clone() }
 }

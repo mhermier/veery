@@ -1,7 +1,7 @@
 
 class system {
-  static input {  }
-  static output {  }
+  static input { return  }
+  static output { return  }
 
   static print() {
     writeString_("\n")

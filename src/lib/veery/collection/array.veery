@@ -3,9 +3,9 @@ import "veery/memoize" for Memoize
 import "veery/template" for Template
 
 class Array {
-  static [count] { this[count, Object] }
+  static [count] { return this[count, Object] }
 
-  static [count, T] { __template[count, T] }
+  static [count, T] { return __template[count, T] }
 
   static new() {
     return __classes[ 0].new()
@@ -92,8 +92,8 @@ class Array {
             __T = veery_type.args[1]
           }
 
-          static count { %(count) }
-          static valueType { __T }
+          static count { return %(count) }
+          static valueType { return __T }
 
           %(codeForArgs)
 
@@ -101,18 +101,18 @@ class Array {
             implementMe
           }
 
-          [subscript] { _data[subscript] }
+          [subscript] { return _data[subscript] }
 
           [subscript] = (value) {
             // FIXME: Validate value type
             return _data[subscript] = value
           }
 
-          count { %(count) }
+          count { return %(count) }
 
           // Satisfiy 'Sequenceable'
-          iterate(it) { _data.iterate(it) }
-          iteratorValue(it) { _data.iteratorValue(it) }
+          iterate(it) { return _data.iterate(it) }
+          iteratorValue(it) { return _data.iteratorValue(it) }
         }
 
         return %(mangledName)

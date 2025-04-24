@@ -1,4 +1,4 @@
 
 class Maximum {
-  static call(a, b) { (a < b) ? b : a }
+  static call(a, b) { return (a < b) ? b : a }
 }

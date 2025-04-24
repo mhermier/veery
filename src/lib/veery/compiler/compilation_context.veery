@@ -10,14 +10,14 @@ class CompilationContext {
     _error_count = 0;
   }
 
-  compiler { _compiler }
-  reporter { _reporter }
+  compiler { return _compiler }
+  reporter { return _reporter }
 
-  has_errors  { _error_count > 0 }
-  error_count { _error_count }
+  has_errors  { return _error_count > 0 }
+  error_count { return _error_count }
 
   // TODO: Remove
-  call(severity, message, tokens) { .report(severity, message, tokens) }
+  call(severity, message, tokens) { return .report(severity, message, tokens) }
 
   // TODO: Only support warning
   report(severity_or_warning, message, tokens) {

@@ -3,7 +3,7 @@ import "veery/interface" for Interface
 
 class Iterable is Interface {
 
-  iterate(it) { subclassResponsibility }
+  iterate(it) { return subclassResponsibility }
 
-  iteratorValue(it) { subclassResponsibility }
+  iteratorValue(it) { return subclassResponsibility }
 }

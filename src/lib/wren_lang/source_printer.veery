@@ -359,7 +359,7 @@ class SourcePrinter is AbstractVisitor {
     }
   }
 
-  write_(obj) { _file.writeBytes(obj.toString) }
+  write_(obj) { return _file.writeBytes(obj.toString) }
 
   writeAll_(elements, sep) {
     var first = true;

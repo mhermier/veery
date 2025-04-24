@@ -7,10 +7,10 @@ class AttributeSpecifier is Node {
     _expression = expression;
   }
 
-  tag        { _tag }
-  expression { _expression }
+  tag        { return _tag }
+  expression { return _expression }
 
-  accept(visitor, visitor_data) { visitor.visitAttributeSpecifier(this, visitor_data) }
+  accept(visitor, visitor_data) { return visitor.visitAttributeSpecifier(this, visitor_data) }
 
   toString {
     return "AttributeSpecifier(%(_expression))";

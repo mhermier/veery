@@ -1,4 +1,4 @@
 
 class IteratorValue {
-  static call(sequenceable, iterator) { sequenceable.iteratorValue(iterator) }
+  static call(sequenceable, iterator) { return sequenceable.iteratorValue(iterator) }
 }

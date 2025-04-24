@@ -1,6 +1,6 @@
 
 class Benchmark {
-  static call(benchmark) { call("", benchmark) }
+  static call(benchmark) { return call("", benchmark) }
 
   static call(name, benchmark) {
     var start = System.clock

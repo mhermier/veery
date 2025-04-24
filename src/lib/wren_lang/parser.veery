@@ -63,25 +63,25 @@ var INFIX_OPERATORS = [
 ];
 
 class Precedence {
-  static NONE          { -1 }
-  static LOWEST        {  0 }
-  static ASSIGNMENT    {  1 } // =
-  static CONDITIONAL   {  2 } // ?:
-  static LOGICAL_OR    {  3 } // ||
-  static LOGICAL_AND   {  4 } // &&
-  static EQUALITY      {  5 } // == !=
-  static IS            {  6 } // is
-  static COMPARISON    {  7 } // < > <= >=
-  static BITWISE_OR    {  8 } // |
-  static BITWISE_XOR   {  9 } // ^
-  static BITWISE_AND   { 10 } // &
-  static BITWISE_SHIFT { 11 } // << >>
-  static RANGE         { 12 } // .. ...
-  static TERM          { 13 } // + -
-  static FACTOR        { 14 } // * / %
-  static UNARY         { 15 } // unary - ! ~
-  static CALL          { 16 } // . () []
-  static PRIMARY       { 17 }
+  static NONE          { return -1 }
+  static LOWEST        { return  0 }
+  static ASSIGNMENT    { return  1 } // =
+  static CONDITIONAL   { return  2 } // ?:
+  static LOGICAL_OR    { return  3 } // ||
+  static LOGICAL_AND   { return  4 } // &&
+  static EQUALITY      { return  5 } // == !=
+  static IS            { return  6 } // is
+  static COMPARISON    { return  7 } // < > <= >=
+  static BITWISE_OR    { return  8 } // |
+  static BITWISE_XOR   { return  9 } // ^
+  static BITWISE_AND   { return 10 } // &
+  static BITWISE_SHIFT { return 11 } // << >>
+  static RANGE         { return 12 } // .. ...
+  static TERM          { return 13 } // + -
+  static FACTOR        { return 14 } // * / %
+  static UNARY         { return 15 } // unary - ! ~
+  static CALL          { return 16 } // . () []
+  static PRIMARY       { return 17 }
 }
 
 // This table defines all of the parsing rules for the prefix and infix
@@ -97,11 +97,11 @@ class GrammarRule {
     _name       = name;
   }
 
-  prefix     { _prefix     }
-  infix      { _infix      }
-  method     { _method     }
-  precedence { _precedence }
-  name       { _name       }
+  prefix     { return _prefix     }
+  infix      { return _infix      }
+  method     { return _method     }
+  precedence { return _precedence }
+  name       { return _name       }
 }
 
 // TODO: Assignment allows invalid LHS like "1 + 2 = 3". Decide if we want to
@@ -148,36 +148,36 @@ class Parser {
       var elseBranch = parser.expression();
       return ConditionalExpr.new(lhs, token, thenBranch, colon, elseBranch);
     };
-    var grouping    = Fn.new {|token, parser, canAssign| parser.grouping() };
+    var grouping    = Fn.new {|token, parser, canAssign| return parser.grouping() };
 
-    var constructorSignature = Fn.new {|parser, signature| todo() };
-    var infixSignature       = Fn.new {|parser, signature| todo() };
-    var unarySignature       = Fn.new {|parser, signature| todo() };
-    var mixedSignature       = Fn.new {|parser, signature| todo() };
-    var namedSignature       = Fn.new {|parser, signature| todo() };
-    var subscriptSignature   = Fn.new {|parser, signature| todo() };
+    var constructorSignature = Fn.new {|parser, signature| return todo() };
+    var infixSignature       = Fn.new {|parser, signature| return todo() };
+    var unarySignature       = Fn.new {|parser, signature| return todo() };
+    var mixedSignature       = Fn.new {|parser, signature| return todo() };
+    var namedSignature       = Fn.new {|parser, signature| return todo() };
+    var subscriptSignature   = Fn.new {|parser, signature| return todo() };
 
-    var UNUSED          =                      GrammarRule.new(null,    null,     null,           Precedence.NONE, null);
-    var PREFIX          = Fn.new {|fn|         GrammarRule.new(fn,      null,     null,           Precedence.NONE, null) };
-    var INFIX           = Fn.new {|prec, fn|   GrammarRule.new(null,    fn,       null,           prec,            null) };
-    var INFIX_OPERATOR  = Fn.new {|prec, name| GrammarRule.new(null,    infixOp,  infixSignature, prec,            name) };
-    var PREFIX_OPERATOR = Fn.new {|name|       GrammarRule.new(unaryOp, null,     unarySignature, Precedence.NONE, name) };
-    var OPERATOR        = Fn.new {|name|       GrammarRule.new(unaryOp, infixOp,  mixedSignature, Precedence.TERM, name) };
+    var UNUSED          =                             GrammarRule.new(null,    null,     null,           Precedence.NONE, null);
+    var PREFIX          = Fn.new {|fn|         return GrammarRule.new(fn,      null,     null,           Precedence.NONE, null) };
+    var INFIX           = Fn.new {|prec, fn|   return GrammarRule.new(null,    fn,       null,           prec,            null) };
+    var INFIX_OPERATOR  = Fn.new {|prec, name| return GrammarRule.new(null,    infixOp,  infixSignature, prec,            name) };
+    var PREFIX_OPERATOR = Fn.new {|name|       return GrammarRule.new(unaryOp, null,     unarySignature, Precedence.NONE, name) };
+    var OPERATOR        = Fn.new {|name|       return GrammarRule.new(unaryOp, infixOp,  mixedSignature, Precedence.TERM, name) };
 
-    var boolean             = Fn.new {|token, parser, canAssign| BoolExpr.new(token, token == TokenType.trueKeyword) };
-    var list                = Fn.new {|token, parser, canAssign| parser.listLiteral() };
-    var map                 = Fn.new {|token, parser, canAssign| parser.mapLiteral() };
-    var name                = Fn.new {|token, parser, canAssign| parser.methodCall(null, token) };
-    var number              = Fn.new {|token, parser, canAssign| NumExpr.new(token) };
-    var null_               = Fn.new {|token, parser, canAssign| NullExpr.new(token) };
-    var string              = Fn.new {|token, parser, canAssign| StringExpr.new(token) };
-    var stringInterpolation = Fn.new {|token, parser, canAssign| parser.stringInterpolation() };
+    var boolean             = Fn.new {|token, parser, canAssign| return BoolExpr.new(token, token == TokenType.trueKeyword) };
+    var list                = Fn.new {|token, parser, canAssign| return parser.listLiteral() };
+    var map                 = Fn.new {|token, parser, canAssign| return parser.mapLiteral() };
+    var name                = Fn.new {|token, parser, canAssign| return parser.methodCall(null, token) };
+    var number              = Fn.new {|token, parser, canAssign| return NumExpr.new(token) };
+    var null_               = Fn.new {|token, parser, canAssign| return NullExpr.new(token) };
+    var string              = Fn.new {|token, parser, canAssign| return StringExpr.new(token) };
+    var stringInterpolation = Fn.new {|token, parser, canAssign| return parser.stringInterpolation() };
 
     // TODO: Error if not inside class.
-    var field               = Fn.new {|token, parser, canAssign| FieldExpr.new(token) };
-    var super_              = Fn.new {|token, parser, canAssign| parser.superCall() };
-    var staticField         = Fn.new {|token, parser, canAssign| StaticFieldExpr.new(token) };
-    var this_               = Fn.new {|token, parser, canAssign| ThisExpr.new(token) };
+    var field               = Fn.new {|token, parser, canAssign| return FieldExpr.new(token) };
+    var super_              = Fn.new {|token, parser, canAssign| return parser.superCall() };
+    var staticField         = Fn.new {|token, parser, canAssign| return StaticFieldExpr.new(token) };
+    var this_               = Fn.new {|token, parser, canAssign| return ThisExpr.new(token) };
 
     __grammar_rules = {
       TokenType.numberSign       : UNUSED,
@@ -267,7 +267,7 @@ class Parser {
   }
 
   // TODO: Remove, added to simulate local variable access
-  compilation_context { _compilation_context_ }
+  compilation_context { return _compilation_context_ }
 
   parse(compilation_context, source) {
     _compilation_context_ = compilation_context;
@@ -779,7 +779,7 @@ class Parser {
 
   // Same as [matchLine()], but makes it clear that the intent is to discard
   // newlines appearing where this is called.
-  ignoreLine() { matchLine() }
+  ignoreLine() { return matchLine() }
 
   // Consumes one or more newlines.
   consumeLine(error) {
@@ -827,8 +827,8 @@ class Parser {
   }
 
   // TODO: Remove
-  error(message) { .report(compilation_context, Severity.Error,   message) }
-  warn(message)  { .report(compilation_context, Severity.Warning, message) }
+  error(message) { return .report(compilation_context, Severity.Error,   message) }
+  warn(message)  { return .report(compilation_context, Severity.Warning, message) }
 
   // The main entrypoint for the top-down operator precedence parser.
   parsePrecedence(precedence) {
@@ -862,6 +862,6 @@ class Parser {
 
   // Parses an expression. Unlike statements, expressions leave a resulting value
   // on the stack.
-  expression() { parsePrecedence(Precedence.LOWEST) }
+  expression() { return parsePrecedence(Precedence.LOWEST) }
 }
 Parser.init_();

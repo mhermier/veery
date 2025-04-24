@@ -12,5 +12,5 @@ class IdentityVisitor is AbstractVisitor {
     return rhs;
   }
 
-  visit(node, visitor_data) { node }
+  visit(node, visitor_data) { return node }
 }

@@ -2,5 +2,5 @@
 import "veery/collection/algorithm/any_of" for AnyOf
 
 class NoneOf {
-  static call(sequenceable, unaryPredicate) { !AnyOf.call(sequenceable, unaryPredicate) }
+  static call(sequenceable, unaryPredicate) { return !AnyOf.call(sequenceable, unaryPredicate) }
 }

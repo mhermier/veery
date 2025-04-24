@@ -1,4 +1,4 @@
 
 class Begin {
-  static call(sequenceable) { sequenceable.iterate(null) }
+  static call(sequenceable) { return sequenceable.iterate(null) }
 }
